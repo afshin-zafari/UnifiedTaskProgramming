@@ -60,5 +60,5 @@ public:
 extern map<GHandleKey,sg_data_t*> glb_to_sg;
 typedef IScheduler * (*fp_create)(int);
 typedef void (*fp_destroy)(IScheduler *);
-extern SuperGlue<SGWOptions> SG;
+extern SuperGlue<SGWOptions> *SG;
 #endif // SGWRAPPER_HPP

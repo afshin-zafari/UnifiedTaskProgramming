@@ -350,6 +350,11 @@ void Dispatcher::initialize()
 
   task_cnt = 0;
 }
+void Dispatcher::get_thread_info( int & n, int & pin_cpu)
+{
+  n = config.getNumThreads();
+  pin_cpu = me * n;
+}
 /***************************************************************/
 void utp_initialize(int argc, char **argv)
 {

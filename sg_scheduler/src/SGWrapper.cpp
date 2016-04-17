@@ -3,7 +3,7 @@
 #include "GData.hpp"
 #include <stdlib.h>
 
-SuperGlue<SGWOptions> SG;
+SuperGlue<SGWOptions> *SG;
 const int In   = 1;
 const int Out  = 2;
 const int InOut= 3;
@@ -12,6 +12,9 @@ const int InOut= 3;
 SGWrapper::SGWrapper(int id):IScheduler(id)
 {
     //ctor
+  int num_threads=-1, pin_cpu=0;
+  get_dispatcher()->get_thread_info(num_threads,pin_cpu);
+  SG = new SuperGlue<SGWOptions>(num_threads,pin_cpu);
 }
 
 /*=========================================================================*/
@@ -46,7 +49,7 @@ void SGWrapper::submitTask(GTask *t)
         return;
     }
     SGGenTask *sgt = new SGGenTask(this,t);
-    SG.submit(sgt);
+    SG->submit(sgt);
 
 }
 /*=========================================================================*/
@@ -61,7 +64,7 @@ void SGWrapper::finishedTask(GTask *t)
 /*=========================================================================*/
 void SGWrapper::finalize()
 {
-    SG.barrier();
+    SG->barrier();
 }
 /*=========================================================================*/
 void SGWrapper::allocate_memory(GData*)

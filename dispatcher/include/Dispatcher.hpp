@@ -42,7 +42,8 @@ class Dispatcher
         void data_partitioned(GData *);
         void data_created(GData *);
         void initialize();
-  IScheduler * load(int no,string s,string lib);
+        IScheduler * load(int no,string s,string lib);
+        void get_thread_info(int &,int&);
     protected:
     private:
         Tree *chain;

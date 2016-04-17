@@ -11,7 +11,9 @@ AR = ar
 LD = mpic++
 WINDRES = windres
 
-INC = -Iinclude -I../dispatcher/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include
+DUCTTEIP_DIR=/pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+
+INC = -Iinclude -I../dispatcher/include -I/pica/h1/afshin/sg/superglue/include -I$(DUCTTEIP_DIR)/include
 CFLAGS = -Wall -fexceptions -std=c++11 -g -O2 -pthread
 RESINC = 
 LIBDIR = 
