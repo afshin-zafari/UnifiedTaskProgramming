@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/cholesky.hpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="117" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/config.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="584" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/cholesky.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="16" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/dt_util.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1395" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/partition.hpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="120" />
+		</Cursor>
+	</File>
+	<File name="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/memory_manager.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/memory_manager.hpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="635" topLine="18" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>

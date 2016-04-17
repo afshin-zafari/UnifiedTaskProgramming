@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd ../cpu_blas_scheduler
+make
+cd ../ductteip
+make
+cd ../dt_scheduler
+make
+cd ../sg_scheduler
+make
+cd ../dispatcher 
+make
+cd ../apps
+make
+#sbatch run.sh

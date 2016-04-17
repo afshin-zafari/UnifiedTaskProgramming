@@ -1,0 +1,217 @@
+# depslib dependency file v1.0
+1455817165 source:/home/cppdev/Damavand/sg_scheduler/main.cpp
+
+1457037265 source:/home/cppdev/Damavand/sg_scheduler/src/SGWrapper.cpp
+	"SGWrapper.hpp"
+	"GTask.hpp"
+	"GData.hpp"
+	<stdlib.h>
+
+1457037275 /home/cppdev/Damavand/sg_scheduler/include/SGWrapper.hpp
+	"IScheduler.hpp"
+	"sg/superglue.hpp"
+	"Dispatcher.hpp"
+	"GHandle.hpp"
+	<map>
+
+1457037287 /home/cppdev/Damavand/dispatcher/include/IScheduler.hpp
+	"utp_basic.hpp"
+
+1456270614 /home/cppdev/Damavand/dispatcher/include/utp_basic.hpp
+	<vector>
+	<cassert>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/superglue.hpp
+	"sg/core/access.hpp"
+	"sg/core/accessutil.hpp"
+	"sg/core/handle.hpp"
+	"sg/core/schedulerver.hpp"
+	"sg/core/task.hpp"
+	"sg/core/taskexecutor.hpp"
+	"sg/core/taskqueue.hpp"
+	"sg/core/versionqueue.hpp"
+	"sg/core/supergluebase.hpp"
+	"sg/core/defaults.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/access.hpp
+	<algorithm>
+	<cstring>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/accessutil.hpp
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/handle.hpp
+	"sg/core/types.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<cassert>
+	<limits>
+	<string>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/types.hpp
+	<vector>
+	<deque>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/atomic.hpp
+	<windows.h>
+	<atomic.h>
+	<sched.h>
+	<pthread.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/spinlock.hpp
+	"sg/platform/atomic.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/schedulerver.hpp
+	"sg/core/access_rwa.hpp"
+	"sg/core/spinlock.hpp"
+	<cstring>
+	<algorithm>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/access_rwa.hpp
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/task.hpp
+	"sg/core/types.hpp"
+	"sg/platform/atomic.hpp"
+	<string>
+	<stdint.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskexecutor.hpp
+	"sg/platform/atomic.hpp"
+	<iostream>
+	<cstdlib>
+	<cstdio>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskqueue.hpp
+	"sg/core/taskqueueunsafe.hpp"
+	"sg/core/taskqueuesafe.hpp"
+	<stdint.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskqueueunsafe.hpp
+	"sg/core/types.hpp"
+	"sg/core/spinlock.hpp"
+	"sg/core/taskqueuesafe.hpp"
+	<stdint.h>
+	<iostream>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskqueuesafe.hpp
+	"sg/core/spinlock.hpp"
+	<cassert>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/versionqueue.hpp
+	"sg/core/types.hpp"
+	"sg/core/orderedvec.hpp"
+	"sg/core/spinlock.hpp"
+	"sg/platform/atomic.hpp"
+	<limits>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/orderedvec.hpp
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/supergluebase.hpp
+	"sg/core/barrierprotocol.hpp"
+	<cassert>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/barrierprotocol.hpp
+	"sg/platform/atomic.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/defaults.hpp
+	"sg/core/access_rwa.hpp"
+	"sg/platform/affinity.hpp"
+	<memory>
+	"sg/option/threadingmanager_omp.hpp"
+	"sg/option/threadingmanager_default.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/affinity.hpp
+	<cassert>
+	<unistd.h>
+	<sched.h>
+	<unistd.h>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<windows.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/option/threadingmanager_omp.hpp
+	"sg/platform/openmputil.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<cassert>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/openmputil.hpp
+	<omp.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/option/threadingmanager_default.hpp
+	"sg/platform/threads.hpp"
+	"sg/platform/threadutil.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<vector>
+	<cstdio>
+
+1456011646 /home/cppdev/sg/superglue/include/sg/platform/threads.hpp
+	<cassert>
+	<cstdlib>
+	<pthread.h>
+	<unistd.h>
+	<unistd.h>
+	<cstdlib>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<pthread.h>
+	<windows.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/threadutil.hpp
+	<cstdlib>
+	<pthread.h>
+	<unistd.h>
+	<unistd.h>
+	<cstdlib>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<pthread.h>
+	<windows.h>
+
+1457015969 /home/cppdev/Damavand/dispatcher/include/Dispatcher.hpp
+	<vector>
+	<string>
+	<map>
+	"utp_basic.hpp"
+	"GData.hpp"
+	"GTask.hpp"
+	"GOperation.hpp"
+	"memory_manager.hpp"
+	"SGWrapper.hpp"
+
+1456498036 /home/cppdev/Damavand/dispatcher/include/GData.hpp
+	"utp_basic.hpp"
+	"GHandle.hpp"
+	"GPartitioner.hpp"
+	"memory_manager.hpp"
+
+1456268623 /home/cppdev/Damavand/dispatcher/include/GPartitioner.hpp
+
+1456224790 /home/cppdev/Damavand/dispatcher/include/GHandle.hpp
+
+1456933378 /home/cppdev/Damavand/dispatcher/include/GTask.hpp
+	"utp_basic.hpp"
+	"IScheduler.hpp"
+	"GHandle.hpp"
+	<string>
+
+1456339795 /home/cppdev/Damavand/dispatcher/include/GOperation.hpp
+	"GTask.hpp"
+
+1456234070 /home/cppdev/Damavand/dispatcher/include/SGWrapper.hpp
+	"IScheduler.hpp"
+	"sg/superglue.hpp"
+	"Dispatcher.hpp"
+	"GHandle.hpp"
+	<map>
+
+1456267563 /home/cppdev/Damavand/dispatcher/include/memory_manager.hpp
+	"utp_basic.hpp"
+	<vector>
+

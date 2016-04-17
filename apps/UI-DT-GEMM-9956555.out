@@ -1,0 +1,119 @@
+mod: loaded OpenMPI 1.8.1, compiled with gcc4.9 (found in /opt/openmpi/1.8.1gcc4.9/)
++ SG_PATH=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so
++ BLAS_PATH=
++ CUBLAS_PATH=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so
++ B1=2
++ B2=1
++ M=1024
++ timeout=300
++ app=./bin/Debug/apps
++ app=./bin/Release/apps
++ for M in 1024 2048 4096 8192
++ for B1 in 128
++ cfg_SG_BLAS
++ SG_INDEX=1
++ BLAS_INDEX=2
++ opt_string
++ DT=--scheduler=DuctTeip
++ SG='--scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler2=cpuBLAS --sched-lib2='
++ cuBLAS='--scheduler=cuBLAS --sched-lib=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2='
++ mpirun -np 1 --output-filename gemm_sg_blas_1024_128.out ./bin/Release/apps -M 1024 128 1 -N 1024 128 1 -P 2 -p 2 -q 1 -t 2 -T 300 --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2=
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory
++ for M in 1024 2048 4096 8192
++ for B1 in 128
++ cfg_SG_BLAS
++ SG_INDEX=1
++ BLAS_INDEX=2
++ opt_string
++ DT=--scheduler=DuctTeip
++ SG='--scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler2=cpuBLAS --sched-lib2='
++ cuBLAS='--scheduler=cuBLAS --sched-lib=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2='
++ mpirun -np 1 --output-filename gemm_sg_blas_2048_128.out ./bin/Release/apps -M 2048 128 1 -N 2048 128 1 -P 2 -p 2 -q 1 -t 2 -T 300 --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2=
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory
++ for M in 1024 2048 4096 8192
++ for B1 in 128
++ cfg_SG_BLAS
++ SG_INDEX=1
++ BLAS_INDEX=2
++ opt_string
++ DT=--scheduler=DuctTeip
++ SG='--scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler2=cpuBLAS --sched-lib2='
++ cuBLAS='--scheduler=cuBLAS --sched-lib=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2='
++ mpirun -np 1 --output-filename gemm_sg_blas_4096_128.out ./bin/Release/apps -M 4096 128 1 -N 4096 128 1 -P 2 -p 2 -q 1 -t 2 -T 300 --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2=
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory
++ for M in 1024 2048 4096 8192
++ for B1 in 128
++ cfg_SG_BLAS
++ SG_INDEX=1
++ BLAS_INDEX=2
++ opt_string
++ DT=--scheduler=DuctTeip
++ SG='--scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler2=cpuBLAS --sched-lib2='
++ cuBLAS='--scheduler=cuBLAS --sched-lib=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2='
++ mpirun -np 1 --output-filename gemm_sg_blas_8192_128.out ./bin/Release/apps -M 8192 128 1 -N 8192 128 1 -P 2 -p 2 -q 1 -t 2 -T 300 --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2=
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory
++ cfg_DT_BLAS
++ DT_INDEX=1
++ BLAS_INDEX=2
++ opt_string
++ DT=--scheduler1=DuctTeip
++ SG='--scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler2=cpuBLAS --sched-lib2='
++ cuBLAS='--scheduler=cuBLAS --sched-lib=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=DuctTeip --scheduler2=cpuBLAS --sched-lib2= '
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory
++ cfg_SG_BLAS
++ SG_INDEX=1
++ BLAS_INDEX=2
++ opt_string
++ DT=--scheduler1=DuctTeip
++ SG='--scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler2=cpuBLAS --sched-lib2='
++ cuBLAS='--scheduler=cuBLAS --sched-lib=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=SuperGlue --sched-lib1=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler2=cpuBLAS --sched-lib2='
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory
++ cfg_DT_SG_BLAS
++ DT_INDEX=1
++ SG_INDEX=2
++ BLAS_INDEX=3
++ opt_string
++ DT=--scheduler1=DuctTeip
++ SG='--scheduler2=SuperGlue --sched-lib2=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler3=cpuBLAS --sched-lib3='
++ cuBLAS='--scheduler=cuBLAS --sched-lib=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=DuctTeip --scheduler2=SuperGlue --sched-lib2=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so --scheduler3=cpuBLAS --sched-lib3= '
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory
++ cfg_DT_cuBLAS
++ DT_INDEX=1
++ CUBLAS_INDEX=2
++ opt_string
++ DT=--scheduler1=DuctTeip
++ SG='--scheduler2=SuperGlue --sched-lib2=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so'
++ BLAS='--scheduler3=cpuBLAS --sched-lib3='
++ cuBLAS='--scheduler2=cuBLAS --sched-lib2=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so'
++ MAGMA=
++ SCH=' --scheduler1=DuctTeip --scheduler2=cuBLAS --sched-lib2=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so '
++ rm '*.txt'
+rm: cannot remove `*.txt': No such file or directory

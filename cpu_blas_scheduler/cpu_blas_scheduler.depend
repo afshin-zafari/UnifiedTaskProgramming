@@ -1,0 +1,92 @@
+# depslib dependency file v1.0
+1455875474 source:/home/cppdev/Damavand/cpu_blas_scheduler/main.cpp
+
+1457037354 source:/home/cppdev/Damavand/cpu_blas_scheduler/src/CPUBLAS.cpp
+	"CPUBLAS.hpp"
+	<cstdio>
+	"unified_blas.hpp"
+	"task_blas.hpp"
+
+1457037403 /home/cppdev/Damavand/cpu_blas_scheduler/include/CPUBLAS.hpp
+	"IScheduler.hpp"
+	"GTask.hpp"
+	"Dispatcher.hpp"
+
+1457037287 /home/cppdev/Damavand/dispatcher/include/IScheduler.hpp
+	"utp_basic.hpp"
+
+1456270614 /home/cppdev/Damavand/dispatcher/include/utp_basic.hpp
+	<vector>
+	<cassert>
+
+1456933378 /home/cppdev/Damavand/dispatcher/include/GTask.hpp
+	"utp_basic.hpp"
+	"IScheduler.hpp"
+	"GHandle.hpp"
+	<string>
+
+1457515928 /home/cppdev/Damavand/dispatcher/include/Dispatcher.hpp
+	<vector>
+	<string>
+	<map>
+	"utp_basic.hpp"
+	"GData.hpp"
+	"GTask.hpp"
+	"GOperation.hpp"
+	"memory_manager.hpp"
+	"SGWrapper.hpp"
+
+1458132431 /home/cppdev/Damavand/dispatcher/include/GData.hpp
+	"utp_basic.hpp"
+	"GHandle.hpp"
+	"GPartitioner.hpp"
+	"memory_manager.hpp"
+
+1456268623 /home/cppdev/Damavand/dispatcher/include/GPartitioner.hpp
+
+1456224790 /home/cppdev/Damavand/dispatcher/include/GHandle.hpp
+
+1456339795 /home/cppdev/Damavand/dispatcher/include/GOperation.hpp
+	"GTask.hpp"
+
+1456234070 /home/cppdev/Damavand/dispatcher/include/SGWrapper.hpp
+	"IScheduler.hpp"
+	"sg/superglue.hpp"
+	"Dispatcher.hpp"
+	"GHandle.hpp"
+	<map>
+
+1456267563 /home/cppdev/Damavand/dispatcher/include/memory_manager.hpp
+	"utp_basic.hpp"
+	<vector>
+
+1456309302 /usr/local/include/gsl/gsl_cblas.h
+	<stddef.h>
+
+1456341436 /home/cppdev/Damavand/apps/include/unified_blas.hpp
+	"unified_gemm.hpp"
+	"unified_trsm.hpp"
+
+1457516102 /home/cppdev/Damavand/apps/include/unified_gemm.hpp
+	"unified_tasks.hpp"
+
+1455825093 /home/cppdev/Damavand/dispatcher/include/unified_tasks.hpp
+	"Dispatcher.hpp"
+	"GData.hpp"
+	"GOperation.hpp"
+	"GPartitioner.hpp"
+	"GTask.hpp"
+	"IScheduler.hpp"
+
+1456491810 /home/cppdev/Damavand/apps/include/unified_trsm.hpp
+	"unified_tasks.hpp"
+
+1456348351 /home/cppdev/Damavand/cpu_blas_scheduler/include/task_blas.hpp
+	"IScheduler.hpp"
+	"GTask.hpp"
+	"Dispatcher.hpp"
+	"gsl/gsl_cblas.h"
+
+1457020175 source:/home/cppdev/Damavand/cpu_blas_scheduler/src/task_blas.cpp
+	"task_blas.hpp"
+

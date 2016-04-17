@@ -1,0 +1,9 @@
+#ifndef UNIFIED_TASKS_HPP
+#define UNIFIED_TASKS_HPP
+#include "Dispatcher.hpp"
+#include "GData.hpp"
+#include "GOperation.hpp"
+#include "GPartitioner.hpp"
+#include "GTask.hpp"
+#include "IScheduler.hpp"
+#endif //UNIFIED_TASKS_HPP

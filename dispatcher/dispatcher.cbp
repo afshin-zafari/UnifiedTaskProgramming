@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="dispatcher" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/dispatcher" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Debug" />
+				<Option object_output="obj/Debug/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-pthread -fPIC -Wno-unused-variable" />
+					<Add option="-DSLIB=1" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-Wl,--allow-multiple-definition  -lpthread -ldl -rdynamic" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/dispatcher" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-std=c++11" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="include/Dispatcher.hpp" />
+		<Unit filename="include/GData.hpp" />
+		<Unit filename="include/GHandle.hpp" />
+		<Unit filename="include/GOperation.hpp" />
+		<Unit filename="include/GPartitioner.hpp" />
+		<Unit filename="include/GTask.hpp" />
+		<Unit filename="include/IScheduler.hpp" />
+		<Unit filename="include/memory_manager.hpp" />
+		<Unit filename="include/unified_tasks.hpp" />
+		<Unit filename="include/utp_basic.hpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Dispatcher.cpp" />
+		<Unit filename="src/GData.cpp" />
+		<Unit filename="src/GHandle.cpp" />
+		<Unit filename="src/GOperation.cpp" />
+		<Unit filename="src/GPartitioner.cpp" />
+		<Unit filename="src/GTask.cpp" />
+		<Unit filename="src/IScheduler.cpp" />
+		<Unit filename="src/memory_manager.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

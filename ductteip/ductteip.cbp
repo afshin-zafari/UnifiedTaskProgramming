@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ductteip" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/ductteip" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/ductteip" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/Makefile" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/MakefileOld" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/LibTest-8747912" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/Makefile" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/check_comp.h" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/cholesky.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/cholesky.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/dt_util.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/dt_util.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/gemm.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/potrf.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/run" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/run_devel_N02.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/syrk.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/test_devel_N01.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/test_devel_N02.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/test_node_N02.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/test_node_N04.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/examples/trsm.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/basic.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/config.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/context.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/data.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/data_basic.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/distribute.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/dlb.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/dt_log.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/dt_task.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/ductteip.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/engine.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/glb_context.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/hostpolicy.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/listener.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/mailbox.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/memory_manager.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/ml_manager.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/mpi_comm.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/network.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/partition.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/procgrid.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/basic.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/config.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/context.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/data.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/data_basic.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/distribute.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/dlb.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/dt_log.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/dt_task.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/ductteip.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/engine.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/glb_context.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/hostpolicy.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/listener.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/mailbox.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/memory_manager.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/ml_manager.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/mpi_comm.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/network.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/partition.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/src/procgrid.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/basic.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/connect_to_mcore/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/data_communication/test_folder_template/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/data_communication/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/dt_thread_manager.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/dt_thread_manager.hpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MLevel/Makefile" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MLevel/ml_basic.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MLevel/run" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MThread/Makefile" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MThread/mt_admin.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MThread/mt_mbox.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MThread/mt_work.cpp" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/gtests/MThread/run" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/performance_experiments/test_folder_template/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/performance_experiments/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/scaleup-experiments/test_folder_template/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/scaleup-experiments/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/task_generation/data_versions/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/task_generation/execution_order/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/task_generation/test_folder_template/test_template.sh" />
+		<Unit filename="../DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/tests/test_folder_template/test_template.sh" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

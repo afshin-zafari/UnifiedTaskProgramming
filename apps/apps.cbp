@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="apps" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/apps" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="-M 20 10 1 -N 1 1 1 -P 1 -p 1 -q 1 -nt 4 &gt;a.txt " />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-pthread" />
+					<Add option="-DSLIB=1" />
+					<Add directory="include" />
+					<Add directory="../dispatcher/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-rdynamic -ldl -lpthread -Wl,--allow-multiple-definition" />
+					<Add library="../dispatcher/bin/Debug/libdispatcher.so" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/apps" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="-M 20 10 1 -N 1 1 1 -P 1 -p 1 -q 1 -nt 4 &gt;a.txt " />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-std=c++11" />
+					<Add directory="include" />
+					<Add directory="../dispatcher/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Linker>
+			<Add option="-rdynamic -ldl -lpthread -Wl,--allow-multiple-definition" />
+			<Add library="../dispatcher/bin/Debug/libdispatcher.so" />
+		</Linker>
+		<Unit filename="include/config.hpp" />
+		<Unit filename="include/unified_blas.hpp" />
+		<Unit filename="include/unified_gemm.hpp" />
+		<Unit filename="include/unified_trsm.hpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/config.cpp" />
+		<Unit filename="src/unified_gemm.cpp" />
+		<Unit filename="src/unified_trsm.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

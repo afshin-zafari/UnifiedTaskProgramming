@@ -1,0 +1,387 @@
+# depslib dependency file v1.0
+1455817274 source:/home/cppdev/Damavand/dt_scheduler/main.cpp
+
+1458133991 source:/home/cppdev/Damavand/dt_scheduler/src/DTWrapper.cpp
+	"DTWrapper.hpp"
+
+1458133612 /home/cppdev/Damavand/dt_scheduler/include/DTWrapper.hpp
+	"IScheduler.hpp"
+	"Dispatcher.hpp"
+	"ductteip.hpp"
+
+1457037287 /home/cppdev/Damavand/dispatcher/include/IScheduler.hpp
+	"utp_basic.hpp"
+
+1456270614 /home/cppdev/Damavand/dispatcher/include/utp_basic.hpp
+	<vector>
+	<cassert>
+
+1457515928 /home/cppdev/Damavand/dispatcher/include/Dispatcher.hpp
+	<vector>
+	<string>
+	<map>
+	"utp_basic.hpp"
+	"GData.hpp"
+	"GTask.hpp"
+	"GOperation.hpp"
+	"memory_manager.hpp"
+	"SGWrapper.hpp"
+
+1458132431 /home/cppdev/Damavand/dispatcher/include/GData.hpp
+	"utp_basic.hpp"
+	"GHandle.hpp"
+	"GPartitioner.hpp"
+	"memory_manager.hpp"
+
+1456224790 /home/cppdev/Damavand/dispatcher/include/GHandle.hpp
+
+1456268623 /home/cppdev/Damavand/dispatcher/include/GPartitioner.hpp
+
+1456267563 /home/cppdev/Damavand/dispatcher/include/memory_manager.hpp
+	"utp_basic.hpp"
+	<vector>
+
+1456933378 /home/cppdev/Damavand/dispatcher/include/GTask.hpp
+	"utp_basic.hpp"
+	"IScheduler.hpp"
+	"GHandle.hpp"
+	<string>
+
+1456339795 /home/cppdev/Damavand/dispatcher/include/GOperation.hpp
+	"GTask.hpp"
+
+1458128332 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/ductteip.hpp
+	"context.hpp"
+	"basic.hpp"
+	"engine.hpp"
+
+1458128353 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/context.hpp
+	<string>
+	<cstdio>
+	<vector>
+	<list>
+	"config.hpp"
+	"procgrid.hpp"
+	"hostpolicy.hpp"
+	"data.hpp"
+	"glb_context.hpp"
+	"engine.hpp"
+	"dt_log.hpp"
+	"data_basic.hpp"
+
+1456835564 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/config.hpp
+	"basic.hpp"
+
+1458123371 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/basic.hpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/time.h>
+	<assert.h>
+	<sched.h>
+	<errno.h>
+	<pthread.h>
+	"mpi.h"
+	"platform/gettime.hpp"
+
+1441294044 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/procgrid.hpp
+	<string>
+	<iostream>
+	<vector>
+	<list>
+
+1458142155 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/hostpolicy.hpp
+	<string>
+	<iostream>
+	<vector>
+	<list>
+	"data_basic.hpp"
+
+1441294044 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/data_basic.hpp
+	"basic.hpp"
+	<list>
+
+1458142155 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/data.hpp
+	<string>
+	<cstdio>
+	<iostream>
+	<sstream>
+	<vector>
+	<list>
+	<new>
+	"basic.hpp"
+	"partition.hpp"
+	"memory_manager.hpp"
+	"dt_log.hpp"
+	"data_basic.hpp"
+	"hostpolicy.hpp"
+	"listener.hpp"
+
+1458123447 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/partition.hpp
+	"sg/superglue.hpp"
+	"sg/core/contrib.hpp"
+	"sg/option/instr_trace.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/superglue.hpp
+	"sg/core/access.hpp"
+	"sg/core/accessutil.hpp"
+	"sg/core/handle.hpp"
+	"sg/core/schedulerver.hpp"
+	"sg/core/task.hpp"
+	"sg/core/taskexecutor.hpp"
+	"sg/core/taskqueue.hpp"
+	"sg/core/versionqueue.hpp"
+	"sg/core/supergluebase.hpp"
+	"sg/core/defaults.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/access.hpp
+	<algorithm>
+	<cstring>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/accessutil.hpp
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/handle.hpp
+	"sg/core/types.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<cassert>
+	<limits>
+	<string>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/types.hpp
+	<vector>
+	<deque>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/atomic.hpp
+	<windows.h>
+	<atomic.h>
+	<sched.h>
+	<pthread.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/spinlock.hpp
+	"sg/platform/atomic.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/schedulerver.hpp
+	"sg/core/access_rwa.hpp"
+	"sg/core/spinlock.hpp"
+	<cstring>
+	<algorithm>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/access_rwa.hpp
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/task.hpp
+	"sg/core/types.hpp"
+	"sg/platform/atomic.hpp"
+	<string>
+	<stdint.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskexecutor.hpp
+	"sg/platform/atomic.hpp"
+	<iostream>
+	<cstdlib>
+	<cstdio>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskqueue.hpp
+	"sg/core/taskqueueunsafe.hpp"
+	"sg/core/taskqueuesafe.hpp"
+	<stdint.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskqueueunsafe.hpp
+	"sg/core/types.hpp"
+	"sg/core/spinlock.hpp"
+	"sg/core/taskqueuesafe.hpp"
+	<stdint.h>
+	<iostream>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/taskqueuesafe.hpp
+	"sg/core/spinlock.hpp"
+	<cassert>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/versionqueue.hpp
+	"sg/core/types.hpp"
+	"sg/core/orderedvec.hpp"
+	"sg/core/spinlock.hpp"
+	"sg/platform/atomic.hpp"
+	<limits>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/orderedvec.hpp
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/supergluebase.hpp
+	"sg/core/barrierprotocol.hpp"
+	<cassert>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/barrierprotocol.hpp
+	"sg/platform/atomic.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/defaults.hpp
+	"sg/core/access_rwa.hpp"
+	"sg/platform/affinity.hpp"
+	<memory>
+	"sg/option/threadingmanager_omp.hpp"
+	"sg/option/threadingmanager_default.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/affinity.hpp
+	<cassert>
+	<unistd.h>
+	<sched.h>
+	<unistd.h>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<windows.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/option/threadingmanager_omp.hpp
+	"sg/platform/openmputil.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<cassert>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/openmputil.hpp
+	<omp.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/option/threadingmanager_default.hpp
+	"sg/platform/threads.hpp"
+	"sg/platform/threadutil.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<vector>
+	<cstdio>
+
+1456011646 /home/cppdev/sg/superglue/include/sg/platform/threads.hpp
+	<cassert>
+	<cstdlib>
+	<pthread.h>
+	<unistd.h>
+	<unistd.h>
+	<cstdlib>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<pthread.h>
+	<windows.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/threadutil.hpp
+	<cstdlib>
+	<pthread.h>
+	<unistd.h>
+	<unistd.h>
+	<cstdlib>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<pthread.h>
+	<windows.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/core/contrib.hpp
+	<algorithm>
+	<new>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/option/instr_trace.hpp
+	"sg/option/log.hpp"
+
+1401878648 /home/cppdev/sg/superglue/include/sg/option/log.hpp
+	"sg/core/spinlock.hpp"
+	"sg/platform/threads.hpp"
+	"sg/platform/gettime.hpp"
+	"sg/platform/tls.hpp"
+	<vector>
+	<fstream>
+	<algorithm>
+	<string>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/gettime.hpp
+	<windows.h>
+	<sys/time.h>
+
+1401878648 /home/cppdev/sg/superglue/include/sg/platform/tls.hpp
+	<pthread.h>
+	<windows.h>
+
+1456267375 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/memory_manager.hpp
+	"basic.hpp"
+	<vector>
+
+1441294044 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/dt_log.hpp
+	<iomanip>
+	"dt_task.hpp"
+	"config.hpp"
+
+1458142155 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/dt_task.hpp
+	<string>
+	<cstdio>
+	<iostream>
+	<vector>
+	<list>
+	<string>
+	"basic.hpp"
+	"data_basic.hpp"
+	"partition.hpp"
+	<sstream>
+
+1441294044 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/listener.hpp
+	<string>
+	<cstdio>
+	<vector>
+	<list>
+	"data.hpp"
+
+1441294044 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/glb_context.hpp
+	<list>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sstream>
+	"config.hpp"
+	"engine.hpp"
+	"hostpolicy.hpp"
+	"data.hpp"
+
+1441294044 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/engine.hpp
+	<pthread.h>
+	<sched.h>
+	<errno.h>
+	<algorithm>
+	<vector>
+	<map>
+	<iterator>
+	<dirent.h>
+	<cstdlib>
+	<cstdio>
+	<cassert>
+	"config.hpp"
+	"dt_task.hpp"
+	"listener.hpp"
+	"mailbox.hpp"
+	"mpi_comm.hpp"
+	"memory_manager.hpp"
+	"dt_log.hpp"
+	"dlb.hpp"
+
+1458142155 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/mailbox.hpp
+	"basic.hpp"
+	"network.hpp"
+	"dt_log.hpp"
+	"memory_manager.hpp"
+
+1458142155 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/network.hpp
+	"basic.hpp"
+
+1458127458 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/mpi_comm.hpp
+	"basic.hpp"
+	"mpi.h"
+	"network.hpp"
+	"dt_log.hpp"
+	"memory_manager.hpp"
+	"mailbox.hpp"
+	"engine.hpp"
+
+1458124812 /home/cppdev/Damavand/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include/dlb.hpp
+	"dt_task.hpp"
+	"mailbox.hpp"
+	"data.hpp"
+	"engine.hpp"
+	"glb_context.hpp"
+
