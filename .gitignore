@@ -1,6 +1,7 @@
 *.o
 *.a
 *.so
+*.out*
 */bin/*
 */obj/*
 */test/*
