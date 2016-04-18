@@ -181,7 +181,9 @@ ALL_LDFLAGS += $(addprefix -Xlinker ,$(LDFLAGS))
 ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))
 
 # Common includes and paths for CUDA
-INCLUDES  := -I/pica/sw/comp/cuda/7.5/tintin/samples/common/inc -Iinclude -I../dispatcher/include -I../apps/include -I/usr/local/include -I/pica/h1/afshin/Damavand/D3/DuctTeip/DuctTeip-multi-thread-admin/ResStudio/Prototype/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include
+DUCTTEIP_DIR=/pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+
+INCLUDES  := -I/pica/sw/comp/cuda/7.5/tintin/samples/common/inc -Iinclude -I../dispatcher/include -I../apps/include -I/usr/local/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include
 
 LIBRARIES :=
 

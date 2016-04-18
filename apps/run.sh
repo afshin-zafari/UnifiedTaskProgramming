@@ -66,16 +66,21 @@ cfg_sched_graph(){
 B1=2
 B2=1
 M=1024
-timeout=300
+timeout=1000
+P=4
+p=2
+q=2
+ipn=4
+nt=4
 app=./bin/Debug/apps
-app=./bin/Release/apps
-for M in 1024 2048 4096 8192
+#app=./bin/Release/apps
+for M in 8192 #1024 2048 4096 8192
 do
-    for Z in 32 64 128 256
+    for Z in 128 #32 64 128 256
     do
 	B1=$[$M/$Z]
-	cfg_SG_BLAS
-	mpirun -np 1 --output-filename "./test/gemm_sg_blas_${M}_${B1}.out" $app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
+	cfg_DT_SG_BLAS
+	mpirun -np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename "./test/gemm_sg_blas_ipn_${ipn}_${M}_${B1}_${SLURM_JOB_ID}.out" $app -M $M $B1 $B2 -N $M $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout $SCH 
 	rm *.txt
     done
 done

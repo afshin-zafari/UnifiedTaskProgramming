@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH -A p2009014
+#SBATCH -o PaRSEC-gemm-%j.out
+#SBATCH -p devel
+#SBATCH -t 00:05:00
+#SBATCH -N 1
+#SBATCH -n 16
+#SBATCH -J PaRSEC_GEMM_N01
+
+module load intel openmpi
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/pica/h1/afshin/PaRSEC/hwloc-1.9.1/HWLOC_BIN/lib
+app=/pica/h1/afshin/PaRSEC/dplasma-1.2.1/dplasma/testing/testing_dgemm 
+P=4
+for N in 8192
+do
+    for i in 1 
+    do
+	echo "---------Test Run $i --------------"
+	for NB in 128
+	do
+            mpirun -np $P -npernode $P $app -c 4 -p 2 -q 2 -t $NB -T $NB -N $N
+	done
+    done
+done

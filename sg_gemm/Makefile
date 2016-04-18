@@ -11,26 +11,26 @@ AR = ar
 LD = g++
 WINDRES = windres
 
-INC = 
+INC = -I/pica/h1/afshin/sg/superglue/include
 CFLAGS = -Wall -fexceptions
 RESINC = 
 LIBDIR = 
 LIB = 
-LDFLAGS = -lpthread
+LDFLAGS = -lpthread -lgsl -lgslcblas
 
-INC_DEBUG = $(INC) -Iinclude -I../dispatcher/include -I/home/cppdev/sg/superglue/include
-CFLAGS_DEBUG = $(CFLAGS) -std=c++11 -g -pthread -DSLIB=1
+INC_DEBUG = $(INC) 
+CFLAGS_DEBUG = $(CFLAGS) -g -pthread
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
-LIB_DEBUG = $(LIB)-l../dispatcher/bin/Debug/libdispatcher.so
-LDFLAGS_DEBUG = $(LDFLAGS) -rdynamic -ldl -lpthread -Wl,--allow-multiple-definition
+LIB_DEBUG = $(LIB)
+LDFLAGS_DEBUG = $(LDFLAGS)
 OBJDIR_DEBUG = obj/Debug
 DEP_DEBUG = 
-OUT_DEBUG = bin/Debug/apps
+OUT_DEBUG = bin/Debug/sg_gemm
 
-INC_RELEASE = $(INC) -Iinclude
-CFLAGS_RELEASE = $(CFLAGS) -O2 -std=c++11
+INC_RELEASE = $(INC)
+CFLAGS_RELEASE = $(CFLAGS) -O2
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
@@ -38,11 +38,11 @@ LIB_RELEASE = $(LIB)
 LDFLAGS_RELEASE = $(LDFLAGS) -s
 OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
-OUT_RELEASE = bin/Release/apps
+OUT_RELEASE = bin/Release/sg_gemm
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/src/unified_gemm.o $(OBJDIR_DEBUG)/src/unified_trsm.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/main.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/src/unified_gemm.o $(OBJDIR_RELEASE)/src/unified_trsm.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o
 
 all: debug release
 
@@ -51,7 +51,6 @@ clean: clean_debug clean_release
 before_debug: 
 	test -d bin/Debug || mkdir -p bin/Debug
 	test -d $(OBJDIR_DEBUG) || mkdir -p $(OBJDIR_DEBUG)
-	test -d $(OBJDIR_DEBUG)/src || mkdir -p $(OBJDIR_DEBUG)/src
 
 after_debug: 
 
@@ -63,22 +62,14 @@ out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c main.cpp -o $(OBJDIR_DEBUG)/main.o
 
-$(OBJDIR_DEBUG)/src/unified_gemm.o: src/unified_gemm.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/unified_gemm.cpp -o $(OBJDIR_DEBUG)/src/unified_gemm.o
-
-$(OBJDIR_DEBUG)/src/unified_trsm.o: src/unified_trsm.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/unified_trsm.cpp -o $(OBJDIR_DEBUG)/src/unified_trsm.o
-
 clean_debug: 
 	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
 	rm -rf bin/Debug
 	rm -rf $(OBJDIR_DEBUG)
-	rm -rf $(OBJDIR_DEBUG)/src
 
 before_release: 
 	test -d bin/Release || mkdir -p bin/Release
 	test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
-	test -d $(OBJDIR_RELEASE)/src || mkdir -p $(OBJDIR_RELEASE)/src
 
 after_release: 
 
@@ -90,17 +81,10 @@ out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
 
-$(OBJDIR_RELEASE)/src/unified_gemm.o: src/unified_gemm.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/unified_gemm.cpp -o $(OBJDIR_RELEASE)/src/unified_gemm.o
-
-$(OBJDIR_RELEASE)/src/unified_trsm.o: src/unified_trsm.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/unified_trsm.cpp -o $(OBJDIR_RELEASE)/src/unified_trsm.o
-
 clean_release: 
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
 	rm -rf bin/Release
 	rm -rf $(OBJDIR_RELEASE)
-	rm -rf $(OBJDIR_RELEASE)/src
 
 .PHONY: before_debug after_debug clean_debug before_release after_release clean_release
 
