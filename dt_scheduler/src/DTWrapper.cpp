@@ -1,4 +1,4 @@
-#include "DTWrapper.hpp"
+#include "DTWrapper.hpp" 
 #define TL LOG_INFO(LOG_MLEVEL,".\n")
 /*=======================================================================*/
 DTWrapper::DTWrapper(int _id):IScheduler(_id)
@@ -84,8 +84,12 @@ void DTWrapper::submitTask(GTask *t)
   if ( dwrt->getHost()==me){
     LOG_INFO(LOG_MLEVEL,"task added.\n");
     TaskHandle task_handle =dtEngine.addTask(ctx,t->fname,KeyGen(t->fname.c_str()),dwrt->getHost(),dlist);
+
     gt2dt_map[t->get_handle()->get_key()]=dtEngine.getTask(task_handle);
+    assert( gt2dt_map[t->get_handle()->get_key()]==dtEngine.getTask(task_handle));
+
     dt2gt_map[task_handle]=t;
+    assert( dt2gt_map[task_handle]==t);
   }
 
 }

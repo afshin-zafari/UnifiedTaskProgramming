@@ -56,7 +56,7 @@ public :
     LOG_INFO(LOG_MLEVEL,"%s, dur:%ld\n",task->getName().c_str(),dur);
   }
   void runKernels(IDuctteipTask *task) {
-    LOG_INFO(LOG_MLEVEL,"%s\n",task->getName().c_str());
+    LOG_INFO(LOG_MLEVEL,"%s,handle:%d\n",task->getName().c_str(),task->getHandle());
     GTask *t=dt2gt_map[task->getHandle()];
     assert(get_dispatcher());
     LOG_INFO(LOG_MLEVEL,"Gtask ptr:%p\n",t);

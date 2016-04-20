@@ -176,6 +176,7 @@ void Dispatcher::dispatch_next(  GTask * t)
 /*=============================================================*/
 void Dispatcher::run_task(GTask *t)
 {
+  assert(t);
     IScheduler *s = t->get_owner();
     Tree *c=chain->find(s);
     assert(c!=nullptr);

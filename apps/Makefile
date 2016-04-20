@@ -20,7 +20,7 @@ LIB = ../dispatcher/bin/Debug/libdispatcher.a ../dt_scheduler/bin/Debug/libdt_sc
 LDFLAGS = -L/pica/sw/comp/cuda/7.5/tintin/lib64 -lpthread -Wl,--allow-multiple-definition -lgsl -lgslcblas #-lcublas -lcudart
 
 INC_DEBUG = $(INC) 
-CFLAGS_DEBUG = $(CFLAGS) -g 
+CFLAGS_DEBUG = $(CFLAGS) -g -DBUILD=1
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
@@ -31,7 +31,7 @@ DEP_DEBUG =
 OUT_DEBUG = bin/Debug/apps
 
 INC_RELEASE = $(INC) 
-CFLAGS_RELEASE = $(CFLAGS) -O2 
+CFLAGS_RELEASE = $(CFLAGS) -O2 -DBUILD=0
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
