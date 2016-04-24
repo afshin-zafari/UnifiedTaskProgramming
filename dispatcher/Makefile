@@ -21,7 +21,7 @@ LIB = ../dt_scheduler/bin/Debug/libdt_scheduler.a
 LDFLAGS = -Wl,--allow-multiple-definition  -lpthread 
 
 INC_DEBUG = $(INC) 
-CFLAGS_DEBUG = $(CFLAGS) -g 
+CFLAGS_DEBUG = $(CFLAGS) -g -D'BUILD=1'
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
@@ -32,7 +32,7 @@ DEP_DEBUG =
 OUT_DEBUG = bin/Debug/libdispatcher.a
 
 INC_RELEASE = $(INC) 
-CFLAGS_RELEASE = $(CFLAGS) -O2 
+CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=0'
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
@@ -65,7 +65,7 @@ out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 
 $(OBJDIR_DEBUG)/src/memory_manager.o: src/memory_manager.cpp
 	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/memory_manager.cpp -o $(OBJDIR_DEBUG)/src/memory_manager.o
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/memory_manager.cpp -o $(OBJDIR_DEBUG)/src/memory_manager.o
 
 $(OBJDIR_DEBUG)/src/IScheduler.o: src/IScheduler.cpp
 	$(info $(notdir $<))
@@ -120,7 +120,7 @@ out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 
 $(OBJDIR_RELEASE)/src/memory_manager.o: src/memory_manager.cpp
 	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/memory_manager.cpp -o $(OBJDIR_RELEASE)/src/memory_manager.o
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/memory_manager.cpp -o $(OBJDIR_RELEASE)/src/memory_manager.o
 
 $(OBJDIR_RELEASE)/src/IScheduler.o: src/IScheduler.cpp
 	$(info $(notdir $<))

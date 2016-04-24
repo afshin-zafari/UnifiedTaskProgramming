@@ -81,8 +81,19 @@ int main(int argc, char **argv)
         << ", time: " << toc()
         << endl;
 
-
+    /*
+    double * d=(double*)C->get_memory();
+    int err=0;
+    int N = config.getYDimension();
+    for (int i = 0; i < N*N ; i++){
+      if (d[i] != (2*N+10.0))
+	err++;
+      cout << d[i] << ',' << ((i%N==0)?('\n'):' ' );
+    }
+    cout << "errors " << err << ' ' << d[0] << endl;
+    */
     C->print();
     cout << "Program finished.\n";
     return 0;
 }
+

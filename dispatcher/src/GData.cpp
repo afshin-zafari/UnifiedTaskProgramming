@@ -34,7 +34,10 @@ GData::GData(int i,int j,string n,GData *p, int idx):
     child_cnt = 0;
     children= nullptr;
     partitioner=nullptr;
-    level = p->level+1;
+    if ( p)
+      level = p->level+1;
+    else
+      level = 0;
     get_dispatcher()->data_created(this);
 }
 /*=====================================================================*/
@@ -76,8 +79,11 @@ GPartitioner *GData::get_partition()
 void GData::set_partition(GPartitioner *P)
 {
     partitioner = P;
+    assert(P);
     child_cnt = P->y * P->x;
     children = new GData*[child_cnt];
+    assert(P->y);
+    assert(P->x);
     int m = M/P->y;
     int n = N/P->x;
     for(int i=0; i<child_cnt; i++)

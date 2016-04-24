@@ -139,6 +139,7 @@ GTask *Dispatcher::submit_task(string fn, Args *args, Axs & axs,GTask *parent_ta
     }
 
     GTask *t=new GTask(fn,args,-1);
+    assert(t);
     t->set_parent(parent_task);
     dispatch_next(t);
     task_cnt++;
@@ -155,6 +156,7 @@ IScheduler *Dispatcher::get_scheduler( int i )
 /*=============================================================*/
 void Dispatcher::dispatch_next(  GTask * t)
 {
+  assert(t);
     GTask *parent = t->get_parent();
     if ( parent == nullptr)
     {
@@ -169,6 +171,7 @@ void Dispatcher::dispatch_next(  GTask * t)
     assert(pos!=nullptr);
     for (  Tree *node : pos->next)
     {
+      assert(node->s);
         t->set_owner(node->s);
         node->s->submitTask(t);
     }
@@ -183,6 +186,7 @@ void Dispatcher::run_task(GTask *t)
     Tree *n = c->next[0];
     if(n->next.size()==0)// it is before last Scheduler
     {
+      assert(n->s);
         n->s->runTask(t);
         return;
     }
@@ -200,6 +204,7 @@ void Dispatcher::finished_task(GTask *t)
     assert(sch->s);
     LOG_INFO(LOG_MLEVEL,"owner  scheduler:%s\n",sch->s->get_name().c_str());
     Tree *n = sch->next[0];    
+    assert(n);
     if(n->next.size()==0)// it is before last Scheduler
       {
 	LOG_INFO(LOG_MLEVEL,"owner scheduler:%s\n",sch->s->get_name().c_str());
@@ -351,11 +356,13 @@ void Dispatcher::initialize()
 
   task_cnt = 0;
 }
+/*=============================================================*/
 void Dispatcher::get_thread_info( int & n, int & pin_cpu)
 {
   n = config.getNumThreads();
   pin_cpu = me * n;
 }
+/***************************************************************/
 /***************************************************************/
 void utp_initialize(int argc, char **argv)
 {

@@ -21,7 +21,7 @@ LIB =
 LDFLAGS = -lpthread
 
 INC_DEBUG = $(INC) 
-CFLAGS_DEBUG = $(CFLAGS) -g 
+CFLAGS_DEBUG = $(CFLAGS) -g -D'BUILD=1'
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
@@ -32,7 +32,7 @@ DEP_DEBUG =
 OUT_DEBUG = bin/Debug/libsg_scheduler.a
 
 INC_RELEASE = $(INC) 
-CFLAGS_RELEASE = $(CFLAGS) -O2 
+CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=0'
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
@@ -69,7 +69,7 @@ $(OBJDIR_DEBUG)/main.o: main.cpp
 
 $(OBJDIR_DEBUG)/src/SGWrapper.o: src/SGWrapper.cpp
 	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/SGWrapper.cpp -o $(OBJDIR_DEBUG)/src/SGWrapper.o
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/SGWrapper.cpp -o $(OBJDIR_DEBUG)/src/SGWrapper.o
 
 clean_debug: 
 	@rm -f $(OBJ_DEBUG) $(OUT_DEBUG)

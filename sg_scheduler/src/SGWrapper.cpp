@@ -11,10 +11,9 @@ const int InOut= 3;
 /*=========================================================================*/
 SGWrapper::SGWrapper(int id):IScheduler(id)
 {
-    //ctor
   int num_threads=-1, pin_cpu=0;
-  //  get_dispatcher()->get_thread_info(num_threads,pin_cpu);
-  SG = new SuperGlue<SGWOptions>(num_threads,pin_cpu);
+  // get_dispatcher()->get_thread_info(num_threads,pin_cpu);
+  SG = new SuperGlue<SGWOptions>(num_threads,pin_cpu); 
 }
 
 /*=========================================================================*/
@@ -132,6 +131,7 @@ SGGenTask::SGGenTask(SGWrapper *sgw,GTask *t):scheduler(sgw),gt(t)
 /*=========================================================================*/
 void SGGenTask::run()
 {
+  LOG_INFO(LOG_MLEVEL,"\n");
     get_dispatcher()->run_task(gt);
 }
 /*=========================================================================*/

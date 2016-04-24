@@ -3,7 +3,7 @@
 #SBATCH -A g2016002
 #SBATCH -o UI-DT-GEMM-%j.out
 #SBATCH -p devel
-#SBATCH -t 00:03:00
+#SBATCH -t 00:20:00
 #SBATCH -N 1
 #SBATCH -n 16
 #SBATCH -J UI-DT-GEMM
@@ -64,23 +64,23 @@ cfg_sched_graph(){
 #rm gemm* core.*
 
 B1=2
-B2=1
+B2=4
 M=2048
 timeout=1000
-P=4
-p=2
-q=2
-ipn=4
-nt=2
-#app=./bin/Debug/apps
-app=./bin/Release/apps
-for M in 2048 #1024 2048 4096 8192
+P=1
+p=1
+q=1
+ipn=1
+nt=16
+app=./bin/Debug/apps
+#app=./bin/Release/apps
+for M in 8192 #1024 2048 4096 8192
 do
-    for Z in 256 #32 64 128 256
+    for Z in 1024  #32 64 128 256
     do
 	B1=$[$M/$Z]
 	cfg_DT_SG_BLAS
-	mpirun -np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename "./test/gemm_sg_blas_ipn_${ipn}_${M}_${B1}_${SLURM_JOB_ID}.out" $app -M $M $B1 $B2 -N $M $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout $SCH 
+	mpirun -np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename "./test/gemm_dt_sg_blas_ipn_${ipn}_${M}_${B1}_${SLURM_JOB_ID}.out" $app -M $M $B1 $B2 -N $M $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout $SCH 
 	rm *.txt
     done
 done

@@ -9,7 +9,7 @@ GTask::GTask()
 GTask::GTask(string fn,Args * a, FUT key):
     fname(fn),args(a)
 {
-  task_count = 0;
+    task_count = 0;
     handle = new GHandle;
     alpha = beta = 1.0;
     trans_a = trans_b = trans_c = false;

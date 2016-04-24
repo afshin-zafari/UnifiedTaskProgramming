@@ -36,7 +36,7 @@ void _gemm(GTask *t)
       b->print();
       cout << "===============================\n";
     }
-    //    cblas_dgemm(CblasColMajor,TransA,CblasNoTrans,M,N,K,alpha,A,ldA,B,ldB,beta,C,ldC);
+    cblas_dgemm(CblasColMajor,TransA,CblasNoTrans,M,N,K,alpha,A,ldA,B,ldB,beta,C,ldC);
     if (dbg)
       cout << "-----------\n" ;
 

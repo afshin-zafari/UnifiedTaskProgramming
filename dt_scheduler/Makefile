@@ -22,7 +22,7 @@ LIB = ../ductteip/bin/Debug/libductteip.a
 LDFLAGS = -lpthread  -Wl,--allow-multiple-definition
 
 INC_DEBUG = $(INC) 
-CFLAGS_DEBUG = $(CFLAGS) -g 
+CFLAGS_DEBUG = $(CFLAGS) -g -D'BUILD=1'
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
@@ -33,7 +33,7 @@ DEP_DEBUG =
 OUT_DEBUG = bin/Debug/libdt_scheduler.a
 
 INC_RELEASE = $(INC) 
-CFLAGS_RELEASE = $(CFLAGS) -O2 
+CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=0'
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
