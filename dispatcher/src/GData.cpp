@@ -41,14 +41,14 @@ GData::GData(int i,int j,string n,GData *p, int idx):
     get_dispatcher()->data_created(this);
 }
 /*=====================================================================*/
-string GData::getName()
+string GData::get_name()
 {
   return name;
 }
 /*=====================================================================*/
 GData::~GData()
 {
-  LOG_INFO(LOG_MLEVEL,"%s\n",getName().c_str());
+  LOG_INFO(LOG_MLEVEL,"%s\n",get_name().c_str());
     //dtor
 }
 
@@ -215,7 +215,7 @@ void GData::print()
       printf("\n");
     }
   }
-  printf("%s,child cnt :%d\n",getName().c_str(),child_cnt);
+  printf("%s,child cnt :%d\n",get_name().c_str(),child_cnt);
   for ( int i=0;i<child_cnt;i++){
     if ( children[i] != nullptr)
       children[i]->print();

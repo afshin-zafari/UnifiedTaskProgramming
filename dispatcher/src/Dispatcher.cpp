@@ -179,18 +179,19 @@ void Dispatcher::dispatch_next(  GTask * t)
 /*=============================================================*/
 void Dispatcher::run_task(GTask *t)
 {
-  assert(t);
+    assert(t);
     IScheduler *s = t->get_owner();
     Tree *c=chain->find(s);
     assert(c!=nullptr);
     Tree *n = c->next[0];
     if(n->next.size()==0)// it is before last Scheduler
     {
-      assert(n->s);
+        assert(n->s);
         n->s->runTask(t);
         return;
     }
     GOperation *o = oper_obj[t->fname];
+    printf("task split\n");
     if ( o )
         o->run(t);
 }
@@ -202,17 +203,16 @@ void Dispatcher::finished_task(GTask *t)
     assert(sch != nullptr);
     IScheduler *prev;
     assert(sch->s);
-    LOG_INFO(LOG_MLEVEL,"owner  scheduler:%s\n",sch->s->get_name().c_str());
+    //LOG_INFO(LOG_MLEVEL,"owner  scheduler:%s\n",sch->s->get_name().c_str());
     Tree *n = sch->next[0];    
     assert(n);
     if(n->next.size()==0)// it is before last Scheduler
       {
-	LOG_INFO(LOG_MLEVEL,"owner scheduler:%s\n",sch->s->get_name().c_str());
+	//LOG_INFO(LOG_MLEVEL,"owner scheduler:%s\n",sch->s->get_name().c_str());
 	sch->s->finishedTask(t);
 	if ( sch->previous == nullptr)
 	  return;
-	if ( sch->previous->s )
-	  LOG_INFO(LOG_MLEVEL,"previous  scheduler:%s\n",sch->previous->s->get_name().c_str());
+	//	if ( sch->previous->s )	  LOG_INFO(LOG_MLEVEL,"previous  scheduler:%s\n",sch->previous->s->get_name().c_str());
       }
     
     if ( sch->previous == nullptr)
@@ -220,7 +220,7 @@ void Dispatcher::finished_task(GTask *t)
     else
         prev=sch->previous->s;
     assert(prev);
-    LOG_INFO(LOG_MLEVEL,"prev scheduler:%s\n",prev->get_name().c_str());
+    //LOG_INFO(LOG_MLEVEL,"prev scheduler:%s\n",prev->get_name().c_str());
     prev->finishedTask(t);
 
 }

@@ -21,7 +21,7 @@ LIB = ../dt_scheduler/bin/Debug/libdt_scheduler.a
 LDFLAGS = -Wl,--allow-multiple-definition  -lpthread 
 
 INC_DEBUG = $(INC) 
-CFLAGS_DEBUG = $(CFLAGS) -g -D'BUILD=1'
+CFLAGS_DEBUG = $(CFLAGS) -g
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
@@ -32,7 +32,7 @@ DEP_DEBUG =
 OUT_DEBUG = bin/Debug/libdispatcher.a
 
 INC_RELEASE = $(INC) 
-CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=0'
+CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=RELEASE'
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
@@ -42,9 +42,9 @@ OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/Release/libdispatcher.a
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/src/memory_manager.o $(OBJDIR_DEBUG)/src/IScheduler.o $(OBJDIR_DEBUG)/src/GTask.o $(OBJDIR_DEBUG)/src/GPartitioner.o $(OBJDIR_DEBUG)/src/GOperation.o $(OBJDIR_DEBUG)/src/GHandle.o $(OBJDIR_DEBUG)/src/GData.o $(OBJDIR_DEBUG)/src/Dispatcher.o $(OBJDIR_DEBUG)/main.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/src/memory_manager.o $(OBJDIR_DEBUG)/src/IScheduler.o $(OBJDIR_DEBUG)/src/GTask.o $(OBJDIR_DEBUG)/src/GPartitioner.o $(OBJDIR_DEBUG)/src/GOperation.o $(OBJDIR_DEBUG)/src/GHandle.o $(OBJDIR_DEBUG)/src/GData.o $(OBJDIR_DEBUG)/src/GLog.o $(OBJDIR_DEBUG)/src/Dispatcher.o $(OBJDIR_DEBUG)/main.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/src/memory_manager.o $(OBJDIR_RELEASE)/src/IScheduler.o $(OBJDIR_RELEASE)/src/GTask.o $(OBJDIR_RELEASE)/src/GPartitioner.o $(OBJDIR_RELEASE)/src/GOperation.o $(OBJDIR_RELEASE)/src/GHandle.o $(OBJDIR_RELEASE)/src/GData.o $(OBJDIR_RELEASE)/src/Dispatcher.o $(OBJDIR_RELEASE)/main.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/src/memory_manager.o $(OBJDIR_RELEASE)/src/IScheduler.o $(OBJDIR_RELEASE)/src/GTask.o $(OBJDIR_RELEASE)/src/GPartitioner.o $(OBJDIR_RELEASE)/src/GOperation.o $(OBJDIR_RELEASE)/src/GHandle.o $(OBJDIR_RELEASE)/src/GData.o $(OBJDIR_RELEASE)/src/GLog.o $(OBJDIR_RELEASE)/src/Dispatcher.o $(OBJDIR_RELEASE)/main.o
 
 all: debug release
 
@@ -65,7 +65,7 @@ out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 
 $(OBJDIR_DEBUG)/src/memory_manager.o: src/memory_manager.cpp
 	$(info $(notdir $<))
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/memory_manager.cpp -o $(OBJDIR_DEBUG)/src/memory_manager.o
+	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/memory_manager.cpp -o $(OBJDIR_DEBUG)/src/memory_manager.o
 
 $(OBJDIR_DEBUG)/src/IScheduler.o: src/IScheduler.cpp
 	$(info $(notdir $<))
@@ -95,6 +95,10 @@ $(OBJDIR_DEBUG)/src/Dispatcher.o: src/Dispatcher.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/Dispatcher.cpp -o $(OBJDIR_DEBUG)/src/Dispatcher.o
 
+$(OBJDIR_DEBUG)/src/GLog.o: src/GLog.cpp
+	$(info $(notdir $<))
+	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/GLog.cpp -o $(OBJDIR_DEBUG)/src/GLog.o
+
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c main.cpp -o $(OBJDIR_DEBUG)/main.o
@@ -120,7 +124,7 @@ out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 
 $(OBJDIR_RELEASE)/src/memory_manager.o: src/memory_manager.cpp
 	$(info $(notdir $<))
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/memory_manager.cpp -o $(OBJDIR_RELEASE)/src/memory_manager.o
+	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/memory_manager.cpp -o $(OBJDIR_RELEASE)/src/memory_manager.o
 
 $(OBJDIR_RELEASE)/src/IScheduler.o: src/IScheduler.cpp
 	$(info $(notdir $<))
@@ -149,6 +153,10 @@ $(OBJDIR_RELEASE)/src/GData.o: src/GData.cpp
 $(OBJDIR_RELEASE)/src/Dispatcher.o: src/Dispatcher.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/Dispatcher.cpp -o $(OBJDIR_RELEASE)/src/Dispatcher.o
+
+$(OBJDIR_RELEASE)/src/GLog.o: src/GLog.cpp
+	$(info $(notdir $<))
+	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/GLog.cpp -o $(OBJDIR_RELEASE)/src/GLog.o
 
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(info $(notdir $<))

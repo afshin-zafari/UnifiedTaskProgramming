@@ -44,6 +44,7 @@ class GTask
         bool get_upper_triangle();
         bool get_lower_triangle();
         bool get_unit_diagonal();
+        string get_name();
     protected:
     private:
     GHandle *handle;

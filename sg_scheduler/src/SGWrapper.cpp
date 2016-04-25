@@ -131,7 +131,7 @@ SGGenTask::SGGenTask(SGWrapper *sgw,GTask *t):scheduler(sgw),gt(t)
 /*=========================================================================*/
 void SGGenTask::run()
 {
-  LOG_INFO(LOG_MLEVEL,"\n");
+  //  LOG_INFO(LOG_MLEVEL,"\n");
     get_dispatcher()->run_task(gt);
 }
 /*=========================================================================*/

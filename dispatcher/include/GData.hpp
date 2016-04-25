@@ -43,7 +43,7 @@ class GData
         void fill_chol_diag();
         int get_child_index();
         void getCoordination( int &r, int &c, int &d);
-        string getName();
+        string get_name();
         GData *get_parent();
         int get_level();
         void set_level(int);
