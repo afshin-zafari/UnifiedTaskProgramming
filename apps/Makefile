@@ -49,15 +49,16 @@ OBJ_DEBUG = $(OBJDIR_DEBUG)/main.o  $(OBJDIR_DEBUG)/src/unified_gemm.o $(OBJDIR_
 OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/src/unified_gemm.o $(OBJDIR_RELEASE)/src/unified_trsm.o 
 
 all: debug release
-
 clean: clean_debug clean_release
 
 before_debug: 
+	$(info ***************** MAIN APP (DEBUG) **************************)
 	@test -d bin/Debug || mkdir -p bin/Debug
 	@test -d $(OBJDIR_DEBUG) || mkdir -p $(OBJDIR_DEBUG)
 	@test -d $(OBJDIR_DEBUG)/src || mkdir -p $(OBJDIR_DEBUG)/src
 
 after_debug: 
+	$(info ************************************************************)
 
 debug: before_debug out_debug after_debug
 
@@ -84,11 +85,15 @@ clean_debug:
 	@rm -rf $(OBJDIR_DEBUG)/src
 
 before_release: 
+	$(info ***************** MAIN APP (RELEASE)************************)
 	@test -d bin/Release || mkdir -p bin/Release
 	@test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
 	@test -d $(OBJDIR_RELEASE)/src || mkdir -p $(OBJDIR_RELEASE)/src
 
 after_release: 
+	$(info ************************************************************)
+	$(info )
+
 
 release: before_release out_release after_release
 

@@ -191,7 +191,6 @@ void Dispatcher::run_task(GTask *t)
         return;
     }
     GOperation *o = oper_obj[t->fname];
-    printf("task split\n");
     if ( o )
         o->run(t);
 }

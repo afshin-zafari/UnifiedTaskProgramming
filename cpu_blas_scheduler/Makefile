@@ -50,11 +50,14 @@ all: debug release
 clean: clean_debug clean_release
 
 before_debug: 
+	$(info ***************** CPU BLAS SCHEDULER (DEBUG)****************)
 	@test -d bin/Debug || mkdir -p bin/Debug
 	@test -d $(OBJDIR_DEBUG) || mkdir -p $(OBJDIR_DEBUG)
 	@test -d $(OBJDIR_DEBUG)/src || mkdir -p $(OBJDIR_DEBUG)/src
 
 after_debug: 
+	$(info ************************************************************)
+	$(info )
 
 debug: before_debug out_debug after_debug
 
@@ -81,11 +84,14 @@ clean_debug:
 	@rm -rf $(OBJDIR_DEBUG)/src
 
 before_release: 
+	$(info ***************** CPU BLAS SCHEDULER (RELEASE)**************)
 	@test -d bin/Release || mkdir -p bin/Release
 	@test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
 	@test -d $(OBJDIR_RELEASE)/src || mkdir -p $(OBJDIR_RELEASE)/src
 
 after_release: 
+	$(info ************************************************************)
+	$(info )
 
 release: before_release out_release after_release
 

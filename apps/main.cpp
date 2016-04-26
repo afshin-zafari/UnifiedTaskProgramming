@@ -34,9 +34,9 @@ GData *test_gemm()
     GPartitioner *P2= new GPartitioner(YB2,YB2);
     P1->set_next(P2);
     cout << "+++++++++++++"<<
-      A.getName() << "," <<
-      B.getName() << "," <<
-      C.getName() << "." << endl;
+      A.get_name() << "," <<
+      B.get_name() << "," <<
+      C.get_name() << "." << endl;
 
     printf("Partitioning starts now %dx%d\n",YB1,YB1);
 

@@ -51,11 +51,14 @@ all: debug release
 clean: clean_debug clean_release
 
 before_debug: 
+	$(info ***************** DISPATCHER (DEBUG)************************)
 	@test -d bin/Debug || mkdir -p bin/Debug
 	@test -d $(OBJDIR_DEBUG)/src || mkdir -p $(OBJDIR_DEBUG)/src
 	@test -d $(OBJDIR_DEBUG) || mkdir -p $(OBJDIR_DEBUG)
 
 after_debug: 
+	$(info ************************************************************)
+	$(info )
 
 debug: before_debug out_debug after_debug
 
@@ -110,11 +113,14 @@ clean_debug:
 	@rm -rf $(OBJDIR_DEBUG)
 
 before_release: 
+	$(info ***************** DISPATCHER (RELEASE)**********************)
 	@test -d bin/Release || mkdir -p bin/Release
 	@test -d $(OBJDIR_RELEASE)/src || mkdir -p $(OBJDIR_RELEASE)/src
 	@test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
 
 after_release: 
+	$(info ************************************************************)
+	$(info )
 
 release: before_release out_release after_release
 

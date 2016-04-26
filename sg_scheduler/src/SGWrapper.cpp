@@ -102,7 +102,7 @@ void SGWrapper::data_partitioned(GData *d)
   for ( int i =0 ; i < by; i++){
     for ( int j =0 ; j < bx; j++){
       GData &d_ch = (*d)(i,j);
-      LOG_INFO(LOG_MLEVEL,"gd_ch:%s\n",d_ch.getName().c_str());
+      LOG_INFO(LOG_MLEVEL,"gd_ch:%s\n",d_ch.get_name().c_str());
       d_ch.set_memory((void*)(content+(j*by+i)*mn));
       LOG_INFO(LOG_MLEVEL,"child (%d,%d) gdata memory:%p \n",i,j,d_ch.get_memory());
     }

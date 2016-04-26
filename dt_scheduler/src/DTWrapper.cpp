@@ -38,7 +38,6 @@ void DTWrapper::submitTask(GTask *t)
     return;
   }
   glbCtx.incrementCounter(GlobalContext::TaskRead);
-  glbCtx.incrementCounter(GlobalContext::TaskInsert);
 
   IData *d=nullptr,*dwrt=nullptr;
   list<DataAccess *> *dlist = new list <DataAccess *>;
@@ -49,15 +48,15 @@ void DTWrapper::submitTask(GTask *t)
     assert(gh);
     d=g2dt_map[gh->get_key()];
     assert(d);
-    LOG_INFO(LOG_MLEVEL,"ghandle:%ld, dt data p:%s\n",gh->get_key(),d->getName().c_str());
+    LOG_INFO(LOG_MLEVEL,"ghandle:%ld, dt data p:%s\n",gh->get_key(),d->get_name().c_str());
     daxs = new DataAccess;
     daxs->data = d;
-    int h = d->getHost();
+    int h = d->getHost();(void)h;
     if ( t->args->args[i]->axs == In){
       daxs->type = IData::READ;
       daxs->required_version = d->getWriteVersion();
       d->incrementVersion(IData::READ);
-      LOG_INFO(LOG_MLEVEL,"READ  %s@%d-ver:%s\n",d->getName().c_str(),h,
+      LOG_INFO(LOG_MLEVEL,"READ  %s@%d-ver:%s\n",d->get_name().c_str(),h,
 	       d->getRunTimeVersion(IData::READ).dumpString().c_str());
     }
     else{
@@ -65,7 +64,7 @@ void DTWrapper::submitTask(GTask *t)
       daxs->type = IData::WRITE;
       daxs->required_version = d->getReadVersion();
       d->incrementVersion(IData::WRITE);
-      LOG_INFO(LOG_MLEVEL,"WRITE %s@%d-ver:%s\n",d->getName().c_str(),h,
+      LOG_INFO(LOG_MLEVEL,"WRITE %s@%d-ver:%s\n",d->get_name().c_str(),h,
 	       d->getRunTimeVersion(IData::WRITE).dumpString().c_str());
     }
     daxs->required_version.setContext( glbCtx.getLevelString() );
@@ -83,6 +82,7 @@ void DTWrapper::submitTask(GTask *t)
   }
   if ( dwrt->getHost()==me){
     LOG_INFO(LOG_MLEVEL,"task added.\n");
+    glbCtx.incrementCounter(GlobalContext::TaskInsert);
     TaskHandle task_handle =dtEngine.addTask(ctx,t->fname,KeyGen(t->fname.c_str()),dwrt->getHost(),dlist);
 
     gt2dt_map[t->get_handle()->get_key()]=dtEngine.getTask(task_handle);
@@ -131,7 +131,7 @@ void DTWrapper::finishedTask(GTask *t)
     LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
     IDuctteipTask *tt=gt2dt_map[parent_task->get_handle()->get_key()];
     if ( tt){
-      LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d task-name:%s.\n",parent_task->task_count,tt->getName().c_str());
+      LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d task-name:%s.\n",parent_task->task_count,tt->get_name().c_str());
       if ( !tt->isFinished() )
 	tt->setFinished(true);
     }
@@ -142,25 +142,25 @@ void DTWrapper::finishedTask(GTask *t)
 /*=======================================================================*/
 void DTWrapper::data_created(GData *d)
 {
-  LOG_INFO(0*LOG_MLEVEL,"data:%s level:%d\n",d->getName().c_str(),d->get_level());
+  LOG_INFO(0*LOG_MLEVEL,"data:%s level:%d\n",d->get_name().c_str(),d->get_level());
   if  ( d->get_level() > 1 ) 
     return;
-  GData *dp = d->get_parent();
+  //GData *dp = d->get_parent();
   //if (dp)     return;
-  LOG_INFO(0*LOG_MLEVEL,"child data:%s\n",d->getName().c_str());
+  LOG_INFO(0*LOG_MLEVEL,"child data:%s\n",d->get_name().c_str());
   GHandle *gh = d->getHandle();
   int M = d->get_rows();
   int N = d->get_cols();
-  OneLevelData *dL1=new OneLevelData(d->getName(),M,N,ctx);
+  OneLevelData *dL1=new OneLevelData(d->get_name(),M,N,ctx);
   g2dt_map[gh->get_key()] = (IData *)dL1;
-  LOG_INFO(0*LOG_MLEVEL,"ghandle:%ld, dt data:%s\n",gh->get_key(),dL1->getName().c_str());
+  LOG_INFO(0*LOG_MLEVEL,"ghandle:%ld, dt data:%s\n",gh->get_key(),dL1->get_name().c_str());
 }
 /*=======================================================================*/
 void DTWrapper::data_partitioned(GData *d)
 {
   int by = d->get_part_countY();
   int bx = d->get_part_countX();
-  LOG_INFO(0*LOG_MLEVEL,"data:%s %dx%d, level:%d\n",d->getName().c_str(),by,bx,d->get_level());  
+  LOG_INFO(0*LOG_MLEVEL,"data:%s %dx%d, level:%d\n",d->get_name().c_str(),by,bx,d->get_level());  
   if  ( d->get_level() > 0 ) 
     return;
   GHandle *gh = d->getHandle();
@@ -171,7 +171,7 @@ void DTWrapper::data_partitioned(GData *d)
       IData * dt_ch = (*dt)(i,j);
       GData &d_ch = (*d)(i,j);
       assert( dt_ch);
-      LOG_INFO(0*LOG_MLEVEL,"gd_ch:%s, dt_ch:%s\n",d_ch.getName().c_str(),dt_ch->getName().c_str());
+      LOG_INFO(0*LOG_MLEVEL,"gd_ch:%s, dt_ch:%s\n",d_ch.get_name().c_str(),dt_ch->get_name().c_str());
       d_ch.set_memory((void *)dt_ch->getContentAddress());
       LOG_INFO(0*LOG_MLEVEL,"gdata memory:%p dt_ch memory:%p\n",d_ch.get_memory(),dt_ch->getContentAddress());
       dt_ch->setParentData(dt);
@@ -200,9 +200,9 @@ void DTWrapper::allocate_memory(GData *d)
   int row,col,depth;
   assert(d);
   d->getCoordination(row,col,depth);
-  LOG_INFO(LOG_MLEVEL,"Data:%s block-coord(%d,%d)\n",d->getName().c_str(),row,col);
+  LOG_INFO(LOG_MLEVEL,"Data:%s block-coord(%d,%d)\n",d->get_name().c_str(),row,col);
   GHandle *gh = d->getHandle();
-  OneLevelData *dL1=new OneLevelData(d->getName(),1,1,ctx);
+  OneLevelData *dL1=new OneLevelData(d->get_name(),1,1,ctx);
   IData *dt = (*dL1)(0,0);
   dL1->setBlockIdx(row,col);
   g2dt_map[gh->get_key()] = (IData *)dL1;

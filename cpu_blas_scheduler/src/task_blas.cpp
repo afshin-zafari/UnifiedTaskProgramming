@@ -25,9 +25,9 @@ void _gemm(GTask *t)
 
     if (dbg) {
       cout << "-----------\n" <<
-	a->getName() << "*"  <<
-	b->getName() << "->" <<
-	c->getName() << "\n---------------\n";	
+	a->get_name() << "*"  <<
+	b->get_name() << "->" <<
+	c->get_name() << "\n---------------\n";	
       cout << A << "," << B << "," << C << endl;
       printf("%p,%p,%p\n%d,%d,%d\n%d,%d,%d\n",A,B,C,ldA,ldB,ldC,M,N,K);
       cout << "===============================\n";

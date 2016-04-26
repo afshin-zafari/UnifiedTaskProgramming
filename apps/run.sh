@@ -64,19 +64,19 @@ cfg_sched_graph(){
 #rm gemm* core.*
 
 B1=2
-B2=4
+B2=2
 M=2048
-timeout=500
+timeout=120
 P=1
 p=1
 q=1
 ipn=1
 nt=16
-#app=./bin/Debug/apps
-app=./bin/Release/apps
-for M in 64 #1024 2048 4096 8192
+app=./bin/Debug/apps
+#app=./bin/Release/apps
+for M in 1024 #1024 2048 4096 8192
 do
-    for Z in 8  #32 64 128 256
+    for Z in 128  #32 64 128 256
     do
 	B1=$[$M/$Z]
 	cfg_DT_SG_BLAS
