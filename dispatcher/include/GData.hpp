@@ -1,3 +1,5 @@
+/** \defgroup gen_group Generic Classes
+*/
 #ifndef GDATA_HPP
 #define GDATA_HPP
 

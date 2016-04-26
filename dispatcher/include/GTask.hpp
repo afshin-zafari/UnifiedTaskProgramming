@@ -1,3 +1,6 @@
+/** \ingroup gen_group Generic Classes
+*/
+
 #ifndef GTASK_HPP
 #define GTASK_HPP
 
