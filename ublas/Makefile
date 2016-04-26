@@ -25,6 +25,9 @@ LIBDIR = ./lib
 LIB = ../dispatcher/bin/Debug/libdispatcher.a ../dt_scheduler/bin/Debug/libdt_scheduler.a ../ductteip/bin/Debug/libductteip.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a
 LDFLAGS = -L/pica/sw/comp/cuda/7.5/tintin/lib64 -lpthread -Wl,--allow-multiple-definition -lgsl -lgslcblas #-lcublas -lcudart
 OBJDIR = ./obj
+libfile=$(LIBDIR)/libublas.a
+outdir=$(OBJDIR)
+
 ifeq ($(CXX),icpc)
 #-----------------------Intel Compiler set---------------------
 	LINK_FLAGS=-lm -lrt 
@@ -40,7 +43,7 @@ endif
 #########################################################
 sources:=$(notdir $(shell ls -Sr $(SOURCE_DIR)/*.cpp))
 objnames:=$(sources:%.cpp=%.o)
-objects:=$(addprefix $(outdir)/,$(objnames))	
+objects:=$(addprefix $(OBJDIR)/,$(objnames))	
 all: $(libfile)
 
 $(libfile) : $(libfile)($(outdir)/*.o)
@@ -61,7 +64,7 @@ $(libfile)($(outdir)/*.o) : $(objects)
 
 $(objects):  $(outdir)/%.o:  $(SOURCE_DIR)/%.cpp $(HEADER_DIR)/%.hpp
 	$(info compile $(notdir $<) )
-	@$(CXX) -c -o $@ $< $(COMP_FLAGS)
+	@$(CXX) -c -o $@ $< $(CFLAGS) $(INC)
 
 
 
