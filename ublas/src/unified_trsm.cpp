@@ -5,7 +5,7 @@
 #include "unified_gemm.hpp"
 
 
-unified_trsm::unified_trsm()
+unified_trsm::unified_trsm():GOperation()
 {
     name = utrsm_name;
     get_dispatcher()->register_operation(this,name);

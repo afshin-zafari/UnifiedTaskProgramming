@@ -1,15 +1,9 @@
 #include "GOperation.hpp"
 
 /*-------------------------------------------------------------*/
-GOperation::GOperation()
-{
-    //ctor
-}
+//GOperation::GOperation(){}
 /*-------------------------------------------------------------*/
-GOperation::~GOperation()
-{
-    //dtor
-}
+//GOperation::~GOperation(){}
 /*-------------------------------------------------------------*/
 GOperation::GOperation(const GOperation& other)
 {

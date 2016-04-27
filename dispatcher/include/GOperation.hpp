@@ -5,11 +5,11 @@
 class GOperation
 {
     public:
-        GOperation();
-        virtual ~GOperation();
+  GOperation(){}
+  ~GOperation(){}
         GOperation(const GOperation& other);
         GOperation& operator=(const GOperation& other);
-        virtual void run(GTask *){}
+        inline virtual void run(GTask *){}
         string name;
     protected:
     private:

@@ -1,7 +1,7 @@
 #include "unified_gemm.hpp"
 #include <cstdlib>
 #include <iostream>
-unified_gemm::unified_gemm()
+unified_gemm::unified_gemm():GOperation()
 {
     name = ugemm_name;
     get_dispatcher()->register_operation(this,name);

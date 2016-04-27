@@ -16,7 +16,7 @@ INC = -Iinclude -I../dispatcher/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afs
 CFLAGS = -Wall -fexceptions -std=c++11 -g -pthread -DSLIB=1
 RESINC = 
 LIBDIR = 
-LIB = ../dispatcher/bin/Debug/libdispatcher.a ../dt_scheduler/bin/Debug/libdt_scheduler.a ../ductteip/bin/Debug/libductteip.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a
+LIB = ../ublas/lib/libublas.a ../dispatcher/bin/Debug/libdispatcher.a ../dt_scheduler/bin/Debug/libdt_scheduler.a ../ductteip/bin/Debug/libductteip.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a 
 LDFLAGS = -L/pica/sw/comp/cuda/7.5/tintin/lib64 -lpthread -Wl,--allow-multiple-definition -lgsl -lgslcblas #-lcublas -lcudart
 
 INC_DEBUG = $(INC) 
@@ -43,10 +43,10 @@ OUT_RELEASE = bin/Release/apps
 
 
 #OBJ_DEBUG = $(OBJDIR_DEBUG)/main.o  $(OBJDIR_DEBUG)/src/unified_gemm.o $(OBJDIR_DEBUG)/src/unified_trsm.o ../cuBLAS_scheduler/CUBLAS.o
-OBJ_DEBUG = $(OBJDIR_DEBUG)/main.o  $(OBJDIR_DEBUG)/src/unified_gemm.o $(OBJDIR_DEBUG)/src/unified_trsm.o 
+OBJ_DEBUG = $(OBJDIR_DEBUG)/main.o  #$(OBJDIR_DEBUG)/src/unified_gemm.o $(OBJDIR_DEBUG)/src/unified_trsm.o 
 
 #OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/src/unified_gemm.o $(OBJDIR_RELEASE)/src/unified_trsm.o ../cuBLAS_scheduler/CUBLAS.o
-OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/src/unified_gemm.o $(OBJDIR_RELEASE)/src/unified_trsm.o 
+OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o #$(OBJDIR_RELEASE)/src/unified_gemm.o $(OBJDIR_RELEASE)/src/unified_trsm.o 
 
 all: debug release
 clean: clean_debug clean_release
@@ -64,7 +64,7 @@ debug: before_debug out_debug after_debug
 
 out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 	$(info creating $(OUT_DEBUG))
-	@$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
+	$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
 
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(info $(notdir $<))
