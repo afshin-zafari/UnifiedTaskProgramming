@@ -3,7 +3,7 @@
 #SBATCH -A g2016002
 #SBATCH -o UI-DT-GEMM-%j.out
 #SBATCH -p devel
-#SBATCH -t 00:10:00
+#SBATCH -t 00:02:00
 #SBATCH -N 1
 #SBATCH -n 16
 #SBATCH -J UI-DT-GEMM
@@ -64,9 +64,9 @@ cfg_sched_graph(){
 #rm gemm* core.*
 
 B1=2
-B2=2
+B2=1
 M=2048
-timeout=120
+timeout=10
 P=1
 p=1
 q=1
@@ -74,9 +74,9 @@ ipn=1
 nt=16
 app=./bin/Debug/apps
 #app=./bin/Release/apps
-for M in 1024 #1024 2048 4096 8192
+for M in 64 #1024 2048 4096 8192
 do
-    for Z in 128  #32 64 128 256
+    for Z in 8  #32 64 128 256
     do
 	B1=$[$M/$Z]
 	cfg_DT_SG_BLAS

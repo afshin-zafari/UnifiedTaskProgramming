@@ -1,8 +1,9 @@
 #include "Dispatcher.hpp"
 #include "SGWrapper.hpp"
 #include "DTWrapper.hpp"
+#include "GLog.hpp"
 #include "CPUBLAS.hpp"
-#include "CUBLAS.hpp"
+//#include "CUBLAS.hpp"
 #include <string>
 #include <iostream>
 #include <dlfcn.h>
@@ -115,7 +116,6 @@ void Dispatcher::destroy_scheduler(Tree *c)
 Dispatcher::~Dispatcher()
 {
   //destroy_scheduler(chain);
-  LOG_INFO(LOG_MLEVEL,"Total Tasks:%d\n",task_cnt);
 }
 /*=============================================================*/
 Dispatcher::Dispatcher(const Dispatcher& other)
@@ -137,12 +137,16 @@ GTask *Dispatcher::submit_task(string fn, Args *args, Axs & axs,GTask *parent_ta
         if ( args->args[i] != nullptr )
             args->args[i]->axs = axs.axs[i];
     }
-
     GTask *t=new GTask(fn,args,-1);
     assert(t);
+
+    glog << ev_submit << *t << endlog;
+
     t->set_parent(parent_task);
+
     dispatch_next(t);
     task_cnt++;
+
     return t;
 }
 /*=============================================================*/

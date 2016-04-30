@@ -11,9 +11,9 @@ set -x
 UI_GEMM=/pica/h1/afshin/Damavand/D3/apps/bin/Debug/apps
 SG_GEMM=/pica/h1/afshin/Damavand/D3/sg_gemm/bin/Debug/sg_gemm
 
-for M in 1024 2048 4096
+for M in 1024 #2048 4096
 do
-	for Z in 16 32 64 128
+	for Z in 128 #16 32 64 128
 	do
 		B=$[$M/$Z]
 

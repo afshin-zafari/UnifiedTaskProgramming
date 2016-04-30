@@ -175,14 +175,11 @@ byte *GData::get_memory()
 void GData::fill_with(double v)
 {
   double *d = (double*)content;
-  LOG_INFO(LOG_MLEVEL,"content:%p\n",d);
   if ( d != nullptr){    
-    //LOG_INFO(LOG_MLEVEL,"memory:%p\n",d);
     for ( int i=0;i<M*N;i++){
       d[i]=v;
     }
   }
-  LOG_INFO(LOG_MLEVEL,"Child Count:%d\n",child_cnt);
   for ( int c=0;c<child_cnt; c++){
     if ( children[c] != nullptr){
       children[c]->fill_with(v);

@@ -123,20 +123,22 @@ void DTWrapper::finishedTask(GTask *t)
     return;
   LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
   
-  pthread_mutex_lock(&thread_lock);
 
-  Atomic::decrease(&parent_task->task_count);
+  int task_cnt = Atomic::decrease_nv(&parent_task->task_count);
   LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
-  if ( parent_task->task_count ==0){
-    LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
-    IDuctteipTask *tt=gt2dt_map[parent_task->get_handle()->get_key()];
-    if ( tt){
-      LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d task-name:%s.\n",parent_task->task_count,tt->get_name().c_str());
-      if ( !tt->isFinished() )
-	tt->setFinished(true);
+  //  if (parent_task->task_count.load() < 2) {
+    //    pthread_mutex_lock(&thread_lock);
+    if ( task_cnt ==0){
+      LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
+      IDuctteipTask *tt=gt2dt_map[parent_task->get_handle()->get_key()];
+      if ( tt){
+	LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d task-name:%s.\n",parent_task->task_count,tt->get_name().c_str());
+	if ( !tt->isFinished() )
+	  tt->setFinished(true);
+      }
     }
-  }
-  pthread_mutex_unlock(&thread_lock);
+    //pthread_mutex_unlock(&thread_lock);
+    //}
 
 }
 /*=======================================================================*/
