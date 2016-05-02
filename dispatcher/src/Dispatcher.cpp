@@ -184,6 +184,7 @@ void Dispatcher::dispatch_next(  GTask * t)
 void Dispatcher::run_task(GTask *t)
 {
     assert(t);
+    glog << ev_run << *t << endlog;
     IScheduler *s = t->get_owner();
     Tree *c=chain->find(s);
     assert(c!=nullptr);
@@ -202,6 +203,7 @@ void Dispatcher::run_task(GTask *t)
 void Dispatcher::finished_task(GTask *t)
 {
     //    LOG_INFO(LOG_MLEVEL,"task finished :%s\n",t->fname.c_str());
+    glog << ev_finished << *t << endlog;
     Tree *sch=chain->find(t->get_owner());
     assert(sch != nullptr);
     IScheduler *prev;
@@ -282,6 +284,8 @@ void Dispatcher::data_created(GData *d, Tree *ch)
 void Dispatcher::data_created(GData *d)
 {
   assert(chain);
+  glog << ev_create << *d << endlog;
+
   data_created(d,chain);
 }
 /*=============================================================*/
@@ -296,6 +300,7 @@ void Dispatcher::data_partitioned(GData *d, Tree *ch)
 void Dispatcher::data_partitioned(GData *d)
 {
   assert(chain);
+  glog << ev_partition << *d << endlog;
   data_partitioned(d,chain);
 }
 /*=============================================================*/

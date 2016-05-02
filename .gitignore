@@ -1,11 +1,11 @@
 *.o
 *.a
 *.so
+*.csv
 *.out*
 */bin/*
 */obj/*
 */test/*
-*/log/*
 DuctTeip/*
 doc/html/*
 doc/latex/*

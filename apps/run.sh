@@ -20,7 +20,7 @@ cd ../apps
 make
 }
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../dispatcher/bin/Debug
-
+mkdir -p log
 set -x
 SG_PATH=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so
 BLAS_PATH=""
