@@ -72,9 +72,13 @@ void SGWrapper::allocate_memory(GData*)
 /*=========================================================================*/
 void SGWrapper::data_created(GData *d)
 {
-  GHandleKey gh = d->get_handle()->get_key();
-  if (glb_to_sg[gh]==NULL)
-    glb_to_sg[gh]=new sg_data_t;
+  //  GHandleKey gh = d->get_handle()->get_key();
+  sg_data_t *sgd= (sg_data_t*)d->get_guest();
+  if ( sgd == NULL ) {
+    sgd = new sg_data_t;
+    d->set_guest((void *)sgd);
+  }
+  //  if (glb_to_sg[gh]==NULL)    glb_to_sg[gh]=new sg_data_t;
   if ( d->get_level() ==0){
     int size = d->get_cols() * d->get_rows() * sizeof(double);
     void *m =(void *) new byte[size];
@@ -112,16 +116,20 @@ void SGWrapper::data_partitioned(GData *d)
 /*=========================================================================*/
 
 /****************************************************************************/
-map<GHandleKey,sg_data_t*> glb_to_sg;
+//map<GHandleKey,sg_data_t*> glb_to_sg;
 SGGenTask::SGGenTask(SGWrapper *sgw,GTask *t):scheduler(sgw),gt(t)
 {
     Args *a=t->args;
     for(uint i=0; i< a->args.size(); i++)
     {
-        GHandleKey gh = a->args[i]->get_handle()->get_key();
-        if (glb_to_sg[gh]==NULL)
-            glb_to_sg[gh]=new sg_data_t;
-        sg_data_t *h = glb_to_sg[gh];
+      //GHandleKey gh = a->args[i]->get_handle()->get_key();
+	sg_data_t *sgd = (sg_data_t *)a->args[i]->get_guest();
+	if ( sgd == NULL ){ 
+            sgd =new sg_data_t;
+	    a->args[i]->set_guest((void*)sgd);
+	}
+	//        if (glb_to_sg[gh]==NULL)            glb_to_sg[gh]=new sg_data_t;
+        sg_data_t *h = sgd;//glb_to_sg[gh];
         if ( a->args[i]->axs==In)
             register_access(ReadWriteAdd::read,*h);
         else

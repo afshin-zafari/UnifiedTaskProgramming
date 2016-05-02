@@ -6,6 +6,7 @@ GData::GData()
     handle = new GHandle;
     memory = nullptr;
     content = nullptr;
+    guest = nullptr;
     level =0;
     child_cnt = 0;
 }
@@ -20,6 +21,7 @@ GData::GData(int i,int j,string n):M(i),N(j),name(n)
     parent = nullptr;
     children= nullptr;
     partitioner=nullptr;
+    guest = nullptr;
     level = 0;
 
     get_dispatcher()->data_created(this); 
@@ -34,6 +36,7 @@ GData::GData(int i,int j,string n,GData *p, int idx):
     child_cnt = 0;
     children= nullptr;
     partitioner=nullptr;
+    guest = nullptr;
     if ( p)
       level = p->level+1;
     else
