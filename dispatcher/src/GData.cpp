@@ -316,3 +316,6 @@ int GData::get_level()
   return level;
 }
 /*=====================================================================*/
+void *GData::get_guest(){return guest;}
+void GData::set_guest(void *p){guest=p;}
+/*=====================================================================*/

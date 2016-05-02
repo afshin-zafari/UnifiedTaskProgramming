@@ -180,3 +180,6 @@ string GTask::get_name()
   return fname;
 }
 /*==================================================================*/
+void* GTask::get_guest(){return guest;}
+void GTask::set_guest(void *p){guest = p;}
+/*==================================================================*/

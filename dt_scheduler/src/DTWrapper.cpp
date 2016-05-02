@@ -46,7 +46,8 @@ void DTWrapper::submitTask(GTask *t)
   for ( uint i=0; i < t->args->args.size(); i++){
     GHandle *gh = t->args->args[i]->getHandle();
     assert(gh);
-    d=g2dt_map[gh->get_key()];
+    //d=g2dt_map[gh->get_key()];
+    d = (IData *)t->args->args[i]->get_guest();
     assert(d);
     LOG_INFO(LOG_MLEVEL,"ghandle:%ld, dt data p:%s\n",gh->get_key(),d->get_name().c_str());
     daxs = new DataAccess;
@@ -61,35 +62,52 @@ void DTWrapper::submitTask(GTask *t)
     }
     else{
       dwrt = d;
+      printf("%s,%d\n",__FILE__,__LINE__);
       daxs->type = IData::WRITE;
+      printf("%s,%d\n",__FILE__,__LINE__);
       daxs->required_version = d->getReadVersion();
+      printf("%s,%d\n",__FILE__,__LINE__);
       d->incrementVersion(IData::WRITE);
       LOG_INFO(LOG_MLEVEL,"WRITE %s@%d-ver:%s\n",d->get_name().c_str(),h,
 	       d->getRunTimeVersion(IData::WRITE).dumpString().c_str());
     }
+      printf("%s,%d\n",__FILE__,__LINE__);
     daxs->required_version.setContext( glbCtx.getLevelString() );
+      printf("%s,%d\n",__FILE__,__LINE__);
     d->getWriteVersion().setContext( glbCtx.getLevelString() );
+      printf("%s,%d\n",__FILE__,__LINE__);
     d->getReadVersion().setContext( glbCtx.getLevelString() );
+      printf("%s,%d\n",__FILE__,__LINE__);
     dlist->push_back(daxs);
+      printf("%s,%d\n",__FILE__,__LINE__);
 
   }
+      printf("%s,%d\n",__FILE__,__LINE__);
   if (d==nullptr){
+      printf("%s,%d\n",__FILE__,__LINE__);
     fprintf(stderr,"No data argument is defined for task.\n ");
     return ;
   }
+      printf("%s,%d\n",__FILE__,__LINE__);
   if (dwrt == nullptr){ // if all data are READ
+      printf("%s,%d\n",__FILE__,__LINE__);
     dwrt = d;
   }
+      printf("%s,%d\n",__FILE__,__LINE__);
   if ( dwrt->getHost()==me){
     LOG_INFO(LOG_MLEVEL,"task added.\n");
     glbCtx.incrementCounter(GlobalContext::TaskInsert);
     TaskHandle task_handle =dtEngine.addTask(ctx,t->fname,KeyGen(t->fname.c_str()),dwrt->getHost(),dlist);
 
-    gt2dt_map[t->get_handle()->get_key()]=dtEngine.getTask(task_handle);
-    assert( gt2dt_map[t->get_handle()->get_key()]==dtEngine.getTask(task_handle));
+    IDuctteipTask *dt=dtEngine.getTask(task_handle);
+    assert(dt);
+    //gt2dt_map[t->get_handle()->get_key()]=dt;//Engine.getTask(task_handle);
+    //assert( gt2dt_map[t->get_handle()->get_key()]==dtEngine.getTask(task_handle));
 
-    dt2gt_map[task_handle]=t;
-    assert( dt2gt_map[task_handle]==t);
+    //dt2gt_map[task_handle]=t;
+    dt->set_guest((void*)t );
+     t->set_guest((void*)dt);
+     //assert( dt2gt_map[task_handle]==t);
   }
 
 }
@@ -104,7 +122,7 @@ void DTWrapper::finishedTask(GTask *t)
   LOG_INFO(LOG_MLEVEL,"%s\n",t->fname.c_str());
   if ( t->get_owner()->get_id() == get_id() ) {
     LOG_INFO(LOG_MLEVEL,"Task is mine.\n");
-    IDuctteipTask *tt=gt2dt_map[t->get_handle()->get_key()];
+    IDuctteipTask *tt=(IDuctteipTask *)t->get_guest();//gt2dt_map[t->get_handle()->get_key()];
     if (tt)
       tt->setFinished(true);
     else
@@ -130,7 +148,7 @@ void DTWrapper::finishedTask(GTask *t)
     //    pthread_mutex_lock(&thread_lock);
     if ( task_cnt ==0){
       LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
-      IDuctteipTask *tt=gt2dt_map[parent_task->get_handle()->get_key()];
+      IDuctteipTask *tt=(IDuctteipTask *)parent_task->get_guest();//gt2dt_map[parent_task->get_handle()->get_key()];
       if ( tt){
 	LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d task-name:%s.\n",parent_task->task_count,tt->get_name().c_str());
 	if ( !tt->isFinished() )
@@ -150,12 +168,13 @@ void DTWrapper::data_created(GData *d)
   //GData *dp = d->get_parent();
   //if (dp)     return;
   LOG_INFO(0*LOG_MLEVEL,"child data:%s\n",d->get_name().c_str());
-  GHandle *gh = d->getHandle();
+  //  GHandle *gh = d->getHandle();
   int M = d->get_rows();
   int N = d->get_cols();
   OneLevelData *dL1=new OneLevelData(d->get_name(),M,N,ctx);
-  g2dt_map[gh->get_key()] = (IData *)dL1;
-  LOG_INFO(0*LOG_MLEVEL,"ghandle:%ld, dt data:%s\n",gh->get_key(),dL1->get_name().c_str());
+  //g2dt_map[gh->get_key()] = (IData *)dL1;
+  d->set_guest((void*)dL1);
+  dL1->set_guest((void *)d);
 }
 /*=======================================================================*/
 void DTWrapper::data_partitioned(GData *d)
@@ -165,8 +184,9 @@ void DTWrapper::data_partitioned(GData *d)
   LOG_INFO(0*LOG_MLEVEL,"data:%s %dx%d, level:%d\n",d->get_name().c_str(),by,bx,d->get_level());  
   if  ( d->get_level() > 0 ) 
     return;
-  GHandle *gh = d->getHandle();
-  IData *dt = g2dt_map[gh->get_key()];
+  //  GHandle *gh = d->getHandle();
+  IData *dt ;//= g2dt_map[gh->get_key()];
+  dt = (IData *)d->get_guest();
   dt->setPartition(by,bx);
   for ( int i =0 ; i < by; i++){
     for ( int j =0 ; j < bx; j++){
@@ -177,7 +197,9 @@ void DTWrapper::data_partitioned(GData *d)
       d_ch.set_memory((void *)dt_ch->getContentAddress());
       LOG_INFO(0*LOG_MLEVEL,"gdata memory:%p dt_ch memory:%p\n",d_ch.get_memory(),dt_ch->getContentAddress());
       dt_ch->setParentData(dt);
-      g2dt_map[d_ch.get_handle()->get_key()]=dt_ch;
+        d_ch.set_guest((void*) dt_ch);
+      dt_ch->set_guest((void*)& d_ch);
+      //g2dt_map[d_ch.get_handle()->get_key()]=dt_ch;
     }
   }
 
@@ -195,6 +217,7 @@ int DTWrapper::init()
 /*=======================================================================*/
 void DTWrapper::allocate_memory(GData *d)
 {
+  return;//obsolete function
   if (d->get_parent() == nullptr ) 
     return;
   if ( d->is_memory_allocated() ) 
@@ -203,11 +226,12 @@ void DTWrapper::allocate_memory(GData *d)
   assert(d);
   d->getCoordination(row,col,depth);
   LOG_INFO(LOG_MLEVEL,"Data:%s block-coord(%d,%d)\n",d->get_name().c_str(),row,col);
-  GHandle *gh = d->getHandle();
+  //GHandle *gh = d->getHandle();
   OneLevelData *dL1=new OneLevelData(d->get_name(),1,1,ctx);
   IData *dt = (*dL1)(0,0);
   dL1->setBlockIdx(row,col);
-  g2dt_map[gh->get_key()] = (IData *)dL1;
+  //g2dt_map[gh->get_key()] = (IData *)dL1;
+  
   int z= d->get_element_count() * sizeof(double);
   ctx->addInputData((IData*)dL1);
   if ( dL1->getHost() == me ) {
@@ -226,9 +250,10 @@ void DTWrapper::allocate_memory(GData *d)
 /*=======================================================================*/
 /*----------------------------------------------------------------------------*/
 void initData(GData &A){
-  GHandle *gh=A.get_handle();
+  //GHandle *gh=A.get_handle();
   IData *dt,*d;
-  dt=g2dt_map[gh->get_key()];
+  //  dt=g2dt_map[gh->get_key()];
+  dt = (IData *)A.get_guest();
   d = (*dt)(0,0);  
   d->setRunTimeVersion("0.",0);
   dtEngine.putWorkForSingleDataReady(d);

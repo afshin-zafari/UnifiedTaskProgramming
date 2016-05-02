@@ -34,9 +34,9 @@ class DTWrapper : public IScheduler
 };
 
 typedef IData dt_data_t;
-extern map<TaskHandle,GTask *> dt2gt_map;
-extern map<ulong,IDuctteipTask *> gt2dt_map;
-extern map<ulong,dt_data_t*> g2dt_map;
+//extern map<TaskHandle,GTask *> dt2gt_map;
+//extern map<ulong,IDuctteipTask *> gt2dt_map;
+//extern map<ulong,dt_data_t*> g2dt_map;
 /*=================================================================================*/
 class OneLevelData:public IData{
 private:
@@ -57,7 +57,8 @@ public :
   }
   void runKernels(IDuctteipTask *task) {
     LOG_INFO(LOG_MLEVEL,"%s,handle:%ld\n",task->getName().c_str(),(long)task->getHandle());
-    GTask *t=dt2gt_map[task->getHandle()];
+    GTask *t;//=dt2gt_map[task->getHandle()];
+    t = (GTask*)task->get_guest();
     assert(get_dispatcher());
     LOG_INFO(LOG_MLEVEL,"Gtask ptr:%p\n",t);
     get_dispatcher()->run_task(t);

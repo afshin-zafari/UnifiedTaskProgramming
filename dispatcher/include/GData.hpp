@@ -49,6 +49,8 @@ class GData
         GData *get_parent();
         int get_level();
         void set_level(int);
+        void set_guest(void *);
+        void *get_guest();
     protected:
     private:
         int M,N,child_idx,child_cnt,level;
@@ -58,5 +60,6 @@ class GData
         byte *content;
         GPartitioner *partitioner;
         string name;
+        void *guest;
 };
 #endif // GDATA_HPP

@@ -66,7 +66,7 @@ cfg_sched_graph(){
 B1=2
 B2=1
 M=2048
-timeout=10
+timeout=30
 P=1
 p=1
 q=1
@@ -76,7 +76,7 @@ app=./bin/Debug/apps
 #app=./bin/Release/apps
 for M in 64 #1024 2048 4096 8192
 do
-    for Z in 8  #32 64 128 256
+    for Z in 32  #32 64 128 256
     do
 	B1=$[$M/$Z]
 	cfg_DT_SG_BLAS

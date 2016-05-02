@@ -48,6 +48,8 @@ class GTask
         bool get_lower_triangle();
         bool get_unit_diagonal();
         string get_name();
+        void *get_guest();
+        void set_guest(void *);
     protected:
     private:
     GHandle *handle;
@@ -55,6 +57,7 @@ class GTask
     IScheduler *owner;
     double alpha,beta;
     bool trans_a,trans_b,trans_c,left_side,right_side, upper_tr,lower_tr,unit_diagonal;
+    void *guest;
 };
 
 #endif // GTASK_HPP

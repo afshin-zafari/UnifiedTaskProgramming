@@ -2,6 +2,7 @@
 *.a
 *.so
 *.csv
+core.*
 *.out*
 */bin/*
 */obj/*
