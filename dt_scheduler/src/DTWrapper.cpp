@@ -302,3 +302,14 @@ int OneLevelData::getHost(){
     return -1;
     */
   }
+/*=======================================================================*/
+void GenAlgorithm::runKernels(IDuctteipTask *task) {
+    LOG_INFO(LOG_MLEVEL,"%s,handle:%ld\n",task->getName().c_str(),(long)task->getHandle());
+    GTask *t;//=dt2gt_map[task->getHandle()];
+    t = (GTask*)task->get_guest();
+    assert(get_dispatcher());
+    LOG_INFO(LOG_MLEVEL,"Gtask ptr:%p\n",t);
+    get_dispatcher()->run_task(t);
+
+  }
+/*=======================================================================*/
