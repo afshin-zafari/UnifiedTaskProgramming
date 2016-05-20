@@ -16,7 +16,7 @@ const int In   = 1;
 const int Out  = 2;
 const int InOut= 3;
 ulong Dispatcher::last_scheduler_id=0;
-map<string,GOperation*> oper_obj;
+//map<string,GOperation*> oper_obj;
 Dispatcher *glbDispatcher;
 
 /*=============================================================*/
@@ -130,14 +130,16 @@ Dispatcher& Dispatcher::operator=(const Dispatcher& rhs)
     return *this;
 }
 /*=============================================================*/
-GTask *Dispatcher::submit_task(string fn, Args *args, Axs & axs,GTask *parent_task)
+GTask *Dispatcher::submit_task(GOperation*op, Args *args, Axs & axs,GTask *parent_task)
 {
     for ( uint i=0; i < args->args.size(); i++)
     {
         if ( args->args[i] != nullptr )
             args->args[i]->axs = axs.axs[i];
     }
-    GTask *t=new GTask(fn,args,-1);
+    GTask *t=new GTask(op->name,args,-1);
+    assert(op);
+    t->set_operation(op);
     assert(t);
 
     glog << ev_submit << *t << endlog;
@@ -192,12 +194,15 @@ void Dispatcher::run_task(GTask *t)
     if(n->next.size()==0)// it is before last Scheduler
     {
         assert(n->s);
+	LOG_INFO(LOG_MLEVEL,"task run %s\n",t->get_name().c_str());
         n->s->runTask(t);
         return;
     }
-    GOperation *o = oper_obj[t->fname];
-    if ( o )
-        o->run(t);
+    GOperation *o = t->get_operation();//oper_obj[t->fname];
+    if ( o ){
+      LOG_INFO(LOG_MLEVEL,"operation run %s, operation:%p\n",t->get_name().c_str(),o);
+      o->run(t);
+    }
 }
 /*=============================================================*/
 void Dispatcher::finished_task(GTask *t)
@@ -237,13 +242,11 @@ Dispatcher *get_dispatcher()
 /*=============================================================*/
 void Dispatcher::register_operation(GOperation *op,string f)
 {
-    oper_obj[f]=op;
+  //oper_obj[f]=op;
 }
 /*=============================================================*/
 void Dispatcher::show_oper()
 {
-    cout << "oper1: " << oper_obj.begin()->first << endl;
-    cout << "oper1: " << oper_obj.begin()->second<< endl;
 }
 /*=============================================================*/
 void Dispatcher::finalize()

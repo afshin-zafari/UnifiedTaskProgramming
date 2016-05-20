@@ -1,4 +1,5 @@
 #include "task_blas.hpp"
+/*---------------------------------------------------------------------------------------*/
 void _gemm(GTask *t)
 {
     GData *a = t->args->args[0];
@@ -41,6 +42,7 @@ void _gemm(GTask *t)
       cout << "-----------\n" ;
 
 }
+/*---------------------------------------------------------------------------------------*/
 void _trsm(GTask *t)
 {
     GData *a = t->args->args[0];
@@ -64,3 +66,121 @@ void _trsm(GTask *t)
     b->dump();printf("--\n");
 }
 
+/*---------------------------------------------------------------------------------------*/
+void _add ( GTask *t)
+{
+    GData *a = t->args->args[0];
+    GData *b = t->args->args[1];
+
+    double *A=(double *)a->get_memory();
+    int mA = a->get_rows();
+    int nA = a->get_cols();
+
+    double *B=(double *)b->get_memory();
+    int mB = b->get_rows();
+    int nB = b->get_cols();
+
+    LOG_INFO(LOG_MLEVEL,"A:%s %d x %d, B:%s %d x %d\n",
+	     a->get_name().c_str(),mA,nA,
+	     b->get_name().c_str(),mB,nB);
+    if ( mA * mB  == 1){ // row vectors
+      if ( nA == nB  ) { 
+	cblas_daxpy(nB,t->get_alpha(),A,1,B,1);
+      }
+      else {
+	fprintf(stderr,"%s,%s Size mismatch in arrays: A:%d x %d B:%d x %d .\n",
+		__FILE__,__FUNCTION__,mA,nA,mB,nB);
+      }
+    }
+    else if ( nA * nB  ==1 ) {//column vectors
+      if ( mA == mB   ) { 
+	cblas_daxpy(mB,t->get_alpha(),A,1,B,1);
+      }
+      else {
+	fprintf(stderr,"%s,%s Size mismatch in arrays: A:%d x %d B:%d x %d.\n",
+		__FILE__,__FUNCTION__,mA,nA,mB,nB);
+      }
+    }
+    else if ( nA == nB and  mA == mB) { // matrix add
+      for ( int  i=0; i< mA; i++){
+	for ( int j=0; j < nA; j++){
+	  B[i+j*mA] += A[i+j*mA];
+	}
+      }
+    }
+    else {
+      fprintf(stderr,"%s,%s Size mismatch in arrays: A:%d x %d B:%d x %d.\n",
+	      __FILE__,__FUNCTION__,mA,nA,mB,nB);
+    }
+}
+/*---------------------------------------------------------------------------------------*/
+void _copy ( GTask *t)
+{
+    GData *a = t->args->args[0];
+    GData *b = t->args->args[1];
+
+
+    double *A=(double *)a->get_memory();
+    int mA = a->get_rows();
+    int nA = a->get_cols();
+    double *B=(double *)b->get_memory();
+    int mB = b->get_rows();
+    int nB = b->get_cols();
+    LOG_INFO(LOG_MLEVEL,"A:%s %d x %d, B:%s %d x %d\n",a->get_name().c_str(),mA,nA,b->get_name().c_str(),mB,nB);
+    if ( mB*nB <= mA*nA)
+      memcpy ( B,A,mB*nB*sizeof(double));
+    else
+      fprintf(stderr,"%s,%s destination (%d x %d = %d)is smaller than source (%d x %d = %d).\n"
+	      ,__FILE__,__FUNCTION__,mB,nB,mB*nB, mA,nA,mA*nA);
+}
+/*---------------------------------------------------------------------------------------*/
+void _dot ( GTask *t)
+{
+   GData *a = t->args->args[0];
+   GData *b = t->args->args[1];
+   GData *c = t->args->args[2];
+
+
+    double *A=(double *)a->get_memory();
+    int mA = a->get_rows();
+    int nA = a->get_cols();
+    double *B=(double *)b->get_memory();
+    int mB = b->get_rows();
+    int nB = b->get_cols();
+    assert(c);
+    double *C=(double *)c->get_memory();
+    cout << "C data : " << c->get_name() << endl;
+    assert(A);
+    assert(B);
+    assert(C);
+    cout << "-----------\n" ;
+    a->print();
+    cout << "-----------\n" ;
+    b->print();
+    cout << "-----------\n" ;
+    c->print();
+    cout << "-----------\n" ;
+    if ( mA * mB  == 1){ // row vectors
+      if ( nA == nB  ) { 
+	C[0]=cblas_ddot(nA,A,1,B,1);
+      }
+      else {
+	fprintf(stderr,"%s,%s Size mismatch in arrays: A:%d x %d B:%d x %d.\n",
+		__FILE__,__FUNCTION__,mA,nA,mB,nB);
+      }
+    }
+    else if ( nA * nB ==1 ) {//column vectors
+      if ( mA == mB   ) { 
+	 C[0]=cblas_ddot(mA,A,1,B,1);
+      }
+      else {
+	fprintf(stderr,"%s,%s Size mismatch in arrays: A:%d x %d B:%d x %d.\n",
+		__FILE__,__FUNCTION__,mA,nA,mB,nB);
+      }
+    }
+    else
+      fprintf(stderr,"%s,%s input arguments are nopt vector  A: %d x %d , B: %d x %d .\n"
+	      ,__FILE__,__FUNCTION__,mA,nA, mB,nB);
+    c->print();
+    cout << "-----------" << C[0] << '\n' ;
+}

@@ -1,0 +1,21 @@
+       /mpi_comm.cpp,  19, initialize                      , tid: FB7DF9C0,    964 ::result:0, host=0, thread-support:0,requested:0,  thrd-enabled:1
+         /engine.cpp,  41, engine                          , tid: FB7DF9C0,    964 ::mpi tick :0.000001
+     /Dispatcher.cpp, 315, load                            , tid: FB7DF9C0,    965 ::The Scheduler No.:1 is DuctTeip.
+@stats Msg Sizes D,T,L: 192,150,64
+         /engine.cpp, 386, setConfig                       , tid: FB7DF9C0,    965 ::DataPackSize:192=6*0*8+16+176
+         /engine.cpp, 388, setConfig                       , tid: FB7DF9C0,    965 ::data meory:0x137ed60
+     /Dispatcher.cpp, 326, load                            , tid: FB7DF9C0,   1087 ::The Scheduler No.:2 is cpuBLAS.
+udot.sttest: src/udot.cpp:31: GData* test_dot(): Assertion `C.get_memory()' failed.
+[tintin2:06845] *** Process received signal ***
+[tintin2:06845] Signal: Aborted (6)
+[tintin2:06845] Signal code:  (-6)
+[tintin2:06845] [ 0] /lib64/libpthread.so.0[0x300140f7e0]
+[tintin2:06845] [ 1] /lib64/libc.so.6(gsignal+0x35)[0x3000832625]
+[tintin2:06845] [ 2] /lib64/libc.so.6(abort+0x175)[0x3000833e05]
+[tintin2:06845] [ 3] /lib64/libc.so.6[0x300082b74e]
+[tintin2:06845] [ 4] /lib64/libc.so.6(__assert_perror_fail+0x0)[0x300082b810]
+[tintin2:06845] [ 5] ../bin/udot.sttest[0x40c2c1]
+[tintin2:06845] [ 6] ../bin/udot.sttest[0x40c67b]
+[tintin2:06845] [ 7] /lib64/libc.so.6(__libc_start_main+0xfd)[0x300081ed5d]
+[tintin2:06845] [ 8] ../bin/udot.sttest[0x40bf0d]
+[tintin2:06845] *** End of error message ***

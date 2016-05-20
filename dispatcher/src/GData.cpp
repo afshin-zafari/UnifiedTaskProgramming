@@ -98,7 +98,7 @@ void GData::set_partition(GPartitioner *P)
 	 << "_" << setw(2) << setfill('0') << py
 	 << "_" << setw(2) << setfill('0') << px;
       string ch_name = os.str();
-      //LOG_INFO(LOG_MLEVEL,"Child data :%s of %dx%d at blk(%d,%d) is being created.\n",ch_name.c_str(),m,n,py,px);
+      LOG_INFO(LOG_MLEVEL,"Child data :%s of %dx%d at blk(%d,%d) is being created.\n",ch_name.c_str(),m,n,py,px);
       children[i] = new GData(m,n,ch_name,this,i);
     }
     get_dispatcher()->data_partitioned(this);
@@ -106,7 +106,7 @@ void GData::set_partition(GPartitioner *P)
     if ( next_p != nullptr)
       for(int i=0; i<child_cnt; i++)
 	{
-	  //LOG_INFO(LOG_MLEVEL,"Cascade partition to %s with %dx%d\n",children[i]->getName().c_str(),next_p->y,next_p->x);
+	  LOG_INFO(LOG_MLEVEL,"Cascade partition to %s with %dx%d\n",children[i]->get_name().c_str(),next_p->y,next_p->x);
 	  children[i]->set_partition(next_p);
 	}
 }

@@ -17,7 +17,7 @@ GTask &ugemm_t(GData &a,GData &b,GData &c,GTask *parent)
     Axs axs;
     packArgs( args,a  ,b  ,c     );
     packAxs ( axs ,In ,In ,InOut );
-    GTask *t=get_dispatcher()->submit_task(ugemm_name,args,axs,parent);
+    GTask *t=get_dispatcher()->submit_task(&_ugemm,args,axs,parent);
     return *t;
 }
 void ugemm(GData &a,GData &b,GData &c,GTask *parent)

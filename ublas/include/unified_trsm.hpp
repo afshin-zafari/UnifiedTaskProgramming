@@ -14,4 +14,5 @@ class unified_trsm : public GOperation
 void utrsm(GData &, GData &, GTask *p=nullptr);
 GTask &utrsm_t(GData &, GData &, GTask *p=nullptr);
 const char *utrsm_name ="utrsm";
+extern unified_trsm _utrsm;
 #endif // UNIFIED_TRSM_HPP

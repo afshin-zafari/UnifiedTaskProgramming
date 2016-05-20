@@ -29,7 +29,7 @@ class Dispatcher
         virtual ~Dispatcher();
         Dispatcher(const Dispatcher& other);
         Dispatcher& operator=(const Dispatcher& other);
-        GTask *submit_task(string,Args *,Axs&,GTask *);
+        GTask *submit_task(GOperation *,Args *,Axs&,GTask *);
         IScheduler *get_scheduler(int i);
         void run_task(GTask*);
         void dispatch_next(GTask * t);

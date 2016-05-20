@@ -52,6 +52,7 @@ class GData
         void set_guest(void *);
         void *get_guest();
     protected:
+
     private:
         int M,N,child_idx,child_cnt,level;
         GHandle *handle;

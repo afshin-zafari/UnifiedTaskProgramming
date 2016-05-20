@@ -53,7 +53,7 @@ public :
   GenAlgorithm(GTask *t):gt(t){
   }
   void taskFinished(IDuctteipTask *task, TimeUnit dur){
-    LOG_INFO(LOG_MLEVEL,"%s, dur:%ld\n",task->getName().c_str(),dur);
+    LOG_INFO(LOG_MLEVEL,"%s, dur:%lld\n",task->getName().c_str(),dur);
   }
   void runKernels(IDuctteipTask *task) ;
   string getTaskName(unsigned long) {return gt->fname;}

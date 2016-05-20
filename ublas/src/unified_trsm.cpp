@@ -21,7 +21,7 @@ GTask &utrsm_t(GData &A,GData &B, GTask *parent )
     Axs axs;
     packArgs( args,A ,B    );
     packAxs ( axs ,In,InOut);
-    GTask *t=get_dispatcher()->submit_task(utrsm_name,args,axs,parent);
+    GTask *t=get_dispatcher()->submit_task(&_utrsm,args,axs,parent);
     return *t;
 }
 void utrsm(GData &A,GData &B, GTask *t )
@@ -48,4 +48,4 @@ void unified_trsm::run(GTask *t)
     GData &b =* t->args->args[1];
     utrsm(a,b,t);
 }
-unified_trsm *_utrsm;
+unified_trsm _utrsm;

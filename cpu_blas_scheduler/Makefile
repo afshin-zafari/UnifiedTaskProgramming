@@ -12,7 +12,7 @@ LD = mpic++
 WINDRES = windres
 DUCTTEIP_DIR=/pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
 
-INC = -I../dispatcher/include -Iinclude -I../apps/include -I/usr/local/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include
+INC = -I../dispatcher/include -Iinclude -I../apps/include -I/usr/local/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I../ublas/include
 CFLAGS = -Wall -fexceptions -DSLIB=1 -std=c++11 
 RESINC = 
 LIBDIR = 

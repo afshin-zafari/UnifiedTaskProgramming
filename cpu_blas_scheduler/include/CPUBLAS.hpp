@@ -4,6 +4,7 @@
 #include "GTask.hpp"
 #include "GData.hpp"
 #include "Dispatcher.hpp"
+#include "unified_blas.hpp"
 
 
 class CPUBLAS : public IScheduler

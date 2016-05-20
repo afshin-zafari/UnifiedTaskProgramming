@@ -12,7 +12,7 @@ LD = mpic++
 WINDRES = windres
 DUCTTEIP_DIR=/pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
 
-INC = -Iinclude -I/pica/h1/afshin/Damavand/D3/dt_scheduler/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/cpu_blas_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/include -I/pica/sw/comp/cuda/7.5/tintin/samples/common/inc -I/pica/sw/comp/cuda/7.5/tintin/include
+INC = -Iinclude -I/pica/h1/afshin/Damavand/D3/dt_scheduler/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/cpu_blas_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/include -I/pica/sw/comp/cuda/7.5/tintin/samples/common/inc -I/pica/sw/comp/cuda/7.5/tintin/include -I../ublas/include
 
 CFLAGS = -Wall -fexceptions -std=c++11 -pthread -Wno-unused-variable -DSLIB=1
 RESINC = 

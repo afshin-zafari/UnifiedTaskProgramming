@@ -7,6 +7,10 @@
 
 void _gemm(GTask *);
 void _trsm(GTask *);
+void _dot (GTask *);
+void _add (GTask *);
+void _copy(GTask *);
+
 #define blas_map(b) if ( t->fname == u##b##_name) _##b(t)
 #endif  //TASK_BLAS_HPP
 

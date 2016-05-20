@@ -10,6 +10,7 @@
 #include "GHandle.hpp"
 
 #include <string>
+class GOperation;
 class GTask
 {
     public:
@@ -50,8 +51,11 @@ class GTask
         string get_name();
         void *get_guest();
         void set_guest(void *);
+        GOperation *get_operation();
+        void set_operation(GOperation*);
     protected:
     private:
+    GOperation *operation;  
     GHandle *handle;
     GTask *parent;
     IScheduler *owner;

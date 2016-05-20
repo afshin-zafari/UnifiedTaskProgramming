@@ -183,3 +183,6 @@ string GTask::get_name()
 void* GTask::get_guest(){return guest;}
 void GTask::set_guest(void *p){guest = p;}
 /*==================================================================*/
+void GTask::set_operation(GOperation*p){operation = p;}
+GOperation *GTask::get_operation(){return operation;}
+/*==================================================================*/

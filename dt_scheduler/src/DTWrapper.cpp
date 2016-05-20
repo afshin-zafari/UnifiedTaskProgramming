@@ -49,10 +49,14 @@ void DTWrapper::submitTask(GTask *t)
     //d=g2dt_map[gh->get_key()];
     d = (IData *)t->args->args[i]->get_guest();
     assert(d);
-    LOG_INFO(LOG_MLEVEL,"ghandle:%ld, dt data p:%s\n",gh->get_key(),d->get_name().c_str());
+      printf("%s,%d\n",__FILE__,__LINE__);
+      //    LOG_INFO(LOG_MLEVEL,"ghandle:%ld, dt data p:%s\n",gh->get_key(),d->get_name().c_str());
+      printf("%s,%d\n",__FILE__,__LINE__);
     daxs = new DataAccess;
     daxs->data = d;
+      printf("%s,%d\n",__FILE__,__LINE__);
     int h = d->getHost();(void)h;
+      printf("%s,%d\n",__FILE__,__LINE__);
     if ( t->args->args[i]->axs == In){
       daxs->type = IData::READ;
       daxs->required_version = d->getWriteVersion();
@@ -162,19 +166,20 @@ void DTWrapper::finishedTask(GTask *t)
 /*=======================================================================*/
 void DTWrapper::data_created(GData *d)
 {
-  LOG_INFO(0*LOG_MLEVEL,"data:%s level:%d\n",d->get_name().c_str(),d->get_level());
+  LOG_INFO(LOG_MLEVEL,"data:%s level:%d\n",d->get_name().c_str(),d->get_level());
   if  ( d->get_level() > 1 ) 
     return;
   //GData *dp = d->get_parent();
   //if (dp)     return;
-  LOG_INFO(0*LOG_MLEVEL,"child data:%s\n",d->get_name().c_str());
+  LOG_INFO(LOG_MLEVEL,"child data:%s\n",d->get_name().c_str());
   //  GHandle *gh = d->getHandle();
   int M = d->get_rows();
   int N = d->get_cols();
+  LOG_INFO(LOG_MLEVEL,"M:%d,N:%d\n",M,N);
   OneLevelData *dL1=new OneLevelData(d->get_name(),M,N,ctx);
   //g2dt_map[gh->get_key()] = (IData *)dL1;
-  d->set_guest((void*)dL1);
-  dL1->set_guest((void *)d);
+    d->set_guest((void*)dL1);
+  dL1->set_guest((void*)d  );
 }
 /*=======================================================================*/
 void DTWrapper::data_partitioned(GData *d)
@@ -193,9 +198,9 @@ void DTWrapper::data_partitioned(GData *d)
       IData * dt_ch = (*dt)(i,j);
       GData &d_ch = (*d)(i,j);
       assert( dt_ch);
-      LOG_INFO(0*LOG_MLEVEL,"gd_ch:%s, dt_ch:%s\n",d_ch.get_name().c_str(),dt_ch->get_name().c_str());
+      LOG_INFO(LOG_MLEVEL,"gd_ch:%s, dt_ch:%s\n",d_ch.get_name().c_str(),dt_ch->get_name().c_str());
       d_ch.set_memory((void *)dt_ch->getContentAddress());
-      LOG_INFO(0*LOG_MLEVEL,"gdata memory:%p dt_ch memory:%p\n",d_ch.get_memory(),dt_ch->getContentAddress());
+      LOG_INFO(LOG_MLEVEL,"gdata memory:%p dt_ch memory:%p\n",d_ch.get_memory(),dt_ch->getContentAddress());
       dt_ch->setParentData(dt);
         d_ch.set_guest((void*) dt_ch);
       dt_ch->set_guest((void*)& d_ch);
@@ -308,7 +313,7 @@ void GenAlgorithm::runKernels(IDuctteipTask *task) {
     GTask *t;//=dt2gt_map[task->getHandle()];
     t = (GTask*)task->get_guest();
     assert(get_dispatcher());
-    LOG_INFO(LOG_MLEVEL,"Gtask ptr:%p\n",t);
+    LOG_INFO(LOG_MLEVEL,"Gtask :%s\n",t->get_name().c_str());
     get_dispatcher()->run_task(t);
 
   }

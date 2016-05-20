@@ -47,6 +47,7 @@ void SGWrapper::submitTask(GTask *t)
     {
         return;
     }
+    LOG_INFO(LOG_MLEVEL,"task submitted  %s\n",t->get_name().c_str());
     SGGenTask *sgt = new SGGenTask(this,t);
     SG->submit(sgt);
 
@@ -79,10 +80,19 @@ void SGWrapper::data_created(GData *d)
     d->set_guest((void *)sgd);
   }
   //  if (glb_to_sg[gh]==NULL)    glb_to_sg[gh]=new sg_data_t;
+  LOG_INFO(LOG_MLEVEL,"Data %s , created at level:%d\n",d->get_name().c_str(),d->get_level() );
   if ( d->get_level() ==0){
     int size = d->get_cols() * d->get_rows() * sizeof(double);
     void *m =(void *) new byte[size];
+    LOG_INFO(LOG_MLEVEL,"memory %d x %d x8 = %d\n",d->get_cols() , d->get_rows(),size);
     d->set_memory(m);
+    memset ( m,0,size);
+  }
+  else{
+    byte *m =(byte *) d->get_parent()->get_memory();
+    int offset = d->get_child_index() *d->get_rows() * d->get_cols() * sizeof(double);
+    d->set_memory(m+offset);
+    LOG_INFO(LOG_MLEVEL,"Data %s, parent memory %p, child memory %p\n",d->get_name().c_str(),m,m+offset);
   }
 }
 /*=========================================================================*/
@@ -120,6 +130,8 @@ void SGWrapper::data_partitioned(GData *d)
 SGGenTask::SGGenTask(SGWrapper *sgw,GTask *t):scheduler(sgw),gt(t)
 {
     Args *a=t->args;
+    printf("%s,%s,%d\n",__FILE__,__FUNCTION__,__LINE__);
+
     for(uint i=0; i< a->args.size(); i++)
     {
       //GHandleKey gh = a->args[i]->get_handle()->get_key();
@@ -130,17 +142,21 @@ SGGenTask::SGGenTask(SGWrapper *sgw,GTask *t):scheduler(sgw),gt(t)
 	}
 	//        if (glb_to_sg[gh]==NULL)            glb_to_sg[gh]=new sg_data_t;
         sg_data_t *h = sgd;//glb_to_sg[gh];
+    printf("%s,%s,%d\n",__FILE__,__FUNCTION__,__LINE__);
         if ( a->args[i]->axs==In)
             register_access(ReadWriteAdd::read,*h);
         else
             register_access(ReadWriteAdd::write,*h);
+    printf("%s,%s,%d\n",__FILE__,__FUNCTION__,__LINE__);
     }
+    printf("%s,%s,%d\n",__FILE__,__FUNCTION__,__LINE__);
 }
 /*=========================================================================*/
 void SGGenTask::run()
 {
-  //  LOG_INFO(LOG_MLEVEL,"\n");
-    get_dispatcher()->run_task(gt);
+  LOG_INFO(LOG_MLEVEL,"task run %s\n",gt->get_name().c_str());
+  get_dispatcher()->run_task(gt);
+    printf("%s,%s,%d\n",__FILE__,__FUNCTION__,__LINE__);
 }
 /*=========================================================================*/
 string SGGenTask::get_name()
