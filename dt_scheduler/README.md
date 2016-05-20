@@ -1,6 +1,6 @@
-=Introduction
+# Introduction
 This is wrapper around *DuctTeip* library.
-=Dependencies
+# Dependencies
 This needs to have access to *DuctTeip* headers and *SuperGlue* headers directories.
 
 
