@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -A g2016002
+#SBATCH -A p2009014
 #SBATCH -o UI-DT-GEMM-%j.out
 #SBATCH -p devel
 #SBATCH -t 00:02:00
@@ -63,14 +63,14 @@ cfg_sched_graph(){
 }
 #rm gemm* core.*
 
-B1=2
+B1=4
 B2=1
-M=2048
-timeout=30
-P=1
-p=1
+M=24
+timeout=5
+P=2
+p=2
 q=1
-ipn=1
+ipn=2
 nt=16
 app=./bin/Debug/apps
 #app=./bin/Release/apps

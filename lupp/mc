@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cd ../ductteip
+make clean
+make
+
+cd ../sg_scheduler
+make clean
+make
+
+cd ../cpu_blas_scheduler
+make clean
+make
+
+cd ../dt_scheduler
+make clean
+make
+
+cd ../dispatcher 
+make clean
+make
+
+cd ..
+make clean
+make
+#sbatch run.sh

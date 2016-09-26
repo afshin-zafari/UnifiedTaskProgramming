@@ -27,7 +27,7 @@ class GData
         GPartitioner *get_partition();
         int get_part_countY();
         int get_part_countX();
-        GData & operator ()(int i, int j ) ;
+        GData & operator ()(int i, int j =0) ;
         GData & get_part(int ,int);
         GHandle *get_handle();
         bool is_memory_allocated();

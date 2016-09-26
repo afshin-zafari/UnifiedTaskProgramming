@@ -13,7 +13,7 @@ SGWrapper::SGWrapper(int id):IScheduler(id)
 {
   int num_threads=-1, pin_cpu=0;
   // get_dispatcher()->get_thread_info(num_threads,pin_cpu);
-  SG = new SuperGlue<SGWOptions>(num_threads,pin_cpu); 
+  SG = new SuperGlue<SGWOptions>(num_threads); 
 }
 
 /*=========================================================================*/

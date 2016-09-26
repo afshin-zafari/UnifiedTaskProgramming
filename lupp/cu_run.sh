@@ -86,7 +86,7 @@ rm *.txt
 
 
 cfg_DT_cuBLAS
-#mpirun -np 2 --map-by ppr:1:node --output-filename gemm_dt_cublas $app -M $M $B1 1 -N $M $B1 1 -P 1 -p 1 -q 1 -t 2 -T $timeout $SCH 
+mpirun -np 2 --map-by ppr:1:node --output-filename gemm_dt_cublas $app -M $M $B1 1 -N $M $B1 1 -P 1 -p 1 -q 1 -t 2 -T $timeout $SCH 
 rm *.txt
 
 

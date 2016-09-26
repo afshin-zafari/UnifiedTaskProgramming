@@ -55,7 +55,7 @@ void DTWrapper::submitTask(GTask *t)
     daxs = new DataAccess;
     daxs->data = d;
       printf("%s,%d\n",__FILE__,__LINE__);
-    int h = d->getHost();(void)h;
+      int h = -1;//d->getHost();
       printf("%s,%d\n",__FILE__,__LINE__);
     if ( t->args->args[i]->axs == In){
       daxs->type = IData::READ;
@@ -146,10 +146,12 @@ void DTWrapper::finishedTask(GTask *t)
   LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
   
 
-  int task_cnt = Atomic::decrease_nv(&parent_task->task_count);
+  //int task_cnt = Atomic::decrease_nv(&parent_task->task_count);
   LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
   //  if (parent_task->task_count.load() < 2) {
-    //    pthread_mutex_lock(&thread_lock);
+  pthread_mutex_lock(&thread_lock);
+  parent_task->task_count--;
+  int task_cnt = parent_task->task_count ;
     if ( task_cnt ==0){
       LOG_INFO(LOG_MLEVEL,"parent Task children cnt :%d.\n",parent_task->task_count);
       IDuctteipTask *tt=(IDuctteipTask *)parent_task->get_guest();//gt2dt_map[parent_task->get_handle()->get_key()];
@@ -159,7 +161,7 @@ void DTWrapper::finishedTask(GTask *t)
 	  tt->setFinished(true);
       }
     }
-    //pthread_mutex_unlock(&thread_lock);
+    pthread_mutex_unlock(&thread_lock);
     //}
 
 }

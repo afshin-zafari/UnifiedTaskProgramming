@@ -3,7 +3,7 @@
 #include "DTWrapper.hpp"
 #include "GLog.hpp"
 #include "CPUBLAS.hpp"
-//#include "CUBLAS.hpp"
+//#include "CUBLAS.hpp"2
 #include <string>
 #include <iostream>
 #include <dlfcn.h>
@@ -214,7 +214,7 @@ void Dispatcher::finished_task(GTask *t)
     IScheduler *prev;
     assert(sch->s);
     //LOG_INFO(LOG_MLEVEL,"owner  scheduler:%s\n",sch->s->get_name().c_str());
-    Tree *n = sch->next[0];    
+    Tree *n = sch->next[0];
     assert(n);
     if(n->next.size()==0)// it is before last Scheduler
       {
@@ -224,7 +224,7 @@ void Dispatcher::finished_task(GTask *t)
 	  return;
 	//	if ( sch->previous->s )	  LOG_INFO(LOG_MLEVEL,"previous  scheduler:%s\n",sch->previous->s->get_name().c_str());
       }
-    
+
     if ( sch->previous == nullptr)
         prev  = sch->s;
     else

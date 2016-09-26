@@ -1,12 +1,12 @@
 #!/bin/bash
 
 #SBATCH -A g2016002
-#SBATCH -o UI-DT-GEMM-%j.out
-#SBATCH -p gpu
-#SBATCH -t 00:10:00
-#SBATCH -N 2
-#SBATCH -n 32
-#SBATCH -J UI-DT-GEMM
+#SBATCH -o UI-DT-LUPP-%j.out
+#SBATCH -p devel
+#SBATCH -t 00:02:00
+#SBATCH -N 1
+#SBATCH -n 16
+#SBATCH -J UI-DT-LUPP
 
 module load gcc/4.9 openmpi/1.8.1 cuda/7.5
 f(){
@@ -20,7 +20,7 @@ cd ../apps
 make
 }
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../dispatcher/bin/Debug
-
+mkdir -p log
 set -x
 SG_PATH=/pica/h1/afshin/Damavand/D3/sg_scheduler/bin/Debug/sg_scheduler.so
 BLAS_PATH=""
@@ -61,34 +61,45 @@ cfg_DT_cuBLAS(){
 cfg_sched_graph(){
     s= "DT ( ( SG cuBLAS)  cpuBLAS )"
 }
+#rm lupp* core.*
 
 B1=2
 B2=1
-M=10
-timeout=300
-app=./bin/Debug/apps
-app=./bin/Release/apps
+M=2048
+timeout=30
+P=1
+p=1
+q=1
+ipn=1
+nt=16
+app=./bin/Debug/lupp
+#app=./bin/Release/lupp
+for M in 64 #1024 2048 4096 8192
+do
+    for Z in 32  #32 64 128 256
+    do
+	B1=$[$M/$Z]
+	cfg_DT_SG_BLAS
+	mpirun -np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename "./test/lupp_dt_sg_blas_ipn_${ipn}_${M}_${B1}_${SLURM_JOB_ID}.out" $app -M $M $B1 $B2 -N $M $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout $SCH 
+	rm *.txt
+    done
+done
 
-
-
-rm gemm* core.*
 cfg_DT_BLAS
-#mpirun -np 2 --output-filename gemm_dt_blas $app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
+#mpirun -np 2 --output-filename lupp_dt_blas $app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
 rm *.txt
 
 cfg_SG_BLAS
-#mpirun -np 2 --output-filename gemm_sg_blas $app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
+#mpirun -np 2 --output-filename lupp_sg_blas $app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
 rm *.txt
 
 cfg_DT_SG_BLAS
-#mpirun -np 2 --output-filename gemm_dt_sg_blas $app -M $M $B1 2 -N $M $B1 2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
+#mpirun -np 2 --output-filename lupp_dt_sg_blas $app -M $M $B1 2 -N $M $B1 2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
 rm *.txt
 
 
 cfg_DT_cuBLAS
-#mpirun -np 2 --map-by ppr:1:node --output-filename gemm_dt_cublas $app -M $M $B1 1 -N $M $B1 1 -P 1 -p 1 -q 1 -t 2 -T $timeout $SCH 
+#mpirun -np 1 --map-by ppr:1:node --output-filename lupp_one_dt_cublas $app -M $M $B1 1 -N $M $B1 1 -P 1 -p 1 -q 1 -t 2 -T $timeout $SCH 
 rm *.txt
-
-
 
 

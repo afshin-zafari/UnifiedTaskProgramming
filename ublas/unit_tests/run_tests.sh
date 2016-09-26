@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -A g2016002
+#SBATCH -A p2009014
 #SBATCH -o UI-DT-DOT-%j.out
 #SBATCH -p devel
 #SBATCH -t 00:02:00
@@ -56,16 +56,16 @@ cfg_sched_graph(){
 B1=4
 B2=1
 M=24
-N=1
+N=24
 timeout=3
 P=2
 p=2
 q=1
 ipn=2
-nt=4
-app=../bin/udot.sttest
+nt=16
+app=../bin/ugemm.sttest
 cfg_DT_SG_BLAS
-mpirun -np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename "./test/dot_dt_sg_blas_ipn_${ipn}_${M}_${B1}_${SLURM_JOB_ID}.out" $app -M $M $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout $SCH 
+mpirun -np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename "./test/gemm_sg_blas_ipn_${ipn}_${M}_${B1}_${SLURM_JOB_ID}.out" $app -M $M $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout $SCH 
 rm *.txt
 
 cfg_DT_BLAS
@@ -73,7 +73,7 @@ cfg_DT_BLAS
 rm *.txt
 
 cfg_SG_BLAS
-#mpirun -np 2 --output-filename gemm_sg_blas $app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
+#mpirun -np 1 --output-filename gemm_sg_blas $app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH 
 rm *.txt
 
 cfg_DT_SG_BLAS
