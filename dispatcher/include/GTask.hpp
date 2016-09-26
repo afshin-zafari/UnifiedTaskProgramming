@@ -9,13 +9,17 @@
 #include "sg/superglue.hpp"
 #include "GHandle.hpp"
 
+
 #include <string>
+#include <vector>
+
 class GOperation;
 class GTask
 {
     public:
         string fname;
         Args *args;
+        Axs *axs;
         int task_count;
         GTask();
         GTask(string,Args*,FUT);
@@ -53,9 +57,15 @@ class GTask
         void set_guest(void *);
         GOperation *get_operation();
         void set_operation(GOperation*);
+        void serialize(byte*,int &);
+        void deserialize(byte*,int &);
+        int get_key();
+        Args * get_args();
+        Axs * get_axs();
     protected:
     private:
-    GOperation *operation;  
+    GOperation *operation;
+    int key;
     GHandle *handle;
     GTask *parent;
     IScheduler *owner;
@@ -63,5 +73,6 @@ class GTask
     bool trans_a,trans_b,trans_c,left_side,right_side, upper_tr,lower_tr,unit_diagonal;
     void *guest;
 };
-
+extern std::vector<GTask*> all_tasks;
+GTask *DeserializeTask(byte *buf, int &);
 #endif // GTASK_HPP

@@ -1,5 +1,7 @@
 #ifndef GPARTITIONER_HPP
 #define GPARTITIONER_HPP
+#include <vector>
+typedef unsigned char byte;
 
 class GPartitioner
 {
@@ -18,10 +20,15 @@ class GPartitioner
         void set_for_comm(bool);
         void set_for_allocation(bool);
         void set_for_ownership(bool);
+        void serialize(byte *buf,int &offset);
+        void deserialize(byte *buf, int &offset);
+        int get_key();
     protected:
         GPartitioner  *next;
+        int key;
     private:
         bool comm,ownership,alloc;
 };
-
+extern std::vector<GPartitioner*> part_list;
+GPartitioner * DeserializePartitioner(byte *,int &);
 #endif // GPARTITIONER_HPP

@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+#include <vector>
 #include "utp_basic.hpp"
 #include "GHandle.hpp"
 #include "GPartitioner.hpp"
@@ -51,6 +52,8 @@ class GData
         void set_level(int);
         void set_guest(void *);
         void *get_guest();
+        void serialize(byte *buf, int &ofs);
+        void deserialize(byte *buf, int &ofs);
     protected:
 
     private:
@@ -63,4 +66,7 @@ class GData
         string name;
         void *guest;
 };
+extern std::vector<GData *> all_data;
+GData* DeserializeData(byte *,int &);
+
 #endif // GDATA_HPP

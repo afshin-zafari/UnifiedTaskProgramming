@@ -1,9 +1,12 @@
 #include "GData.hpp"
 #include "Dispatcher.hpp"
+#include "basic.hpp"
+std::vector<GData*> all_data;
 /*=====================================================================*/
 GData::GData()
 {
     handle = new GHandle;
+    all_data.push_back(this);
     memory = nullptr;
     content = nullptr;
     guest = nullptr;
@@ -11,7 +14,7 @@ GData::GData()
     child_cnt = 0;
 }
 /*=====================================================================*/
-GData::GData(int i,int j,string n):M(i),N(j),name(n) 
+GData::GData(int i,int j,string n):M(i),N(j),name(n)
 {
     handle = new GHandle;
     memory = nullptr;
@@ -24,7 +27,7 @@ GData::GData(int i,int j,string n):M(i),N(j),name(n)
     guest = nullptr;
     level = 0;
 
-    get_dispatcher()->data_created(this); 
+    get_dispatcher()->data_created(this);
 }
 /*=====================================================================*/
 GData::GData(int i,int j,string n,GData *p, int idx):
@@ -94,7 +97,7 @@ void GData::set_partition(GPartitioner *P)
       int px = i/P->y;
       int py = i%P->y;
       ostringstream os;
-      os << name 
+      os << name
 	 << "_" << setw(2) << setfill('0') << py
 	 << "_" << setw(2) << setfill('0') << px;
       string ch_name = os.str();
@@ -178,7 +181,7 @@ byte *GData::get_memory()
 void GData::fill_with(double v)
 {
   double *d = (double*)content;
-  if ( d != nullptr){    
+  if ( d != nullptr){
     for ( int i=0;i<M*N;i++){
       d[i]=v;
     }
@@ -194,7 +197,7 @@ void GData::print()
 {
   if ( M > 15 ) return;
   double *d = (double*)content;
-  if ( d != nullptr){    
+  if ( d != nullptr){
     int py,px,by;
     if ( partitioner ){
       py = M/partitioner->y;
@@ -225,7 +228,7 @@ void GData::print()
 void GData::fill_rows_with ( double start , double scale)
 {
   double *d = (double*)content;
-  if ( d != nullptr){    
+  if ( d != nullptr){
     int py = M/partitioner->y;
     int px = N/partitioner->x;
     int by = partitioner->y;
@@ -243,7 +246,7 @@ void GData ::dump()
 {
   if ( M > 5 ) return;
   double *d = (double*)content;
-  if ( d != nullptr){    
+  if ( d != nullptr){
     for ( int i=0;i<M;i++){
       for ( int j=0;j<N;j++){
 
@@ -257,7 +260,7 @@ void GData ::dump()
 void GData::fill_moler()
 {
   double *d = (double*)content;
-  if ( d != nullptr){    
+  if ( d != nullptr){
     int py = M/partitioner->y;
     int px = N/partitioner->x;
     int by = partitioner->y;
@@ -274,7 +277,7 @@ void GData::fill_moler()
 void GData::fill_chol_diag()
 {
   double *d = (double*)content;
-  if ( d != nullptr){    
+  if ( d != nullptr){
 
     int py = M/partitioner->y;
     int px = N/partitioner->x;
@@ -322,3 +325,50 @@ int GData::get_level()
 void *GData::get_guest(){return guest;}
 void GData::set_guest(void *p){guest=p;}
 /*=====================================================================*/
+void GData::serialize(byte *buf, int &ofs)
+{
+    int zero=0;
+    copy(buf,ofs,handle->get_key());
+    copy(buf,ofs,M);
+    copy(buf,ofs,N);
+    copy(buf,ofs,child_idx);
+    copy(buf,ofs,child_cnt);
+    copy(buf,ofs,level);
+    if(parent)
+        copy(buf,ofs,parent->get_handle()->get_key());
+    else
+        copy(buf,ofs,zero);
+    if (partitioner)
+        partitioner->serialize(buf,ofs);
+    else
+        copy(buf,ofs,zero);
+}
+void GData::deserialize(byte *buf, int &ofs)
+{
+    int k,p,q;
+    paste(buf,ofs,&k);
+    paste(buf,ofs,&M);
+    paste(buf,ofs,&N);
+    paste(buf,ofs,&child_idx);
+    paste(buf,ofs,&child_cnt);
+    paste(buf,ofs,&level);
+    paste(buf,ofs,&p);
+    if(p  and (unsigned)p <all_data.size())
+        parent = all_data[p];
+    else
+        parent = nullptr;
+    paste(buf,ofs,&q);
+    if (q)
+        partitioner = DeserializePartitioner(buf,ofs);
+    else
+        partitioner = nullptr;
+}
+GData *DeserializeData(byte *buf, int &ofs)
+{
+    int k;
+    paste(buf,ofs,&k);
+    if(k  and (unsigned)k <all_data.size())
+        return all_data[k];
+    return nullptr;
+
+}

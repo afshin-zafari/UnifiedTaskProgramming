@@ -1,9 +1,15 @@
+#include "basic.hpp"
+#include "GOperation.hpp"
 #include "GTask.hpp"
+#include "Dispatcher.hpp"
 /*==================================================================*/
+std::vector<GTask*> all_tasks;
 GTask::GTask()
 {
-  task_count = 0;
+    task_count = 0;
     handle = new GHandle;
+    key=all_tasks.size();
+    all_tasks.push_back(this);
 }
 /*==================================================================*/
 GTask::GTask(string fn,Args * a, FUT key):
@@ -45,7 +51,7 @@ GTask *GTask::get_parent()
 void GTask::set_parent(GTask *p)
 {
     parent = p;
-    if ( !p ) 
+    if ( !p )
       return;
     Atomic::increase(&p->task_count);
 }
@@ -186,3 +192,84 @@ void GTask::set_guest(void *p){guest = p;}
 void GTask::set_operation(GOperation*p){operation = p;}
 GOperation *GTask::get_operation(){return operation;}
 /*==================================================================*/
+int GTask::get_key()
+{
+    return key;
+}
+
+void GTask::serialize(byte *buf, int &ofs)
+{
+    int invalid=-1;
+    copy(buf,ofs,key);
+    copy(buf,ofs,handle->get_key());
+    if(parent)
+        copy(buf,ofs,parent->get_key());
+    else
+        copy(buf,ofs,invalid);
+    if(operation)
+        operation->serialize(buf,ofs);
+    else
+        copy(buf,ofs,invalid);
+    if (owner)
+        copy(buf,ofs,owner->get_id());
+    else
+        copy(buf,ofs,invalid);
+    int n =args->args.size();
+    copy(buf,ofs,n);
+    for(int i=0;i<n;i++)
+    {
+        copy(buf,ofs,args->args[i]->get_handle()->get_key());
+        copy(buf,ofs,args->axs.axs[i]);
+    }
+}
+void GTask::deserialize(byte *buf, int &ofs)
+{
+    int k,h,p,o,s,n,d;
+    int invalid=-1;
+    paste(buf,ofs,&k);
+    if ( k != invalid)
+        key = k;
+    paste(buf,ofs,&h);
+    // if ( h != invalid) //TODO: Then What??
+
+    paste(buf,ofs,&p);
+    if(p!=invalid){
+        parent=DeserializeTask(buf,ofs);
+    }
+
+    paste(buf,ofs,&o);
+    if(o!=invalid){
+        operation = DeserializeOperation(buf,ofs);
+    }
+    paste(buf,ofs,&s);
+    if (s!=invalid){
+        owner = get_dispatcher()->get_scheduler(s);
+    }
+    paste(buf,ofs,&n);
+    int x;
+    for(int i=0;i<n;i++)
+    {
+        paste(buf,ofs,&d);
+        paste(buf,ofs,&x);
+        GData *data=all_data[d];
+        args->axs.addAxs(x);
+        args->args.push_back(data);
+    }
+}
+GTask *DeserializeTask(byte *buf,int &ofs)
+{
+    int k;
+    paste(buf,ofs,&k);
+    if( k and (unsigned)k<all_tasks.size()){
+        return all_tasks[k];
+    }
+    return nullptr;
+}
+Args *GTask::get_args()
+{
+    return args;
+}
+Axs *GTask::get_axs()
+{
+    return &(args->axs);
+}

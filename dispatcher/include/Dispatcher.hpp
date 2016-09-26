@@ -9,6 +9,10 @@
 #include "GOperation.hpp"
 #include "memory_manager.hpp"
 #include "SGWrapper.hpp"
+#ifdef LOCAL_DEV
+    #include "basic.hpp"
+    #include "config.hpp"
+#endif
 
 class Tree {
 public:

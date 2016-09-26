@@ -1,9 +1,11 @@
 #include "Dispatcher.hpp"
 #include "SGWrapper.hpp"
-#include "DTWrapper.hpp"
+#ifndef LOCAL_DEV
+ #include "DTWrapper.hpp"
+ #include "CPUBLAS.hpp"
+#endif // LOCAL_DEV
 #include "GLog.hpp"
-#include "CPUBLAS.hpp"
-//#include "CUBLAS.hpp"2
+//#include "CUBLAS.hpp"
 #include <string>
 #include <iostream>
 #include <dlfcn.h>
@@ -135,7 +137,7 @@ GTask *Dispatcher::submit_task(GOperation*op, Args *args, Axs & axs,GTask *paren
     for ( uint i=0; i < args->args.size(); i++)
     {
         if ( args->args[i] != nullptr )
-            args->args[i]->axs = axs.axs[i];
+            args->axs.addAxs(axs.axs[i]);
     }
     GTask *t=new GTask(op->name,args,-1);
     assert(op);
@@ -254,10 +256,12 @@ void Dispatcher::finalize()
     chain->s->finalize();
     LOG_INFO(LOG_MLEVEL,"First scheduler:%s\n",chain->s->get_name().c_str());
     //    if ( chain->s->get_name() != "DuctTeip" )
+    #ifndef LOCAL_DEV
     int flag;
     MPI_Finalized(&flag);
     if (!flag)
       MPI_Finalize();
+    #endif
     LOG_INFO(LOG_MLEVEL,"First scheduler:%s\n",chain->s->get_name().c_str());
 }
 /*=============================================================*/
@@ -310,6 +314,7 @@ void Dispatcher::data_partitioned(GData *d)
 IScheduler * Dispatcher::load(int no,string s,string lib)
 {
   IScheduler *sch=nullptr;
+  #ifndef LOCAL_DEV
 
   if ( s == "DuctTeip"){
     LOG_INFO(LOG_MLEVEL,"The Scheduler No.:%d is DuctTeip.\n",no);
@@ -338,6 +343,7 @@ IScheduler * Dispatcher::load(int no,string s,string lib)
     fprintf(stderr,"The scheduler No.:%d (%s) could not be loaded.\n",no,(char *)s.c_str());
     exit(-2);
   }
+  #endif
   return sch;
 }
 /*=============================================================*/

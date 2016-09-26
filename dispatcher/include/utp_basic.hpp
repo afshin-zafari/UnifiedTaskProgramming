@@ -27,20 +27,21 @@ struct GenHandle{
   GenHandle(ulong h):handle(h){}
 };
 /*====================================================================*/
-struct Args{
-  vector<GData*> args;
-  //todo: access to be member of Args. -> thread safety
-  Args(){args.reserve(5);}
-  void addArg(GData *a){
-    args.push_back(a);
-  }
-};
-/*====================================================================*/
 struct Axs{
   vector<int> axs;
   Axs(){axs.reserve(5);}
   void addAxs(int a){
     axs.push_back(a);
+  }
+};
+/*====================================================================*/
+struct Args{
+  vector<GData*> args;
+  Axs  axs;
+
+  Args(){}
+  void addArg(GData *a){
+    args.push_back(a);
   }
 };
 /*====================================================================*/
