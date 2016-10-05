@@ -1,11 +1,11 @@
 #include <iostream>
-#include "dispatcher.hpp"
+#include "Dispatcher.hpp"
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
-Dispatcher d;
-    cout << "Hello world!" << endl;
-    return 0;
+  Dispatcher d(argc,argv);
+  cout << "Hello world!" << endl;
+  return 0;
 }

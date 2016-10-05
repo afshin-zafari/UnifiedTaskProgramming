@@ -320,3 +320,9 @@ void GenAlgorithm::runKernels(IDuctteipTask *task) {
 
   }
 /*=======================================================================*/
+void DTWrapper::partition_cascaded(GPartitioner *p1, GPartitioner *p2)
+{
+}
+void DTWrapper::partition_defined(GPartitioner *p)
+{
+}

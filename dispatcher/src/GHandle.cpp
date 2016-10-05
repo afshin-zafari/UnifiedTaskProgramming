@@ -1,5 +1,7 @@
 #include "GHandle.hpp"
 #include "basic.hpp"
+#include <string>
+#include <stdint.h>
 GHandleKey GHandle::lastKey=0;
 /*-------------------------------------------------------------*/
 GHandle::GHandle()
@@ -35,4 +37,9 @@ void GHandle::serialize(byte *buf, int &ofs)
 void GHandle::deserialize(byte *buf, int &ofs)
 {
     paste(buf,ofs,&key);
+}
+GHandle::operator std::string() const
+{
+    char *itoa(unsigned long );
+     return "handle string";//itoa(key);
 }

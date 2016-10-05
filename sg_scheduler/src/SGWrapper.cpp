@@ -11,7 +11,7 @@ const int InOut= 3;
 /*=========================================================================*/
 SGWrapper::SGWrapper(int id):IScheduler(id)
 {
-  int num_threads=-1, pin_cpu=0;
+  int num_threads=-1;
   // get_dispatcher()->get_thread_info(num_threads,pin_cpu);
   SG = new SuperGlue<SGWOptions>(num_threads); 
 }
@@ -122,6 +122,12 @@ void SGWrapper::data_partitioned(GData *d)
     }
   }
   
+}
+void SGWrapper::partition_defined(GPartitioner *p)
+{
+}
+void SGWrapper::partition_cascaded(GPartitioner *p1,GPartitioner *p2)
+{
 }
 /*=========================================================================*/
 

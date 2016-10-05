@@ -1,12 +1,16 @@
 #include "GData.hpp"
 #include "Dispatcher.hpp"
 #include "basic.hpp"
-std::vector<GData*> all_data;
+std::vector<GData*> *all_data;
+const int DATA_NAME_COPY=20;
 /*=====================================================================*/
 GData::GData()
 {
     handle = new GHandle;
-    all_data.push_back(this);
+    if( all_data == nullptr)
+        all_data = new std::vector<GData *>;
+    key = all_data->size();
+    all_data->push_back(this);
     memory = nullptr;
     content = nullptr;
     guest = nullptr;
@@ -17,6 +21,10 @@ GData::GData()
 GData::GData(int i,int j,string n):M(i),N(j),name(n)
 {
     handle = new GHandle;
+    if( all_data == nullptr)
+        all_data = new std::vector<GData *>;
+    key = all_data->size();
+    all_data->push_back(this);
     memory = nullptr;
     content = nullptr;
     child_cnt = 0;
@@ -26,14 +34,19 @@ GData::GData(int i,int j,string n):M(i),N(j),name(n)
     partitioner=nullptr;
     guest = nullptr;
     level = 0;
-
-    get_dispatcher()->data_created(this);
+    Dispatcher *dis=get_dispatcher();
+    if (dis != nullptr)
+        dis->data_created(this);
 }
 /*=====================================================================*/
 GData::GData(int i,int j,string n,GData *p, int idx):
   M(i),N(j),child_idx(idx),parent(p),name(n)
 {
     handle = new GHandle;
+    if( all_data == nullptr)
+        all_data = new std::vector<GData *>;
+    key = all_data->size();
+    all_data->push_back(this);
     memory = nullptr;
     content = nullptr;
     child_cnt = 0;
@@ -44,7 +57,9 @@ GData::GData(int i,int j,string n,GData *p, int idx):
       level = p->level+1;
     else
       level = 0;
-    get_dispatcher()->data_created(this);
+    Dispatcher *dis = get_dispatcher();
+    if ( dis != nullptr)
+        dis->data_created(this);
 }
 /*=====================================================================*/
 string GData::get_name()
@@ -104,7 +119,9 @@ void GData::set_partition(GPartitioner *P)
       LOG_INFO(LOG_MLEVEL,"Child data :%s of %dx%d at blk(%d,%d) is being created.\n",ch_name.c_str(),m,n,py,px);
       children[i] = new GData(m,n,ch_name,this,i);
     }
-    get_dispatcher()->data_partitioned(this);
+    Dispatcher *dis = get_dispatcher();
+    if ( dis != nullptr)
+        dis->data_partitioned(this);
     GPartitioner *next_p=partitioner->get_next();
     if ( next_p != nullptr)
       for(int i=0; i<child_cnt; i++)
@@ -327,25 +344,29 @@ void GData::set_guest(void *p){guest=p;}
 /*=====================================================================*/
 void GData::serialize(byte *buf, int &ofs)
 {
-    int zero=0;
-    copy(buf,ofs,handle->get_key());
+    int invalid=-1;
+    copy(buf,ofs,key);
     copy(buf,ofs,M);
     copy(buf,ofs,N);
     copy(buf,ofs,child_idx);
     copy(buf,ofs,child_cnt);
     copy(buf,ofs,level);
     if(parent)
-        copy(buf,ofs,parent->get_handle()->get_key());
+        copy(buf,ofs,parent->key);
     else
-        copy(buf,ofs,zero);
+        copy(buf,ofs,invalid);
     if (partitioner)
         partitioner->serialize(buf,ofs);
     else
-        copy(buf,ofs,zero);
+        copy(buf,ofs,invalid);
+    char s[DATA_NAME_COPY];
+    strcpy(s,name.c_str());
+    memcpy(buf+ofs,s, DATA_NAME_COPY);
+    ofs +=DATA_NAME_COPY;
 }
 void GData::deserialize(byte *buf, int &ofs)
 {
-    int k,p,q;
+    int k,p,q,invalid=-1;
     paste(buf,ofs,&k);
     paste(buf,ofs,&M);
     paste(buf,ofs,&N);
@@ -353,12 +374,12 @@ void GData::deserialize(byte *buf, int &ofs)
     paste(buf,ofs,&child_cnt);
     paste(buf,ofs,&level);
     paste(buf,ofs,&p);
-    if(p  and (unsigned)p <all_data.size())
-        parent = all_data[p];
+    if(p!=invalid  and (unsigned)p <all_data->size())
+        parent = (*all_data)[p];
     else
         parent = nullptr;
     paste(buf,ofs,&q);
-    if (q)
+    if (q!=invalid)
         partitioner = DeserializePartitioner(buf,ofs);
     else
         partitioner = nullptr;
@@ -367,8 +388,29 @@ GData *DeserializeData(byte *buf, int &ofs)
 {
     int k;
     paste(buf,ofs,&k);
-    if(k  and (unsigned)k <all_data.size())
-        return all_data[k];
+    if(k>=0  and (unsigned)k <all_data->size())
+        return (*all_data)[k];
     return nullptr;
 
+}
+GData* CreateData(byte *buf, int &ofs)
+{
+    int k,M,N,idx,cnt,level,p,q,invalid=-1;
+    GData *d;
+    paste(buf,ofs,&k);
+    paste(buf,ofs,&M);
+    paste(buf,ofs,&N);
+    paste(buf,ofs,&idx);
+    paste(buf,ofs,&cnt);
+    paste(buf,ofs,&level);
+    paste(buf,ofs,&p);
+    paste(buf,ofs,&q);
+    char s[DATA_NAME_COPY];
+    memcpy(s,buf+ofs,DATA_NAME_COPY);
+    ofs +=DATA_NAME_COPY;
+    if(p!=invalid)
+        d = new GData(M,N,s,(*all_data)[p],idx);
+    else
+        d = new GData(M,N,s);
+    return d;
 }

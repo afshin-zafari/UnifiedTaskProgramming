@@ -5,7 +5,7 @@
 class GOperation
 {
     public:
-        GOperation(){}
+        GOperation();
         ~GOperation(){}
         GOperation(const GOperation& other);
         GOperation& operator=(const GOperation& other);
@@ -18,6 +18,7 @@ class GOperation
         int key;
     private:
 };
-extern std::vector<GOperation*> all_operations;
+extern std::vector<GOperation*> *all_operations;
+
 GOperation *DeserializeOperation(byte *buf, int &);
 #endif // GOPERATION_HPP

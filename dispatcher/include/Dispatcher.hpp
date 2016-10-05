@@ -7,11 +7,16 @@
 #include "GData.hpp"
 #include "GTask.hpp"
 #include "GOperation.hpp"
+#include "GPartitioner.hpp"
 #include "memory_manager.hpp"
-#include "SGWrapper.hpp"
+#include "config.hpp"
 #ifdef LOCAL_DEV
     #include "basic.hpp"
-    #include "config.hpp"
+#else
+    #ifndef UTP_MQ
+       #include "SGWrapper.hpp"
+    #endif
+
 #endif
 
 class Tree {
@@ -45,9 +50,12 @@ class Dispatcher
         void allocate_memory(GData *);
         void data_partitioned(GData *);
         void data_created(GData *);
+        void partition_defined(GPartitioner*);
         void initialize();
         IScheduler * load(int no,string s,string lib);
         void get_thread_info(int &,int&);
+        void partition_cascaded(GPartitioner*p1, GPartitioner *p2);
+  void set_mq_mode(bool);
     protected:
     private:
         Tree *chain;
@@ -55,10 +63,13 @@ class Dispatcher
         int task_cnt,argc;
         static ulong last_scheduler_id;
         char **argv;
+        bool mq_mode;
         IScheduler *add_scheduler(const char *);
         void destroy_scheduler(Tree *);
         void data_created(GData *,Tree*);
         void data_partitioned(GData *,Tree*);
+        void partition_defined(GPartitioner*,Tree *);
+        void partition_cascaded(GPartitioner*, GPartitioner *, Tree *);
 };
 
 typedef Dispatcher UnifiedTaskPara;

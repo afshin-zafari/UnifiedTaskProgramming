@@ -1,0 +1,105 @@
+# depslib dependency file v1.0
+1475135586 source:/home/cppdev/dispatcher/app/main.cpp
+	<iostream>
+	"unified_gemm.hpp"
+	"Dispatcher.hpp"
+	"config.hpp"
+	<map>
+	<cstdio>
+	<sys/time.h>
+
+1474981164 /home/cppdev/dispatcher/app/unified_gemm.hpp
+	"utp.hpp"
+
+1474740824 /home/cppdev/dispatcher/include/utp.hpp
+	"Dispatcher.hpp"
+	"GData.hpp"
+	"GOperation.hpp"
+	"GPartitioner.hpp"
+	"GTask.hpp"
+	"IScheduler.hpp"
+
+1475139555 /home/cppdev/dispatcher/include/Dispatcher.hpp
+	<vector>
+	<string>
+	<map>
+	"utp_basic.hpp"
+	"GData.hpp"
+	"GTask.hpp"
+	"GOperation.hpp"
+	"GPartitioner.hpp"
+	"memory_manager.hpp"
+	"basic.hpp"
+	"config.hpp"
+	"SGWrapper.hpp"
+
+1474925511 /home/cppdev/dispatcher/include/utp_basic.hpp
+	<vector>
+	<cassert>
+
+1474979541 /home/cppdev/dispatcher/include/GData.hpp
+	<string>
+	<iomanip>
+	<sstream>
+	<iostream>
+	<vector>
+	"utp_basic.hpp"
+	"GHandle.hpp"
+	"GPartitioner.hpp"
+	"memory_manager.hpp"
+
+1475078844 /home/cppdev/dispatcher/include/GHandle.hpp
+	<string>
+
+1475047369 /home/cppdev/dispatcher/include/GPartitioner.hpp
+	<vector>
+
+1474740822 /home/cppdev/dispatcher/include/memory_manager.hpp
+	"utp_basic.hpp"
+	<vector>
+
+1475077922 /home/cppdev/dispatcher/include/GTask.hpp
+	"utp_basic.hpp"
+	"IScheduler.hpp"
+	"GHandle.hpp"
+	<string>
+	<vector>
+
+1475139034 /home/cppdev/dispatcher/include/IScheduler.hpp
+	<string>
+	<iomanip>
+	<sstream>
+	<iostream>
+	"utp_basic.hpp"
+
+1474969976 /home/cppdev/dispatcher/include/GOperation.hpp
+	"GTask.hpp"
+	<vector>
+
+1474961875 /home/cppdev/dispatcher/include/basic.hpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/time.h>
+	<assert.h>
+	<sched.h>
+	<errno.h>
+	<pthread.h>
+	"mpi.h"
+	"sg/platform/gettime.hpp"
+
+1474741975 /home/cppdev/dispatcher/include/config.hpp
+	<string>
+
+1474741521 /home/cppdev/dispatcher/include/SGWrapper.hpp
+	"IScheduler.hpp"
+	"sg/superglue.hpp"
+	"Dispatcher.hpp"
+	"GHandle.hpp"
+	<map>
+
+1474981157 source:/home/cppdev/dispatcher/app/unified_gemm.cpp
+	"unified_gemm.hpp"
+	<cstdlib>
+	<iostream>
+

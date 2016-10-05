@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ugemm" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/ugemm" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-DSLIB=1" />
+					<Add option="-DLOCAL_DEV=1" />
+					<Add directory="../include" />
+				</Compiler>
+				<Linker>
+					<Add option="-Wl,--allow-multiple-definition" />
+					<Add library="../bin/Debug/libdispatcher.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/ugemm" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DSLIB=1" />
+					<Add option="-DLOCAL_DEV=1" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-Wl,--allow-multiple-definition" />
+					<Add library="../bin/Debug/libdispatcher.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-DSLIB=1" />
+			<Add option="-DLOCAL_DEV=1" />
+			<Add directory="../include" />
+		</Compiler>
+		<Linker>
+			<Add option="-Wl,--allow-multiple-definition" />
+			<Add library="../bin/Debug/libdispatcher.a" />
+		</Linker>
+		<Unit filename="../app/main.cpp" />
+		<Unit filename="../app/unified_gemm.cpp" />
+		<Unit filename="../app/unified_gemm.hpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

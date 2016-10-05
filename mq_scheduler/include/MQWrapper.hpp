@@ -2,7 +2,6 @@
 #define MQWRAPPER_HPP
 
 #include "IScheduler.hpp"
-//#include "sg/superglue.hpp"
 #include "Dispatcher.hpp"
 #include "GHandle.hpp"
 #include "basic.hpp"

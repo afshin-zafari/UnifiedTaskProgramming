@@ -1,9 +1,10 @@
 #include "MQWrapper.hpp"
 #include "GTask.hpp"
 #include "GData.hpp"
+#include "GPartitioner.hpp"
 #include <stdlib.h>
 
-
+#define LOG(x) printf("%s, %s\n",__PRETTY_FUNCTION__,x)
 template <>
 void Queue::put(GData *d,int tag){
 
@@ -18,6 +19,14 @@ void Queue::put(GTask *t,int tag){
     byte *buf=new byte[256];
     int ofs=0;
     t->serialize(buf,ofs);
+    Message *msg = new Message ( buf, ofs, tag);
+    msg_list.push_back(msg);
+}
+template <>
+void Queue::put(GPartitioner *p,int tag){
+    byte *buf=new byte[256];
+    int ofs=0;
+    p->serialize(buf,ofs);
     Message *msg = new Message ( buf, ofs, tag);
     msg_list.push_back(msg);
 }
@@ -66,17 +75,20 @@ void MQWrapper::submitTask(GTask *t)
         return;
     }
     mq_send->put(t,MQ_TASK_SUBMIT);
+    LOG("");
 
 }
 /*=========================================================================*/
 void MQWrapper::runTask(GTask *t)
 {
     mq_send->put(t,MQ_TASK_READY);
+    LOG("");
 }
 /*=========================================================================*/
 void MQWrapper::finishedTask(GTask *t)
 {
     mq_send->put(t,MQ_TASK_FINISHED);
+    LOG("");
 }
 /*=========================================================================*/
 void MQWrapper::finalize()
@@ -86,56 +98,131 @@ void MQWrapper::finalize()
 void MQWrapper::allocate_memory(GData*d)
 {
     mq_send->put(d,MQ_DATA_ALLOCATED);
+    LOG("");
 }
 /*=========================================================================*/
 void MQWrapper::data_created(GData *d)
 {
     mq_send->put(d,MQ_DATA_CREATED);
+    LOG("");
 }
 /*=========================================================================*/
 void MQWrapper::data_partitioned(GData *d)
 {
     mq_send->put(d,MQ_DATA_PARTITIONED);
+    LOG("");
 }
-void MQWrapper::run_rpc(){
-    Message *msg = mq_recv->get();
+/*=========================================================================*/
+void MQWrapper::partition_defined(GPartitioner*p)
+{
+    mq_send->put(p,MQ_PARTITION_CREATED);
+    LOG("");
+}
+/*=========================================================================*/
+void MQWrapper::run_rpc(Message *msg ){
     Dispatcher * dis = get_dispatcher();
     GTask *t;
     GData *d;
-    GOperation *o;
+    GPartitioner *p;
     int ofs=0;
     switch(msg->tag){
         case MQ_TASK_FINISHED:
+            LOG("TASK Finished");
             t = DeserializeTask(msg->buf,ofs);
             dis->finished_task(t);
             break;
         case MQ_TASK_READY:
+            LOG("Task Ready");
             t = DeserializeTask(msg->buf,ofs);
             dis->run_task(t);
             break;
         case MQ_TASK_SUBMIT:
-            t = DeserializeTask(msg->buf,ofs);
+            LOG("Task submit");
+            t = CreateTask(msg->buf,ofs);
             dis->submit_task(t->get_operation(),t->get_args(),*t->get_axs(),t->get_parent());
             break;
         case MQ_DATA_ALLOCATED:
+            LOG("data alloc");
             d = DeserializeData(msg->buf,ofs);
             dis->allocate_memory(d);
             break;
         case MQ_DATA_CREATED:
-            d = DeserializeData(msg->buf,ofs);
-            dis->data_created(d);
+            LOG("Data Created");
+            d = CreateData (msg->buf,ofs);
             break;
         case MQ_DATA_PARTITIONED:
+            LOG("Data Partitioned");
             d = DeserializeData(msg->buf,ofs);
-            dis->data_partitioned(d);
+            ofs += 6 * sizeof(int);
+            p = DeserializePartitioner(msg->buf,ofs);
+            if ( d->get_partition() != p)
+                d->set_partition(p);
             break;
         case MQ_OPERATION_DEFINED:
-            o = DeserializeOperation(msg->buf,ofs);
-            operation_defined(o);
+            //o = DeserializeOperation(msg->buf,ofs);
+            //operation_defined(o);
+            break;
+        case MQ_PARTITION_CREATED:
+            LOG("Partition created");
+            p = CreatePartition(msg->buf,ofs);
+
+            break;
+        case MQ_PARTITION_CASCADED:
+            LOG("Partition Cascaded");
+            p=DeserializePartitioner(msg->buf,ofs);
+            ofs += 2*sizeof(int);
+            GPartitioner *p2=DeserializePartitioner(msg->buf,ofs);
+            p->set_next(p2);
+
             break;
 
-
     }
+}
+/*=========================================================================*/
+void MQWrapper::import_all()
+{
+    Message *m;
+
+    FILE *f;
+    f=fopen("msg_sent.dat","r");
+    if ( f == NULL)
+    return;
+    while(!feof(f)){
+
+
+        int n,tag;
+//        decltype<Message::tag> tag ;
+        fread(&tag,sizeof(tag),1,f);
+        fread(&n,sizeof(n),1,f);
+        byte * buf = new byte[n];
+        fread(buf,1,n,f);
+        m = new Message(buf,n,tag);
+        run_rpc(m);
+        mq_recv->msg_list.push_back(m);
+    };
+    fclose(f);
+}
+/*=========================================================================*/
+void MQWrapper::export_all()
+{
+    Message *m;
+
+    FILE *f;
+    f=fopen("msg_sent.dat","w");
+    do{
+        m=mq_send->get();
+        if (!m)break;//run_rpc(m);
+        int n = m->len;
+        fwrite(&m->tag,sizeof(m->tag),1,f);
+        fwrite(&n,sizeof(n),1,f);
+        fwrite(m->buf,1,n,f);
+    }while (m);
+    fclose(f);
+}
+/*=========================================================================*/
+void MQWrapper::partition_cascaded(GPartitioner*p1,GPartitioner*p2)
+{
+    mq_send->put(p1,MQ_PARTITION_CASCADED);
 }
 /*=========================================================================*/
 

@@ -3,6 +3,7 @@
 #include "IScheduler.hpp"
 #include "GTask.hpp"
 #include "Dispatcher.hpp"
+#include "basic.hpp"
 #include "gsl/gsl_cblas.h"
 
 void _gemm(GTask *);

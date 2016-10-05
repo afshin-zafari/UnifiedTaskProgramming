@@ -17,7 +17,7 @@ INC = -Iinclude -I/pica/h1/afshin/Damavand/D3/dt_scheduler/include -I$(DUCTTEIP_
 CFLAGS = -Wall -fexceptions -std=c++11 -pthread -Wno-unused-variable -DSLIB=1
 RESINC = 
 LIBDIR = 
-LIB = ../dt_scheduler/bin/Debug/libdt_scheduler.a 
+LIB = ../dt_scheduler/bin/Debug/libdt_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a
 LDFLAGS = -Wl,--allow-multiple-definition  -lpthread 
 
 INC_DEBUG = $(INC) 
@@ -30,6 +30,7 @@ LDFLAGS_DEBUG = $(LDFLAGS)
 OBJDIR_DEBUG = obj/Debug
 DEP_DEBUG = 
 OUT_DEBUG = bin/Debug/libdispatcher.a
+UTPMQ_DEBUG = bin/Debug/libutpmq.a
 
 INC_RELEASE = $(INC) 
 CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=RELEASE'
@@ -41,14 +42,21 @@ LDFLAGS_RELEASE = $(LDFLAGS) -s
 OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/Release/libdispatcher.a
+UTPMQ_RELEASE = bin/Release/libutpmq.a
+
 
 OBJ_DEBUG = $(OBJDIR_DEBUG)/src/memory_manager.o $(OBJDIR_DEBUG)/src/IScheduler.o $(OBJDIR_DEBUG)/src/GTask.o $(OBJDIR_DEBUG)/src/GPartitioner.o $(OBJDIR_DEBUG)/src/GOperation.o $(OBJDIR_DEBUG)/src/GHandle.o $(OBJDIR_DEBUG)/src/GData.o $(OBJDIR_DEBUG)/src/GLog.o $(OBJDIR_DEBUG)/src/Dispatcher.o $(OBJDIR_DEBUG)/main.o
 
+UTPMQ_OBJ_DEBUG= $(subst Dispatcher,utpmq,$(OBJ_DEBUG))
+
 OBJ_RELEASE = $(OBJDIR_RELEASE)/src/memory_manager.o $(OBJDIR_RELEASE)/src/IScheduler.o $(OBJDIR_RELEASE)/src/GTask.o $(OBJDIR_RELEASE)/src/GPartitioner.o $(OBJDIR_RELEASE)/src/GOperation.o $(OBJDIR_RELEASE)/src/GHandle.o $(OBJDIR_RELEASE)/src/GData.o $(OBJDIR_RELEASE)/src/GLog.o $(OBJDIR_RELEASE)/src/Dispatcher.o $(OBJDIR_RELEASE)/main.o
 
-all: debug release
+UTPMQ_OBJ_RELEASE=$(subst Dispatcher,utpmq,$(OBJ_RELEASE))
 
-clean: clean_debug clean_release
+all: debug release 
+
+clean: clean_debug clean_release 
+
 
 before_debug: 
 	$(info ***************** DISPATCHER (DEBUG)************************)
@@ -62,9 +70,15 @@ after_debug:
 
 debug: before_debug out_debug after_debug
 
-out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
+.ONESHELL:
+out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG) $(UTPMQ_OBJ_DEBUG)
 	$(info creating $(OUT_DEBUG))
-	@$(AR) rcsv $(OUT_DEBUG) $(OBJ_DEBUG)
+	@$(AR) rcsv $(OUT_DEBUG) $(OBJ_DEBUG)  | cat 
+	$(info creating $(UTPMQ_DEBUG))
+	@tput setaf 2 
+	@$(AR) rcsv $(UTPMQ_DEBUG) $(UTPMQ_OBJ_DEBUG) | cat 
+	@tput sgr0
+
 
 $(OBJDIR_DEBUG)/src/memory_manager.o: src/memory_manager.cpp
 	$(info $(notdir $<))
@@ -98,6 +112,10 @@ $(OBJDIR_DEBUG)/src/Dispatcher.o: src/Dispatcher.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/Dispatcher.cpp -o $(OBJDIR_DEBUG)/src/Dispatcher.o
 
+$(OBJDIR_DEBUG)/src/utpmq.o: src/Dispatcher.cpp
+	$(info $(notdir $<) --> utpmq.o)
+	@$(CXX) -DUTP_MQ $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/Dispatcher.cpp -o $(OBJDIR_DEBUG)/src/utpmq.o
+
 $(OBJDIR_DEBUG)/src/GLog.o: src/GLog.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/GLog.cpp -o $(OBJDIR_DEBUG)/src/GLog.o
@@ -124,9 +142,14 @@ after_release:
 
 release: before_release out_release after_release
 
-out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
+.NOTPARALLEL:
+out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE) $(UTPMQ_OBJ_RELEASE)
 	$(info creating $(OUT_RELEASE))
 	@$(AR) rcsv $(OUT_RELEASE) $(OBJ_RELEASE)
+	$(info creating $(UTPMQ_RELEASE))
+	@tput setaf 2
+	@$(AR) rcsv $(UTPMQ_RELEASE) $(UTPMQ_OBJ_RELEASE) | cat 
+	@tput sgr0
 
 $(OBJDIR_RELEASE)/src/memory_manager.o: src/memory_manager.cpp
 	$(info $(notdir $<))
@@ -159,6 +182,10 @@ $(OBJDIR_RELEASE)/src/GData.o: src/GData.cpp
 $(OBJDIR_RELEASE)/src/Dispatcher.o: src/Dispatcher.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/Dispatcher.cpp -o $(OBJDIR_RELEASE)/src/Dispatcher.o
+
+$(OBJDIR_RELEASE)/src/utpmq.o: src/Dispatcher.cpp
+	$(info $(notdir $<))
+	@$(CXX) -DUTP_MQ $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/Dispatcher.cpp -o $(OBJDIR_RELEASE)/src/utpmq.o
 
 $(OBJDIR_RELEASE)/src/GLog.o: src/GLog.cpp
 	$(info $(notdir $<))

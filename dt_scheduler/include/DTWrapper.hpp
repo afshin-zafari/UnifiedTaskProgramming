@@ -5,6 +5,7 @@
 #include "GData.hpp"
 #include "GTask.hpp"
 #include "ductteip.hpp"
+#include "GPartitioner.hpp"
 
 long  KeyGen(const char *s);
 extern int LastFuncKey ;
@@ -25,6 +26,8 @@ class DTWrapper : public IScheduler
         void allocate_memory(GData *);
         void data_created(GData *);
         void data_partitioned(GData *);
+  void partition_defined(GPartitioner *);
+  void partition_cascaded(GPartitioner *,GPartitioner*);
     protected:
     private:
   IContext *ctx;

@@ -3,13 +3,15 @@
 #include "GTask.hpp"
 #include "Dispatcher.hpp"
 /*==================================================================*/
-std::vector<GTask*> all_tasks;
+std::vector<GTask*> *all_tasks;
 GTask::GTask()
 {
     task_count = 0;
     handle = new GHandle;
-    key=all_tasks.size();
-    all_tasks.push_back(this);
+    if(all_tasks == nullptr)
+        all_tasks = new std::vector<GTask *>;
+    key=all_tasks->size();
+    all_tasks->push_back(this);
 }
 /*==================================================================*/
 GTask::GTask(string fn,Args * a, FUT key):
@@ -23,6 +25,10 @@ GTask::GTask(string fn,Args * a, FUT key):
     unit_diagonal=false;
     left_side = true;
     right_side=!left_side;
+    if(all_tasks == nullptr)
+        all_tasks = new std::vector<GTask *>;
+    key=all_tasks->size();
+    all_tasks->push_back(this);
 
 }
 /*==================================================================*/
@@ -53,7 +59,9 @@ void GTask::set_parent(GTask *p)
     parent = p;
     if ( !p )
       return;
+      #ifndef LOCAL_DEV
     Atomic::increase(&p->task_count);
+    #endif // LOCAL_DEV
 }
 /*==================================================================*/
 IScheduler *GTask::get_owner()
@@ -224,7 +232,8 @@ void GTask::serialize(byte *buf, int &ofs)
 }
 void GTask::deserialize(byte *buf, int &ofs)
 {
-    int k,h,p,o,s,n,d;
+    int k,p,o,s,n,d;
+    GHandleKey h;
     int invalid=-1;
     paste(buf,ofs,&k);
     if ( k != invalid)
@@ -234,11 +243,13 @@ void GTask::deserialize(byte *buf, int &ofs)
 
     paste(buf,ofs,&p);
     if(p!=invalid){
+        ofs -= sizeof(p);
         parent=DeserializeTask(buf,ofs);
     }
 
     paste(buf,ofs,&o);
     if(o!=invalid){
+        ofs -= sizeof(o);
         operation = DeserializeOperation(buf,ofs);
     }
     paste(buf,ofs,&s);
@@ -247,11 +258,12 @@ void GTask::deserialize(byte *buf, int &ofs)
     }
     paste(buf,ofs,&n);
     int x;
+    args = new Args;
     for(int i=0;i<n;i++)
     {
         paste(buf,ofs,&d);
         paste(buf,ofs,&x);
-        GData *data=all_data[d];
+        GData *data=(*all_data)[d];
         args->axs.addAxs(x);
         args->args.push_back(data);
     }
@@ -260,10 +272,16 @@ GTask *DeserializeTask(byte *buf,int &ofs)
 {
     int k;
     paste(buf,ofs,&k);
-    if( k and (unsigned)k<all_tasks.size()){
-        return all_tasks[k];
+    if( k>= 0 and (unsigned)k<all_tasks->size()){
+        return (*all_tasks)[k];
     }
     return nullptr;
+}
+GTask *CreateTask(byte *buf, int &ofs)
+{
+    GTask *t = new GTask();
+    t->deserialize(buf,ofs);
+    return t;
 }
 Args *GTask::get_args()
 {

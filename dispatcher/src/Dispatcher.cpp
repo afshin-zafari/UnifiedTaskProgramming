@@ -1,14 +1,18 @@
 #include "Dispatcher.hpp"
-#include "SGWrapper.hpp"
 #ifndef LOCAL_DEV
- #include "DTWrapper.hpp"
- #include "CPUBLAS.hpp"
+ #ifndef UTP_MQ
+    #include "SGWrapper.hpp"
+    #include "DTWrapper.hpp"
+    #include "CPUBLAS.hpp"
+    #include "EchoScheduler.hpp"
+  #endif // UTP_MQ
 #endif // LOCAL_DEV
 #include "GLog.hpp"
-//#include "CUBLAS.hpp"
 #include <string>
 #include <iostream>
 #include <dlfcn.h>
+#include "MQWrapper.hpp"
+#include "GOperation.hpp"
 
 using namespace std;
 
@@ -61,9 +65,12 @@ typedef void (*fp_destroy)(IScheduler *);
 /*=============================================================*/
 IScheduler *Dispatcher::add_scheduler(const char *s)
 {
+#ifdef LOCAL_DEV
+    return nullptr;
+#else
     char *error;
     Tree *next,*last =chain;
-    LOG_INFO(LOG_MLEVEL,"Load a dynamic libray '%s'.\n",s);
+    LOG_INFO(LOG_MLEVEL,"Load a dynamic library '%s'.\n",s);
     if ( last != nullptr)
     {
       LOG_INFO(LOG_MLEVEL,"not first sh.lib.\n");
@@ -96,6 +103,7 @@ IScheduler *Dispatcher::add_scheduler(const char *s)
     next->s =fn(last_scheduler_id++);
     next->s->submitTask((GTask *) NULL);
     return next->s;
+    #endif // LOCAL_DEV
 }
 /*=============================================================*/
 Dispatcher::Dispatcher(int argc_, char **argv_)
@@ -108,11 +116,13 @@ Dispatcher::Dispatcher(int argc_, char **argv_)
 /*=============================================================*/
 void Dispatcher::destroy_scheduler(Tree *c)
 {
+    #ifndef LOCAL_DEV
     fp_destroy dtor = (fp_destroy)dlsym(c->lib_handle, "f_destroy");
     dtor(c->s);
     dlclose(c->lib_handle);
     for ( Tree *n : c->next)
         destroy_scheduler(n);
+    #endif // LOCAL_DEV
 }
 /*=============================================================*/
 Dispatcher::~Dispatcher()
@@ -253,16 +263,23 @@ void Dispatcher::show_oper()
 /*=============================================================*/
 void Dispatcher::finalize()
 {
+#ifndef LOCAL_DEV
     chain->s->finalize();
     LOG_INFO(LOG_MLEVEL,"First scheduler:%s\n",chain->s->get_name().c_str());
     //    if ( chain->s->get_name() != "DuctTeip" )
     #ifndef LOCAL_DEV
+    #ifndef UTP_MQ
     int flag;
     MPI_Finalized(&flag);
     if (!flag)
       MPI_Finalize();
     #endif
+#endif // UTP_MQ
     LOG_INFO(LOG_MLEVEL,"First scheduler:%s\n",chain->s->get_name().c_str());
+#else
+    MQWrapper *mq=(MQWrapper*)chain->s;
+    mq->export_all();
+#endif // LOCAL_DEV
 }
 /*=============================================================*/
 IScheduler *Dispatcher::get_next_scheduler(IScheduler *sch)
@@ -303,6 +320,19 @@ void Dispatcher::data_partitioned(GData *d, Tree *ch)
     data_partitioned(d,ch->next[i]);
   }
 }
+void Dispatcher::partition_defined(GPartitioner *p, Tree *ch)
+{
+    ch->s->partition_defined(p);
+    for (uint i=0;i< ch->next.size();i++ ){
+        partition_defined(p,ch->next[i]);
+    }
+
+}
+void Dispatcher::partition_defined(GPartitioner *p)
+{
+     assert(chain);
+     partition_defined(p,chain);
+}
 /*=============================================================*/
 void Dispatcher::data_partitioned(GData *d)
 {
@@ -315,7 +345,7 @@ IScheduler * Dispatcher::load(int no,string s,string lib)
 {
   IScheduler *sch=nullptr;
   #ifndef LOCAL_DEV
-
+  #ifndef UTP_MQ
   if ( s == "DuctTeip"){
     LOG_INFO(LOG_MLEVEL,"The Scheduler No.:%d is DuctTeip.\n",no);
     sch= new DTWrapper(last_scheduler_id++);
@@ -343,7 +373,8 @@ IScheduler * Dispatcher::load(int no,string s,string lib)
     fprintf(stderr,"The scheduler No.:%d (%s) could not be loaded.\n",no,(char *)s.c_str());
     exit(-2);
   }
-  #endif
+  #endif // UTP_MQ
+#endif  // LOCAL_DEV 
   return sch;
 }
 /*=============================================================*/
@@ -352,7 +383,19 @@ void Dispatcher::initialize()
   Tree *last;
   if ( config.sch1.size() ==0){
       fprintf(stderr,"No Library for first scheduler is given.\n");
-      exit(-1);
+      #ifndef LOCAL_DEV
+        exit(-1);
+      #else
+        chain = new Tree;
+        chain->s = (IScheduler *)new MQWrapper(last_scheduler_id++);
+        Tree * n = new Tree;
+        n->s = (IScheduler*)new EchoScheduler(last_scheduler_id++);
+        chain->next.push_back(n);
+        n->previous=chain;
+        MQWrapper *mq = (MQWrapper*)chain->s;
+        mq->import_all();
+        return;
+      #endif // LOCAL_DEV
   }
   chain = new Tree;
   chain->s = load(1,config.sch1,config.lib1);
@@ -378,6 +421,24 @@ void Dispatcher::get_thread_info( int & n, int & pin_cpu)
 {
   n = config.getNumThreads();
   pin_cpu = me * n;
+}
+void Dispatcher::partition_cascaded(GPartitioner*p1, GPartitioner *p2, Tree *ch)
+{
+  ch->s->partition_cascaded(p1,p2);
+  for (uint i=0;i< ch->next.size();i++ ){
+    partition_cascaded(p1,p2,ch->next[i]);
+  }
+}
+
+void Dispatcher::partition_cascaded(GPartitioner*p1, GPartitioner *p2)
+{
+  assert(chain);
+  partition_cascaded(p1,p2,chain);
+
+}
+void Dispatcher::set_mq_mode(bool m)
+{
+  mq_mode = m;
 }
 /***************************************************************/
 /***************************************************************/

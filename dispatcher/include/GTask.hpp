@@ -6,7 +6,7 @@
 
 #include "utp_basic.hpp"
 #include "IScheduler.hpp"
-#include "sg/superglue.hpp"
+//#include "sg/superglue.hpp"
 #include "GHandle.hpp"
 
 
@@ -62,6 +62,7 @@ class GTask
         int get_key();
         Args * get_args();
         Axs * get_axs();
+        operator string();
     protected:
     private:
     GOperation *operation;
@@ -73,6 +74,7 @@ class GTask
     bool trans_a,trans_b,trans_c,left_side,right_side, upper_tr,lower_tr,unit_diagonal;
     void *guest;
 };
-extern std::vector<GTask*> all_tasks;
+extern std::vector<GTask*> *all_tasks;
 GTask *DeserializeTask(byte *buf, int &);
+GTask *CreateTask(byte *buf, int &);
 #endif // GTASK_HPP

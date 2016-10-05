@@ -57,7 +57,7 @@ class GData
     protected:
 
     private:
-        int M,N,child_idx,child_cnt,level;
+        int M,N,child_idx,child_cnt,level,key;
         GHandle *handle;
         GData *parent, **children;
         MemoryItem *memory;
@@ -66,7 +66,8 @@ class GData
         string name;
         void *guest;
 };
-extern std::vector<GData *> all_data;
+extern std::vector<GData *> *all_data;
 GData* DeserializeData(byte *,int &);
+GData* CreateData(byte *,int &);
 
 #endif // GDATA_HPP

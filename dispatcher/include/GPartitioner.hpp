@@ -29,6 +29,7 @@ class GPartitioner
     private:
         bool comm,ownership,alloc;
 };
-extern std::vector<GPartitioner*> part_list;
+extern std::vector<GPartitioner*> *part_list;
 GPartitioner * DeserializePartitioner(byte *,int &);
+GPartitioner *CreatePartition(byte * buf, int &ofs);
 #endif // GPARTITIONER_HPP

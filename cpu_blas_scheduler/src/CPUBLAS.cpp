@@ -45,7 +45,7 @@ void CPUBLAS::submitTask(GTask *t)
 /*==============================================================*/
 void CPUBLAS::runTask(GTask *t)
 {
-  LOG_INFO(LOG_MLEVEL,"task run %s\n",t->get_name().c_str());
+  //  LOG_INFO(LOG_MLEVEL,"task run %s\n",t->get_name().c_str());
     blas_map(gemm);  
     blas_map(trsm);
     blas_map(dot);
@@ -83,6 +83,12 @@ void CPUBLAS::data_created(GData *)
 {
 }
 void CPUBLAS::data_partitioned(GData *)
+{
+}
+void CPUBLAS::partition_defined(GPartitioner *p)
+{
+}
+void CPUBLAS::partition_cascaded(GPartitioner *p1,GPartitioner *p2)
 {
 }
 /*==============================================================*/

@@ -6,6 +6,7 @@
 #include "Dispatcher.hpp"
 #include "GHandle.hpp"
 #include "basic.hpp"
+#include "GPartitioner.hpp"
 
 #include <map>
 using namespace sg;
@@ -27,6 +28,8 @@ public:
     void allocate_memory(GData *);
     void data_created(GData *);
     void data_partitioned(GData *);
+  void partition_defined(GPartitioner *);
+  void partition_cascaded(GPartitioner *,GPartitioner *);
 protected:
 private:
 };

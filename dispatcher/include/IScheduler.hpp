@@ -9,6 +9,7 @@
 
 class GTask;
 class GData;
+class GPartitioner;
 class IScheduler
 {
     public:
@@ -26,6 +27,8 @@ class IScheduler
         virtual void allocate_memory(GData*)=0;
         virtual void data_created(GData *)=0;
         virtual void data_partitioned(GData *)=0;
+        virtual void partition_defined(GPartitioner*)=0;
+        virtual void partition_cascaded(GPartitioner*p1, GPartitioner *p2)=0;
         IScheduler *next,*previous;
         string get_name();
         void set_name(string);
