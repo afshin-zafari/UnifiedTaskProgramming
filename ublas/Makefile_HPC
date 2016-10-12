@@ -1,6 +1,7 @@
 
 outdir= ./temp
 libfile=./lib/libublas.a
+SUPERGLUE_DIR=../../../superglue/include
 SUPERGLUE_FLAGS=-pthread -I$(SUPERGLUE_DIR)  #-pedantic -Wno-long-long -Wno-format
 SOURCE_DIR=./src
 HEADER_DIR=./include
@@ -10,16 +11,15 @@ LINK=mpif90
 #---------------------------------------------------------
 WORKDIR = `pwd`
 
-CC =gcc
-CXX = g++
+CC = mpicc
+CXX = mpic++
 AR = ar
-LD = g++
+LD = mpic++
 WINDRES = windres
-DUCTTEIP_DIR=/home/ubuntu/UTP/UnifiedTaskProgramming/DuctTeip/ResStudio/Prototype
-SUPERGLUE_DIR=/home/ubuntu/UTP/UnifiedTaskProgramming/superglue
+DUCTTEIP_DIR=/pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
 
-INC = -Iinclude -I../dispatcher/include -I$(DUCTTEIP_DIR)/include -I$(SUPERGLUE_DIR)/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/include
-CFLAGS = -Wall -fexceptions -std=c++11 -g -pthread -DSLIB=1 -DUTP_MQ
+INC = -Iinclude -I../dispatcher/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/include
+CFLAGS = -Wall -fexceptions -std=c++11 -g -pthread -DSLIB=1
 RESINC = 
 LIBDIR = ./lib
 LIB = ../dispatcher/bin/Debug/libdispatcher.a ../dt_scheduler/bin/Debug/libdt_scheduler.a ../ductteip/bin/Debug/libductteip.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a

@@ -15,7 +15,7 @@ mq::MQ::MQ(){
   ioService = new boost::asio::io_service();
   handler = new AsioHandler(*ioService);
   std::cout <<"2\n";
-  handler->connect("130.238.29.108", 5672);
+  handler->connect("130.238.29.221", 5672);
 
   connection = new AMQP::Connection (handler, AMQP::Login("afshin", "afshin"), "/");
   channel = new AMQP::Channel (connection);

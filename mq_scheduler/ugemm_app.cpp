@@ -1,7 +1,6 @@
 #include <iostream>
 #include "unified_blas.hpp"
 #include "Dispatcher.hpp"
-#include "ductteip.hpp"
 #include "config.hpp"
 #include <map>
 #include <cstdio>
