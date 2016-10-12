@@ -14,6 +14,10 @@
 #include "MQWrapper.hpp"
 #include "GOperation.hpp"
 
+
+#ifdef UTP_MQ
+int me;
+#endif
 using namespace std;
 
 void packArgs(Args *a) {}
@@ -381,6 +385,12 @@ IScheduler * Dispatcher::load(int no,string s,string lib)
 void Dispatcher::initialize()
 {
   Tree *last;
+  #ifdef UTP_MQ
+  if(config.mq_mode){
+        chain = new Tree;
+        chain->s = (IScheduler *)new MQWrapper(last_scheduler_id++);
+  }
+  #else
   if ( config.sch1.size() ==0){
       fprintf(stderr,"No Library for first scheduler is given.\n");
       #ifndef LOCAL_DEV
@@ -413,7 +423,7 @@ void Dispatcher::initialize()
     last->next.push_back(n);
     n->previous = last;
   }
-
+#endif // UTP_MQ
   task_cnt = 0;
 }
 /*=============================================================*/
@@ -446,6 +456,10 @@ void utp_initialize(int argc, char **argv)
 {
   config.getCmdLine(argc,argv);
   glbDispatcher = new Dispatcher(argc,argv);
+  #ifdef UTP_MQ
+    config.mq_mode = true;
+    me =0;
+  #endif
   glbDispatcher->initialize();
 }
 /*=============================================================*/

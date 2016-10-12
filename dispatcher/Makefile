@@ -12,7 +12,7 @@ LD = mpic++
 WINDRES = windres
 DUCTTEIP_DIR=/pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
 
-INC = -Iinclude -I/pica/h1/afshin/Damavand/D3/dt_scheduler/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/cpu_blas_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/include -I/pica/sw/comp/cuda/7.5/tintin/samples/common/inc -I/pica/sw/comp/cuda/7.5/tintin/include -I../ublas/include
+INC = -Iinclude -I/pica/h1/afshin/Damavand/D3/dt_scheduler/include -I$(DUCTTEIP_DIR)/include -I/pica/h1/afshin/sg/superglue/include -I/pica/h1/afshin/Damavand/D3/cpu_blas_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I../mq_scheduler/include -I/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/include -I/pica/sw/comp/cuda/7.5/tintin/samples/common/inc -I/pica/sw/comp/cuda/7.5/tintin/include -I../ublas/include
 
 CFLAGS = -Wall -fexceptions -std=c++11 -pthread -Wno-unused-variable -DSLIB=1
 RESINC = 
@@ -45,11 +45,11 @@ OUT_RELEASE = bin/Release/libdispatcher.a
 UTPMQ_RELEASE = bin/Release/libutpmq.a
 
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/src/memory_manager.o $(OBJDIR_DEBUG)/src/IScheduler.o $(OBJDIR_DEBUG)/src/GTask.o $(OBJDIR_DEBUG)/src/GPartitioner.o $(OBJDIR_DEBUG)/src/GOperation.o $(OBJDIR_DEBUG)/src/GHandle.o $(OBJDIR_DEBUG)/src/GData.o $(OBJDIR_DEBUG)/src/GLog.o $(OBJDIR_DEBUG)/src/Dispatcher.o $(OBJDIR_DEBUG)/main.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/src/memory_manager.o $(OBJDIR_DEBUG)/src/IScheduler.o $(OBJDIR_DEBUG)/src/GTask.o $(OBJDIR_DEBUG)/src/GPartitioner.o $(OBJDIR_DEBUG)/src/GOperation.o $(OBJDIR_DEBUG)/src/GHandle.o $(OBJDIR_DEBUG)/src/GData.o $(OBJDIR_DEBUG)/src/GLog.o $(OBJDIR_DEBUG)/src/Dispatcher.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/src/basic.o
 
 UTPMQ_OBJ_DEBUG= $(subst Dispatcher,utpmq,$(OBJ_DEBUG))
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/src/memory_manager.o $(OBJDIR_RELEASE)/src/IScheduler.o $(OBJDIR_RELEASE)/src/GTask.o $(OBJDIR_RELEASE)/src/GPartitioner.o $(OBJDIR_RELEASE)/src/GOperation.o $(OBJDIR_RELEASE)/src/GHandle.o $(OBJDIR_RELEASE)/src/GData.o $(OBJDIR_RELEASE)/src/GLog.o $(OBJDIR_RELEASE)/src/Dispatcher.o $(OBJDIR_RELEASE)/main.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/src/memory_manager.o $(OBJDIR_RELEASE)/src/IScheduler.o $(OBJDIR_RELEASE)/src/GTask.o $(OBJDIR_RELEASE)/src/GPartitioner.o $(OBJDIR_RELEASE)/src/GOperation.o $(OBJDIR_RELEASE)/src/GHandle.o $(OBJDIR_RELEASE)/src/GData.o $(OBJDIR_RELEASE)/src/GLog.o $(OBJDIR_RELEASE)/src/Dispatcher.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/src/basic.o
 
 UTPMQ_OBJ_RELEASE=$(subst Dispatcher,utpmq,$(OBJ_RELEASE))
 
@@ -68,17 +68,18 @@ after_debug:
 	$(info ************************************************************)
 	$(info )
 
-debug: before_debug out_debug after_debug
+debug: before_debug out_debug after_debug utp_mq
 
 .ONESHELL:
-out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG) $(UTPMQ_OBJ_DEBUG)
-	$(info creating $(OUT_DEBUG))
+out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
+	@echo creating $(OUT_DEBUG) 
 	@$(AR) rcsv $(OUT_DEBUG) $(OBJ_DEBUG)  | cat 
-	$(info creating $(UTPMQ_DEBUG))
+
+utp_mq: before_debug $(OBJ_DEBUG) $(DEP_DEBUG) $(UTPMQ_OBJ_DEBUG)
 	@tput setaf 2 
+	@echo creating $(UTPMQ_DEBUG)
 	@$(AR) rcsv $(UTPMQ_DEBUG) $(UTPMQ_OBJ_DEBUG) | cat 
 	@tput sgr0
-
 
 $(OBJDIR_DEBUG)/src/memory_manager.o: src/memory_manager.cpp
 	$(info $(notdir $<))
@@ -119,6 +120,10 @@ $(OBJDIR_DEBUG)/src/utpmq.o: src/Dispatcher.cpp
 $(OBJDIR_DEBUG)/src/GLog.o: src/GLog.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/GLog.cpp -o $(OBJDIR_DEBUG)/src/GLog.o
+
+$(OBJDIR_DEBUG)/src/basic.o: src/basic.cpp
+	$(info $(notdir $<))
+	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/basic.cpp -o $(OBJDIR_DEBUG)/src/basic.o
 
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(info $(notdir $<))
@@ -191,6 +196,10 @@ $(OBJDIR_RELEASE)/src/GLog.o: src/GLog.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/GLog.cpp -o $(OBJDIR_RELEASE)/src/GLog.o
 
+$(OBJDIR_RELEASE)/src/basic.o: src/basic.cpp
+	$(info $(notdir $<))
+	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/basic.cpp -o $(OBJDIR_RELEASE)/src/basic.o
+
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
@@ -201,5 +210,5 @@ clean_release:
 	@rm -rf $(OBJDIR_RELEASE)/src
 	@rm -rf $(OBJDIR_RELEASE)
 
-.PHONY: before_debug after_debug clean_debug before_release after_release clean_release
+.PHONY: before_debug after_debug clean_debug before_release after_release clean_release utp_mq
 

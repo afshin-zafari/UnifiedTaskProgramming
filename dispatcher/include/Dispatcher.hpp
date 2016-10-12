@@ -10,13 +10,9 @@
 #include "GPartitioner.hpp"
 #include "memory_manager.hpp"
 #include "config.hpp"
-#ifdef LOCAL_DEV
-    #include "basic.hpp"
-#else
-    #ifndef UTP_MQ
-       #include "SGWrapper.hpp"
-    #endif
-
+#include "basic.hpp"
+#ifndef UTP_MQ
+  #include "SGWrapper.hpp"
 #endif
 
 class Tree {

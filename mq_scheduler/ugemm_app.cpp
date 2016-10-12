@@ -6,6 +6,13 @@
 #include <map>
 #include <cstdio>
 #include <sys/time.h>
+static inline TimeUnit  UserTime(int y) {
+  timeval tv;
+  unsigned long  unit = 1000000;
+  gettimeofday(&tv, 0);
+  return (tv.tv_sec*unit+tv.tv_usec/unit);
+}
+
 
 map<string,GOperation *> op;
 using namespace std;
@@ -53,20 +60,6 @@ GData *test_gemm()
     ugemm(A,B,C);
     return _C;
 }
-GData *test_trsm()
-{
-    GData &A = * new GData (10,10);
-    GData &B = * new GData (10,10);
-    GPartitioner *P=new GPartitioner(5,5);
-    A.set_partition(P);
-    B.set_partition(P);
-
-    A.fill_chol_diag();
-    B.fill_moler();
-
-    utrsm(A,B);
-    return &B;
-}
 int main(int argc, char **argv)
 {
     utp_initialize(argc,argv);
@@ -80,17 +73,6 @@ int main(int argc, char **argv)
         << ", time: " << toc()
         << endl;
 
-    /*
-    double * d=(double*)C->get_memory();
-    int err=0;
-    int N = config.getYDimension();
-    for (int i = 0; i < N*N ; i++){
-      if (d[i] != (2*N+10.0))
-	err++;
-      cout << d[i] << ',' << ((i%N==0)?('\n'):' ' );
-    }
-    cout << "errors " << err << ' ' << d[0] << endl;
-    */
     C->print();
     cout << "Program finished.\n";
     return 0;
