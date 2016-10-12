@@ -5,30 +5,37 @@
 #include <stdlib.h>
 
 #define LOG(x) printf("%s, %s\n",__PRETTY_FUNCTION__,x)
+Queue::Queue(mq::MQ *m):mq_sch(m){}
 template <>
 void Queue::put(GData *d,int tag){
 
     byte *buf = new byte[128];
     int ofs=0;
+    copy(buf,ofs,tag);
     d->serialize(buf,ofs);
     Message *msg = new Message ( buf, ofs, tag);
     msg_list.push_back(msg);
+    mq_sch->send_buffer((const char *)buf,ofs);
 }
 template <>
 void Queue::put(GTask *t,int tag){
     byte *buf=new byte[256];
     int ofs=0;
+    copy(buf,ofs,tag);
     t->serialize(buf,ofs);
     Message *msg = new Message ( buf, ofs, tag);
     msg_list.push_back(msg);
+    mq_sch->send_buffer((const char *)buf,ofs);
 }
 template <>
 void Queue::put(GPartitioner *p,int tag){
     byte *buf=new byte[256];
     int ofs=0;
+    copy(buf,ofs,tag);
     p->serialize(buf,ofs);
     Message *msg = new Message ( buf, ofs, tag);
     msg_list.push_back(msg);
+    mq_sch->send_buffer((const char *)buf,ofs);
 }
 
 const int In   = 1;
@@ -38,8 +45,12 @@ const int InOut= 3;
 /*=========================================================================*/
 MQWrapper::MQWrapper(int id):IScheduler(id)
 {
-  mq_send = new Queue;
-  mq_recv = new Queue;
+  LOG("");
+  mq_sch = new mq::MQ();
+  LOG("");
+  mq_send = new Queue(mq_sch);
+  mq_recv = new Queue(mq_sch);
+  t = new boost::thread ([]{mq::ioService->run();});
 }
 
 /*=========================================================================*/
@@ -50,8 +61,10 @@ int MQWrapper::init()
 /*=========================================================================*/
 MQWrapper::~MQWrapper()
 {
-    delete mq_send;
-    delete mq_recv;
+  delete t;  
+  delete mq_send;
+  delete mq_recv;
+  delete mq_sch;
 }
 
 /*=========================================================================*/
@@ -93,6 +106,8 @@ void MQWrapper::finishedTask(GTask *t)
 /*=========================================================================*/
 void MQWrapper::finalize()
 {
+  if(t!= nullptr)
+    t->join();
 }
 /*=========================================================================*/
 void MQWrapper::allocate_memory(GData*d)

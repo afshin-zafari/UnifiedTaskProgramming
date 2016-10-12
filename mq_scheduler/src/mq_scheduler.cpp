@@ -1,7 +1,7 @@
 #include "mq_scheduler.hpp"
 
 namespace mq{
-  boost::asio::io_service ioService;
+  boost::asio::io_service *ioService;
   AsioHandler *handler;
   AMQP::Connection *connection;
   AMQP::Channel *channel,*channel_recv;
@@ -11,8 +11,11 @@ namespace mq{
 
 /*----------------------------------------------------------------------------------------*/
 mq::MQ::MQ(){
-  handler = new AsioHandler(ioService);
-  handler->connect("130.238.28.158", 5672);
+  std::cout <<"1\n";
+  ioService = new boost::asio::io_service();
+  handler = new AsioHandler(*ioService);
+  std::cout <<"2\n";
+  handler->connect("130.238.29.108", 5672);
 
   connection = new AMQP::Connection (handler, AMQP::Login("afshin", "afshin"), "/");
   channel = new AMQP::Channel (connection);
@@ -22,7 +25,9 @@ mq::MQ::MQ(){
   channel_recv->consume("recv",AMQP::noack).onReceived(receive);
     
 
-  t= new boost::asio::deadline_timer(ioService, boost::posix_time::millisec(1000));
+  t= new boost::asio::deadline_timer(*ioService, boost::posix_time::millisec(1000));
+  std::cout <<"3\n";
+
   channel->onReady(ready);
     
 }
@@ -32,7 +37,8 @@ mq::MQ::~MQ(){
   delete channel_recv;
   delete channel;
   delete connection;
-  delete handler;    
+  delete handler;
+  delete ioService;
 }
 /*----------------------------------------------------------------------------------------*/
 void mq::MQ::ready(){

@@ -8,7 +8,7 @@
 #include "IScheduler.hpp"
 
 namespace mq{
-  extern boost::asio::io_service ioService;
+  extern boost::asio::io_service *ioService;
   extern AsioHandler *handler;
   extern AMQP::Connection *connection;
   extern AMQP::Channel *channel,*channel_recv;

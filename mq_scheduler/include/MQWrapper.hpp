@@ -4,9 +4,10 @@
 #include "IScheduler.hpp"
 #include "Dispatcher.hpp"
 #include "GHandle.hpp"
-//#include "basic.hpp"
+#include "basic.hpp"
+#include "mq_scheduler.hpp"
+#include "boost/thread/thread.hpp"
 #include <deque>
-
 
 
 struct Message{
@@ -17,10 +18,12 @@ struct Message{
 };
 
 struct Queue {
-    std::deque<Message*> msg_list;
-    template <class T>
-    void put(T* msg,int tag);
-    Message *get();
+  std::deque<Message*> msg_list;
+  mq::MQ* mq_sch;
+  Queue(mq::MQ *);
+  template <class T>
+  void put(T* msg,int tag);
+  Message *get();
 };
 /*============================================================*/
 class MQWrapper: public IScheduler
@@ -38,6 +41,8 @@ public:
         MQ_OPERATION_DEFINED
     };
     Queue *mq_send,*mq_recv;
+  mq::MQ *mq_sch;
+  boost::thread *t;
     MQWrapper(int);
      ~MQWrapper();
     MQWrapper(const MQWrapper& other,int);
