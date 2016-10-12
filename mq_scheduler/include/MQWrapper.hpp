@@ -5,10 +5,15 @@
 #include "Dispatcher.hpp"
 #include "GHandle.hpp"
 #include "basic.hpp"
+class MQWrapper;
+
 #include "mq_scheduler.hpp"
 #include "boost/thread/thread.hpp"
 #include <deque>
 
+namespace mq{
+  class MQ;
+}
 
 struct Message{
     int tag,len;

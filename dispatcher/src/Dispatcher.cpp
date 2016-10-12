@@ -366,6 +366,11 @@ IScheduler * Dispatcher::load(int no,string s,string lib)
     sch = new CPUBLAS(last_scheduler_id++);
     sch->set_name("cpuBLAS");
   }
+  if(s == "UTP_MQ"){
+    LOG_INFO(LOG_MLEVEL,"The Scheduler No.:%d is UTP_MQ.\n",no);
+    sch = new MQWrapper(last_scheduler_id++);
+    sch->set_name("MQWrapper");
+  }
   /*
   if(s == "cuBLAS"){
     LOG_INFO(LOG_MLEVEL,"The Scheduler No.:%d is cuBLAS.\n",no);

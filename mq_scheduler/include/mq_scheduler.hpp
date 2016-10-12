@@ -6,6 +6,7 @@
 #include "asiohandler.h"
 #include "amqpcpp.h"
 #include "IScheduler.hpp"
+#include "MQWrapper.hpp"
 
 namespace mq{
   extern boost::asio::io_service *ioService;
@@ -13,10 +14,11 @@ namespace mq{
   extern AMQP::Connection *connection;
   extern AMQP::Channel *channel,*channel_recv;
   extern boost::asio::deadline_timer *t;  
+  extern ::MQWrapper *mq_wrapper;
   
   class MQ{//:public IScheduler
   public:
-    MQ();
+    MQ(MQWrapper *);
     ~MQ();
     static void ready();
     static void receive(const AMQP::Message &message,uint64_t deliveryTag,bool redeliver);

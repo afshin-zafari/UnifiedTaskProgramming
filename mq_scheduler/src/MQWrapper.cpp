@@ -46,7 +46,7 @@ const int InOut= 3;
 MQWrapper::MQWrapper(int id):IScheduler(id)
 {
   LOG("");
-  mq_sch = new mq::MQ();
+  mq_sch = new mq::MQ(this);
   LOG("");
   mq_send = new Queue(mq_sch);
   mq_recv = new Queue(mq_sch);

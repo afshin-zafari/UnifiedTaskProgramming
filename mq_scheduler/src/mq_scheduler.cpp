@@ -5,12 +5,14 @@ namespace mq{
   AsioHandler *handler;
   AMQP::Connection *connection;
   AMQP::Channel *channel,*channel_recv;
-  boost::asio::deadline_timer *t;  
+  boost::asio::deadline_timer *t;
+  MQWrapper *mq_wrapper;
   
 }
 
 /*----------------------------------------------------------------------------------------*/
-mq::MQ::MQ(){
+mq::MQ::MQ(MQWrapper *mqw){
+  mq_wrapper=mqw;
   std::cout <<"1\n";
   ioService = new boost::asio::io_service();
   handler = new AsioHandler(*ioService);
@@ -21,8 +23,8 @@ mq::MQ::MQ(){
   channel = new AMQP::Channel (connection);
     
   channel_recv = new AMQP::Channel (connection);
-  channel_recv->declareQueue("recv");
-  channel_recv->consume("recv",AMQP::noack).onReceived(receive);
+  channel_recv->declareQueue("hello");
+  channel_recv->consume("hello",AMQP::noack).onReceived(receive);
     
 
   t= new boost::asio::deadline_timer(*ioService, boost::posix_time::millisec(1000));
@@ -51,15 +53,22 @@ void mq::MQ::ready(){
 /*----------------------------------------------------------------------------------------*/
  void mq::MQ::receive(const AMQP::Message &message,uint64_t deliveryTag,bool redeliver)
 {
-  std::cout <<" [x] Received "<<message.message()<< "size: " << message.bodySize() << std::endl;
+  byte *buf = (byte *)message.body();
+  int ofs=0,tag;
+  paste(buf,ofs,&tag);
+  ofs = message.bodySize()- ofs;
+  Message * msg = new Message (buf,ofs,tag);
+  std::cout <<" [x] Received command with tag: "<< tag << "size: " << ofs << std::endl;
+  mq::mq_wrapper->run_rpc(msg);
+  delete msg;
 }
 /*----------------------------------------------------------------------------------------*/
 void mq::MQ::send(const char *msg){
-  mq::channel->publish("", "hello", msg);
+  mq::channel->publish("", "recv", msg);
 }
 /*----------------------------------------------------------------------------------------*/
 void mq::MQ::send_buffer(const char *buf,int n){
   AMQP::Envelope e(buf,n);
-  mq::channel->publish("", "hello", e);
+  mq::channel->publish("", "recv", e);
 }
 /*----------------------------------------------------------------------------------------*/
