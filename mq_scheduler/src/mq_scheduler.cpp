@@ -38,6 +38,7 @@ mq::MQ::MQ(MQWrapper *mqw){
   std::cout <<"3\n";
 
   channel->onReady(ready);
+  
     
 }
 /*----------------------------------------------------------------------------------------*/
@@ -51,6 +52,7 @@ mq::MQ::~MQ(){
 }
 /*----------------------------------------------------------------------------------------*/
 void mq::MQ::ready(){
+  while (!mq::handler->connected()) ;
   if(mq::handler->connected())
     {
       //mq::channel->publish("", "hello", "Hello World!by Afshin. Inside a class.");
@@ -80,6 +82,11 @@ void mq::MQ::send(const char *msg){
 }
 /*----------------------------------------------------------------------------------------*/
 void mq::MQ::send_buffer(const char *buf,int n){
+  if (!mq::handler->connected()) {
+    std::cout << "MQ not connected.\n";
+    return;
+  }
+  std::cout << "sent to " << config.mq_send << " " << n <<" bytes" << std::endl;
   AMQP::Envelope e(buf,n);
   mq::channel->publish("", config.mq_send, e);
 }

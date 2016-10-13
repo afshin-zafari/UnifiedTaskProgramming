@@ -3,9 +3,23 @@
 #include "GData.hpp"
 #include "GPartitioner.hpp"
 #include <stdlib.h>
+#include <sched.h>
+#include <iostream>
 
 #define LOG(x) printf("%s, %s\n",__PRETTY_FUNCTION__,x)
+
+void dump_buffer(byte *buf, const int n)
+{
+  for ( int i=0;i<n;i++){
+    printf("%3.3d ",buf[i]);
+    if(i and i%3 ==0)
+      printf("\n");
+  }
+  printf("\n");
+}
+
 Queue::Queue(mq::MQ *m):mq_sch(m){}
+
 template <>
 void Queue::put(GData *d,int tag){
 
@@ -15,6 +29,7 @@ void Queue::put(GData *d,int tag){
     d->serialize(buf,ofs);
     Message *msg = new Message ( buf, ofs, tag);
     msg_list.push_back(msg);
+    dump_buffer(buf,ofs);
     mq_sch->send_buffer((const char *)buf,ofs);
 }
 template <>
@@ -25,6 +40,7 @@ void Queue::put(GTask *t,int tag){
     t->serialize(buf,ofs);
     Message *msg = new Message ( buf, ofs, tag);
     msg_list.push_back(msg);
+    dump_buffer(buf,ofs);
     mq_sch->send_buffer((const char *)buf,ofs);
 }
 template <>
@@ -35,6 +51,7 @@ void Queue::put(GPartitioner *p,int tag){
     p->serialize(buf,ofs);
     Message *msg = new Message ( buf, ofs, tag);
     msg_list.push_back(msg);
+    dump_buffer(buf,ofs);
     mq_sch->send_buffer((const char *)buf,ofs);
 }
 
@@ -51,6 +68,12 @@ MQWrapper::MQWrapper(int id):IScheduler(id)
   mq_send = new Queue(mq_sch);
   mq_recv = new Queue(mq_sch);
   t = new boost::thread ([]{mq::ioService->run();});
+  int c=0;
+  while (! mq::handler->connected()){
+    std::cout << c++ << ",";
+    sched_yield();
+  }
+  std::cout << std::endl;
 }
 
 /*=========================================================================*/

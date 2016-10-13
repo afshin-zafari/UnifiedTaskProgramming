@@ -351,8 +351,10 @@ void GData::serialize(byte *buf, int &ofs)
     copy(buf,ofs,child_idx);
     copy(buf,ofs,child_cnt);
     copy(buf,ofs,level);
-    if(parent)
+    if(parent){
+      std::cout << "parent key of Data: " << parent->key << std::endl;
         copy(buf,ofs,parent->key);
+    }
     else
         copy(buf,ofs,invalid);
     if (partitioner)
