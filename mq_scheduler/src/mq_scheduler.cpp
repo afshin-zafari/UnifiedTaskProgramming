@@ -1,4 +1,5 @@
 #include "mq_scheduler.hpp"
+#include "config.hpp"
 
 namespace mq{
   boost::asio::io_service *ioService;
@@ -17,14 +18,20 @@ mq::MQ::MQ(MQWrapper *mqw){
   ioService = new boost::asio::io_service();
   handler = new AsioHandler(*ioService);
   std::cout <<"2\n";
-  handler->connect("130.238.29.221", 5672);
+  std::cout << config.mq_ip << " "
+	    << config.mq_send << " "
+	    << config.mq_recv << " "
+	    << config.mq_name << " "
+	    << config.mq_pass << std::endl;
+  
+  handler->connect(config.mq_ip, 5672);//"130.238.29.221"
 
-  connection = new AMQP::Connection (handler, AMQP::Login("afshin", "afshin"), "/");
+  connection = new AMQP::Connection (handler, AMQP::Login(config.mq_name,config.mq_pass), "/"); //"afshin", "afshin"
   channel = new AMQP::Channel (connection);
     
   channel_recv = new AMQP::Channel (connection);
-  channel_recv->declareQueue("hello");
-  channel_recv->consume("hello",AMQP::noack).onReceived(receive);
+  channel_recv->declareQueue(config.mq_recv);//"hello"
+  channel_recv->consume(config.mq_recv,AMQP::noack).onReceived(receive);//"hello"
     
 
   t= new boost::asio::deadline_timer(*ioService, boost::posix_time::millisec(1000));
@@ -46,8 +53,8 @@ mq::MQ::~MQ(){
 void mq::MQ::ready(){
   if(mq::handler->connected())
     {
-      mq::channel->publish("", "hello", "Hello World!by Afshin. Inside a class.");
-      std::cout << " [x] Sent 'Hello World!'" << std::endl;	
+      //mq::channel->publish("", "hello", "Hello World!by Afshin. Inside a class.");
+      std::cout << " [x] Connection established " << std::endl;	
     }  
 }
 /*----------------------------------------------------------------------------------------*/
@@ -64,11 +71,11 @@ void mq::MQ::ready(){
 }
 /*----------------------------------------------------------------------------------------*/
 void mq::MQ::send(const char *msg){
-  mq::channel->publish("", "recv", msg);
+  mq::channel->publish("", config.mq_send, msg);
 }
 /*----------------------------------------------------------------------------------------*/
 void mq::MQ::send_buffer(const char *buf,int n){
   AMQP::Envelope e(buf,n);
-  mq::channel->publish("", "recv", e);
+  mq::channel->publish("", config.mq_send, e);
 }
 /*----------------------------------------------------------------------------------------*/
