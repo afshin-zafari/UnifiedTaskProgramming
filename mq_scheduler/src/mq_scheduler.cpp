@@ -66,6 +66,11 @@ void mq::MQ::ready(){
   ofs = message.bodySize()- ofs;
   Message * msg = new Message (buf,ofs,tag);
   std::cout <<" [x] Received command with tag: "<< tag << "size: " << ofs << std::endl;
+  for(int i=0;i<ofs;i++){
+    printf("%3.3d ",buf[i]);
+    if(i and i %3 ==0)
+      printf("\n");
+  }
   mq::mq_wrapper->run_rpc(msg);
   delete msg;
 }

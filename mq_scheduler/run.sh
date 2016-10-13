@@ -28,8 +28,8 @@ UTPMQ_PATH=""
 CUBLAS_PATH=/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/CUBLAS.so
 
 MQ_IP="130.238.29.221"
-MQ_SEND="send"
-MQ_RECV="hello"
+MQ_SEND="hpc_to_cloud"
+MQ_RECV="cloud_to_hpc"
 MQ_NAME="afshin"
 MQ_PASS="afshin"
 MQ_PARAMS="--mq-ip=${MQ_IP} --mq-send=${MQ_SEND} --mq-recv=${MQ_RECV} --mq-name=${MQ_NAME} --mq-pass=${MQ_PASS}"
@@ -89,8 +89,8 @@ nt=16
 app=./bin/Debug/ugemm_server
 
 cfg_MQ_BLAS
-$app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH $MQ_PARAMS
-rm *.txt
+$app -M $M $B1 $B2 -N $M $B1 $B2 -P 2 -p 2 -q 1 -t 2 -T $timeout $SCH $MQ_PARAMS > a.txt
+#rm *.txt
 
 
 cfg_DT_BLAS

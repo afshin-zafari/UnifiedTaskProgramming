@@ -33,6 +33,7 @@ LDFLAGS += -Wl,--allow-multiple-definition
 LDFLAGS += -L../ductteip/bin/Debug -lductteip 
 LDFLAGS += ../dt_scheduler/bin/Debug/libdt_scheduler.a 
 LDFLAGS += ../sg_scheduler/bin/Debug/libsg_scheduler.a 
+LDFLAGS += ../ublas/lib/libublas.a
 LDFLAGS += ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a 
 LDFLAGS += -lgsl -lgslcblas 
 LDFLAGS += $(BOOST)/stage/lib/libboost_thread.a 

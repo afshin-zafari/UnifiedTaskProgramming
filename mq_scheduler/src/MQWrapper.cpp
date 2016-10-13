@@ -139,7 +139,7 @@ void MQWrapper::run_rpc(Message *msg ){
     GTask *t;
     GData *d;
     GPartitioner *p;
-    int ofs=0;
+    int ofs=sizeof(msg->tag);
     switch(msg->tag){
         case MQ_TASK_FINISHED:
             LOG("TASK Finished");
