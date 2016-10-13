@@ -1,31 +1,32 @@
-CC = mpicc
-CXX = mpic++
+CC = gcc
+CXX = g++
 AR = ar
-LD = mpic++
+LD = g++
 
-DUCTTEIP_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-RMQ_TUTORIAL = /pica/h1/afshin/RabbitMQ/Client/AMQP-CPP/AMQP-CPP/examples/rabbitmq_tutorials
-AMQPCPP      = /pica/h1/afshin/RabbitMQ/Client/AMQP-CPP/AMQP-CPP/include
-BOOST        = /pica/h1/afshin/RabbitMQ/Client/RMQC/boost/boost_1_61_0
-SUPERGLUE    = /pica/h1/afshin/sg/superglue
-CUDA         = /pica/sw/comp/cuda/7.5/tintin
+DUCTTEIP_DIR         = /home/ubuntu/UTP/UnifiedTaskProgramming/DuctTeip/ResStudio/Prototype
+BOOST                = /home/ubuntu/boost/boost_1_61_0
+RABIITMQ_TUROIAL_DIR = /home/ubuntu/RMQ/AMQP-CPP/examples/rabbitmq_tutorials
+AMQPCPP_DIR          = /home/ubuntu/RMQ/AMQP-CPP
+CUDA                 = /pica/sw/comp/cuda/7.5/tintin
 
 INC  = -Iinclude 
-INC += -I$(DUCTTEIP_DIR)/include 
-INC += -I$(SUPERGLUE)/include 
 INC += -I../dt_scheduler/include 
-INC += -I../sg_scheduler/include 
+INC += -I$(DUCTTEIP_DIR)/include 
+INC += -I../superglue/include 
 INC += -I../cpu_blas_scheduler/include 
-INC += -I../mq_scheduler/include 
+INC += -I../sg_scheduler/include 
+INC += -I../sg_scheduler/include 
 INC += -I../cuBLAS_scheduler/include 
-INC += -I../ublas/include 
+INC += -I../mq_scheduler/include 
 INC += -I$(CUDA)/samples/common/inc 
-INC += -I$(CUDA)/include 
-INC += -I$(RMQ_TUTORIAL) 
-INC += -I$(AMQPCPP) 
-INC += -I$(BOOST)
+INC += -I$(CUDA)/include -I../ublas/include 
+INC += -I$(BOOST) 
+INC += -I$(AMPQCPP_DIR)/include 
+INC += -I$(RABIITMQ_TUROIAL_DIR) 
+INC += -I$(RABIITMQ_TUROIAL_DIR)/include 
+INC += -I$(RABIITMQ_TUROIAL_DIR)/build
 
-CFLAGS  = -Wall -fexceptions -std=c++11 -pthread -Wno-unused-variable -DSLIB=1
+CFLAGS  = -Wall -fexceptions -std=c++11 -pthread -Wno-unused-variable -DSLIB=1 -DUTP_MQ
 RESINC  = 
 LIBDIR  = 
 LIB     = ../dt_scheduler/bin/Debug/libdt_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a
@@ -66,10 +67,8 @@ OBJ_DEBUG += $(OBJDIR_DEBUG)/src/GData.o
 OBJ_DEBUG += $(OBJDIR_DEBUG)/src/GLog.o 
 OBJ_DEBUG += $(OBJDIR_DEBUG)/src/Dispatcher.o 
 OBJ_DEBUG += $(OBJDIR_DEBUG)/main.o 
-OBJ_DEBUG += $(OBJDIR_DEBUG)/src/basic.o 
-OBJ_DEBUG += $(OBJDIR_DEBUG)/src/MQWrapper.o 
-OBJ_DEBUG += $(OBJDIR_DEBUG)/src/mq_scheduler.o
-OBJ_DEBUG += $(OBJDIR_DEBUG)/src/config.o
+OBJ_DEBUG += $(OBJDIR_DEBUG)/src/config.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/src/basic.o
 
 UTPMQ_OBJ_DEBUG= $(subst Dispatcher,utpmq,$(OBJ_DEBUG))
 
@@ -83,7 +82,6 @@ OBJ_RELEASE += $(OBJDIR_RELEASE)/src/GData.o
 OBJ_RELEASE += $(OBJDIR_RELEASE)/src/GLog.o 
 OBJ_RELEASE += $(OBJDIR_RELEASE)/src/Dispatcher.o 
 OBJ_RELEASE += $(OBJDIR_RELEASE)/main.o 
-OBJ_RELEASE += $(OBJDIR_RELEASE)/src/basic.o
 
 UTPMQ_OBJ_RELEASE=$(subst Dispatcher,utpmq,$(OBJ_RELEASE))
 
@@ -102,15 +100,15 @@ after_debug:
 	$(info ************************************************************)
 	$(info )
 
-debug: before_debug out_debug after_debug utp_mq
+debug: before_debug out_debug after_debug
 
-out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
-	@echo creating $(OUT_DEBUG) 
+.ONESHELL:
+out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG) $(UTPMQ_OBJ_DEBUG)
+	$(info creating $(OUT_DEBUG))
 	@$(AR) rcsv $(OUT_DEBUG) $(OBJ_DEBUG)  | cat 
-
-utp_mq: before_debug $(OBJ_DEBUG) $(DEP_DEBUG) $(UTPMQ_OBJ_DEBUG)
+utpmq: before_debug $(DEP_DEBUG) $(UTPMQ_OBJ_DEBUG)
+	$(info creating $(UTPMQ_DEBUG))
 	@tput setaf 2 
-	@echo creating $(UTPMQ_DEBUG)
 	@$(AR) rcsv $(UTPMQ_DEBUG) $(UTPMQ_OBJ_DEBUG) | cat 
 	@tput sgr0
 
@@ -154,22 +152,13 @@ $(OBJDIR_DEBUG)/src/GLog.o: src/GLog.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/GLog.cpp -o $(OBJDIR_DEBUG)/src/GLog.o
 
-$(OBJDIR_DEBUG)/src/basic.o: src/basic.cpp
-	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/basic.cpp -o $(OBJDIR_DEBUG)/src/basic.o
-
-$(OBJDIR_DEBUG)/src/mq_scheduler.o: ../mq_scheduler/src/mq_scheduler.cpp
-	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c  ../mq_scheduler/src/mq_scheduler.cpp -o $(OBJDIR_DEBUG)/src/mq_scheduler.o
-$(OBJDIR_DEBUG)/src/MQWrapper.o: ../mq_scheduler/src/MQWrapper.cpp
-	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c  ../mq_scheduler/src/MQWrapper.cpp -o $(OBJDIR_DEBUG)/src/MQWrapper.o
-
 $(OBJDIR_DEBUG)/src/config.o: $(DUCTTEIP_DIR)/src/config.cpp
 	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c  $(DUCTTEIP_DIR)/src/config.cpp -o $(OBJDIR_DEBUG)/src/config.o
+	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c $(DUCTTEIP_DIR)/src/config.cpp -o $(OBJDIR_DEBUG)/src/config.o
 
-
+$(OBJDIR_DEBUG)/src/basic.o: $(DUCTTEIP_DIR)/src/basic.cpp
+	$(info $(notdir $<))
+	@$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c $(DUCTTEIP_DIR)/src/basic.cpp -o $(OBJDIR_DEBUG)/src/basic.o
 
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(info $(notdir $<))
@@ -193,6 +182,7 @@ after_release:
 
 release: before_release out_release after_release
 
+.NOTPARALLEL:
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE) $(UTPMQ_OBJ_RELEASE)
 	$(info creating $(OUT_RELEASE))
 	@$(AR) rcsv $(OUT_RELEASE) $(OBJ_RELEASE)
@@ -241,10 +231,6 @@ $(OBJDIR_RELEASE)/src/GLog.o: src/GLog.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/GLog.cpp -o $(OBJDIR_RELEASE)/src/GLog.o
 
-$(OBJDIR_RELEASE)/src/basic.o: src/basic.cpp
-	$(info $(notdir $<))
-	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/basic.cpp -o $(OBJDIR_RELEASE)/src/basic.o
-
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(info $(notdir $<))
 	@$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
@@ -255,5 +241,5 @@ clean_release:
 	@rm -rf $(OBJDIR_RELEASE)/src
 	@rm -rf $(OBJDIR_RELEASE)
 
-.PHONY: before_debug after_debug clean_debug before_release after_release clean_release utp_mq
+.PHONY: before_debug after_debug clean_debug before_release after_release clean_release
 
