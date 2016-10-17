@@ -41,39 +41,60 @@ LDFLAGS += -lamqpcpp
 LDFLAGS += -lasio_handler 
 LDFLAGS += -rdynamic -lpthread  
 
-UGEMM_APP_LDFLAGS = -L/pica/h1/afshin/RabbitMQ/Client/AMQP-CPP/AMQP-CPP/lib  -L/pica/h1/afshin/RabbitMQ/Client/AMQP-CPP/AMQP-CPP/examples/rabbitmq_tutorials/build  -L/pica/h1/afshin/RabbitMQ/Client/RMQC/boost/boost_1_61_0/stage/lib -rdynamic -lamqpcpp -lasio_handler -lpthread /pica/h1/afshin/RabbitMQ/Client/RMQC/boost/boost_1_61_0/stage/lib/libboost_system.a -Wl,-rpath,/pica/h1/afshin/RabbitMQ/Client/AMQP-CPP/AMQP-CPP/lib -L../dispatcher/bin/Debug -lutpmq -Wl,--allow-multiple-definition -L../ublas/lib -lublas
+UGEMM_APP_LDFLAGS  = -L$(AMQP_CPP)/lib  
+UGEMM_APP_LDFLAGS += -L$(AMQP_CPP)/examples/rabbitmq_tutorials/build  
+UGEMM_APP_LDFLAGS += -L$(BOOST)/stage/lib 
+UGEMM_APP_LDFLAGS += -rdynamic 
+UGEMM_APP_LDFLAGS += -lamqpcpp 
+UGEMM_APP_LDFLAGS += -lasio_handler 
+UGEMM_APP_LDFLAGS += -lpthread 
+UGEMM_APP_LDFLAGS += $(BOOST)/stage/lib/libboost_system.a 
+UGEMM_APP_LDFLAGS += -Wl,-rpath,$(AMQP_CPP)/lib 
+UGEMM_APP_LDFLAGS += -L../dispatcher/bin/Debug 
+UGEMM_APP_LDFLAGS += -lutpmq 
+UGEMM_APP_LDFLAGS += -Wl,--allow-multiple-definition 
+UGEMM_APP_LDFLAGS += -L../ublas/lib -lublas
 
 DT_CONFIG_OBJ=../ductteip/obj/Debug/__/o/config.o
 
-INC_DEBUG = $(INC) 
-CFLAGS_DEBUG = $(CFLAGS) -g 
-RESINC_DEBUG = $(RESINC)
+INC_DEBUG     = $(INC) 
+CFLAGS_DEBUG  = $(CFLAGS) -g 
+RESINC_DEBUG  = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
-LIBDIR_DEBUG = $(LIBDIR)
-LIB_DEBUG = $(LIB)
+LIBDIR_DEBUG  = $(LIBDIR)
+LIB_DEBUG     = $(LIB)
 LDFLAGS_DEBUG = $(LDFLAGS)
-OBJDIR_DEBUG = obj/Debug
-DEP_DEBUG = 
-OUT_DEBUG = bin/Debug/mqapp
+OBJDIR_DEBUG  = obj/Debug
+DEP_DEBUG     = 
+OUT_DEBUG     = bin/Debug/mqapp
 
-INC_RELEASE = $(INC) 
-CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=RELEASE'
-RESINC_RELEASE = $(RESINC)
+INC_RELEASE     = $(INC) 
+CFLAGS_RELEASE  = $(CFLAGS) -O2 -D'BUILD=RELEASE'
+RESINC_RELEASE  = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
-LIBDIR_RELEASE = $(LIBDIR)
-LIB_RELEASE = $(LIB)
+LIBDIR_RELEASE  = $(LIBDIR)
+LIB_RELEASE     = $(LIB)
 LDFLAGS_RELEASE = $(LDFLAGS) -s
-OBJDIR_RELEASE = obj/Release
-DEP_RELEASE = 
-OUT_RELEASE = bin/Release/mqapp
+OBJDIR_RELEASE  = obj/Release
+DEP_RELEASE     = 
+OUT_RELEASE     = bin/Release/mqapp
 
-UGEMM_APP_OBJ=$(OBJDIR_DEBUG)/mq_scheduler.o $(OBJDIR_DEBUG)/MQWrapper.o $(OBJDIR_DEBUG)/ugemm_app.o $(DT_CONFIG_OBJ)
-UGEMM_SERVER_OBJ=$(OBJDIR_DEBUG)/mq_scheduler.o $(OBJDIR_DEBUG)/MQWrapper.o $(OBJDIR_DEBUG)/ugemm_server.o
-MQ_PROFILE_OBJ=$(OBJDIR_DEBUG)/mq_scheduler.o $(OBJDIR_DEBUG)/MQWrapper.o  $(OBJDIR_DEBUG)/mq_profile.o 
+UGEMM_APP_OBJ  = $(OBJDIR_DEBUG)/mq_scheduler.o 
+UGEMM_APP_OBJ += $(OBJDIR_DEBUG)/MQWrapper.o 
+UGEMM_APP_OBJ += $(OBJDIR_DEBUG)/ugemm_app.o 
+UGEMM_APP_OBJ += $(DT_CONFIG_OBJ)
 
-UGEMM_APP_OUT=bin/Debug/ugemm_app
-UGEMM_SERVER_OUT=bin/Debug/ugemm_server
-MQ_PROFILE_OUT=bin/Debug/mq_profile
+UGEMM_SERVER_OBJ  = $(OBJDIR_DEBUG)/mq_scheduler.o 
+UGEMM_SERVER_OBJ += $(OBJDIR_DEBUG)/MQWrapper.o 
+UGEMM_SERVER_OBJ += $(OBJDIR_DEBUG)/ugemm_server.o
+
+MQ_PROFILE_OBJ  = $(OBJDIR_DEBUG)/mq_scheduler.o 
+MQ_PROFILE_OBJ += $(OBJDIR_DEBUG)/MQWrapper.o  
+MQ_PROFILE_OBJ += $(OBJDIR_DEBUG)/mq_profile.o 
+
+UGEMM_APP_OUT    = bin/Debug/ugemm_app
+UGEMM_SERVER_OUT = bin/Debug/ugemm_server
+MQ_PROFILE_OUT   = bin/Debug/mq_profile
 
 
 

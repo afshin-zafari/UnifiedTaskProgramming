@@ -8,21 +8,26 @@ DUCTTEIP_FLAGS=-I$(HEADER_DIR)
 CPP=mpic++
 LINK=mpif90
 #---------------------------------------------------------
-WORKDIR = `pwd`
-
 CC =gcc
 CXX = g++
 AR = ar
 LD = g++
-WINDRES = windres
 DUCTTEIP_DIR=/home/ubuntu/UTP/UnifiedTaskProgramming/DuctTeip/ResStudio/Prototype
 SUPERGLUE_DIR=/home/ubuntu/UTP/UnifiedTaskProgramming/superglue
 
-INC = -Iinclude -I../dispatcher/include -I$(DUCTTEIP_DIR)/include -I$(SUPERGLUE_DIR)/include -I/pica/h1/afshin/Damavand/D3/sg_scheduler/include -I/pica/h1/afshin/Damavand/D3/cuBLAS_scheduler/include
+INC = -Iinclude 
+INC += -I../dispatcher/include 
+INC += -I$(DUCTTEIP_DIR)/include 
+INC += -I$(SUPERGLUE_DIR)/include 
+INC += -I../sg_scheduler/include 
+INC += -I../cuBLAS_scheduler/include
+
 CFLAGS = -Wall -fexceptions -std=c++11 -g -pthread -DSLIB=1 -DUTP_MQ
 RESINC = 
 LIBDIR = ./lib
-LIB = ../dispatcher/bin/Debug/libdispatcher.a ../dt_scheduler/bin/Debug/libdt_scheduler.a ../ductteip/bin/Debug/libductteip.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a
+LIB  = ../dispatcher/bin/Debug/libdispatcher.a 
+LIB += ../dt_scheduler/bin/Debug/libdt_scheduler.a 
+LIB += s../ductteip/bin/Debug/libductteip.a ../cpu_blas_scheduler/bin/Debug/libcpu_blas_scheduler.a ../sg_scheduler/bin/Debug/libsg_scheduler.a
 LDFLAGS = -L/pica/sw/comp/cuda/7.5/tintin/lib64 -lpthread -Wl,--allow-multiple-definition -lgsl -lgslcblas #-lcublas -lcudart
 OBJDIR = ./obj
 libfile=$(LIBDIR)/libublas.a
