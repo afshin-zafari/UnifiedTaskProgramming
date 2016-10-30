@@ -1,7 +1,6 @@
 #include "ugemm.hpp"
 #include <vector>
 namespace utp{
-//    const int GEMM_TYPE_ID=0;
     namespace ublas{
         Gemm gemm_instance("gemm");
         template<typename S>

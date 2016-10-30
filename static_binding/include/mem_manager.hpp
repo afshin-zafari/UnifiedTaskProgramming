@@ -1,5 +1,5 @@
-#ifndef __MEMORY_MANAGER_HPP__
-#define  __MEMORY_MANAGER_HPP__
+#ifndef __MEM_MANAGER_HPP__
+#define  __MEM_MANAGER_HPP__
 #include "utp_basic.hpp"
 #include <vector>
 namespace utp{
@@ -52,4 +52,4 @@ public:
 };
 /*============================================================================*/
 }
-#endif // __MEMORY_MANAGER_HPP__
+#endif // __MEM_MANAGER_HPP__

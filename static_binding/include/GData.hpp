@@ -9,7 +9,7 @@
 #include "utp_basic.hpp"
 #include "GHandle.hpp"
 #include "GPartitioner.hpp"
-#include "memory_manager.hpp"
+#include "mem_manager.hpp"
 
 namespace utp {
 class GData

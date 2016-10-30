@@ -19,7 +19,7 @@ DT_COMP_FLAG = -I$(DT_INC)
 
 all: bo 
 clean:
-	rm -f ./bin/* ./obj/* lib/*
+	rm -f ./obj/* lib/*
 
 test:
 	$(info $(COMMON))
@@ -29,14 +29,13 @@ test:
 #------------------------------
 COMMON  =          basic.cpp
 COMMON +=          GData.cpp
-COMMON +=        GHandle.cpp
-COMMON +=   GPartitioner.cpp
-COMMON += memory_manager.cpp
 COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
-COMMON +=      utp_basic.cpp
 COMMON +=          utrsm.cpp
-
+COMMON +=        GHandle.cpp
+COMMON +=      utp_basic.cpp
+COMMON +=    mem_manager.cpp
+COMMON +=   GPartitioner.cpp
 
 #--------- BLAS_ONLY (BO) ---------
 
@@ -78,36 +77,3 @@ $(APP_TARGET_BO):$(LIB_TARGET_BO) $(OBJP_APP_BO)
 
 bo:$(APP_TARGET_BO)
 
-
-
-#--------- CUBLAS_ONLY ---------
-LIB_CO  = $(COMMON)
-LIB_CO +=       sch_cu_blas.cpp
-
-APP_CO  = 
-APP_CO +=  cfg_cu_blas_only.cpp
-APP_CO += main_CU_BLAS_ONLY.cpp
-
-#--------- DT_BLAS ---------
-zCOMMON += sch_blas.cpp
-zCOMMON += sch_ductteip.cpp
-a=cfg_dt_blas.cpp
-a=main_DT_BLAS.cpp
-#--------- DT FORK ---------
-zCOMMON += sch_blas.cpp
-zCOMMON += sch_ductteip.cpp
-zCOMMON += sch_spu.cpp
-zCOMMON += sch_superglue.cpp
-a=cfg_dt_fork_sg_spu.cpp
-a=main_DT_FORK_SG_SPU.cpp
-#--------- DT SG BLAS ---------
-zCOMMON += sch_blas.cpp
-zCOMMON += sch_ductteip.cpp
-zCOMMON += sch_superglue.cpp
-a=cfg_dt_sg_blas.cpp
-a=main_DT_SG_BLAS.cpp
-#--------- SG BLAS ---------
-zCOMMON += sch_blas.cpp
-zCOMMON += sch_superglue.cpp
-a=cfg_sg_blas.cpp
-a=main_SG_BLAS.cpp
