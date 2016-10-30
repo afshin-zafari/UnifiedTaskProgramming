@@ -1,0 +1,710 @@
+# depslib dependency file v1.0
+1477580014 source:c:\afshin\utp\src\gdata.cpp
+	"GData.hpp"
+	"dispatcher.hpp"
+	"basic.hpp"
+
+1477608748 "
+
+1477578473 c:\afshin\utp\include\gdata.hpp
+	<string>
+	<iomanip>
+	<sstream>
+	<iostream>
+	<vector>
+	"utp_basic.hpp"
+	"GHandle.hpp"
+	"GPartitioner.hpp"
+	"memory_manager.hpp"
+
+1477578473 nager.hpp"
+
+1477604372 c:\afshin\utp\include\utp_basic.hpp
+	<vector>
+	<cassert>
+
+1475439306 
+
+1475439289 c:\afshin\utp\include\ghandle.hpp
+	<string>
+
+1477579762 c:\afshin\utp\include\gpartitioner.hpp
+	<vector>
+
+1477587792 c:\afshin\utp\include\memory_manager.hpp
+	"utp_basic.hpp"
+	<vector>
+
+1477633894 c:\afshin\utp\include\dispatcher.hpp
+	<iostream>
+	"operation.hpp"
+	"GData.hpp"
+
+1477605067 c:\afshin\utp\include\operation.hpp
+	<iostream>
+	"utp_basic.hpp"
+
+1477608741 .hpp"
+
+1477578372 c:\afshin\utp\include\basic.hpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/time.h>
+	<assert.h>
+	<sched.h>
+	<errno.h>
+	<pthread.h>
+	"mpi.h"
+	"sg/platform/gettime.hpp"
+
+1477578372 rm/gettime.hpp"
+
+1475439306 source:c:\afshin\utp\src\ghandle.cpp
+	"GHandle.hpp"
+	"basic.hpp"
+	<string>
+	<stdint.h>
+
+1477579775 source:c:\afshin\utp\src\gpartitioner.cpp
+	"GPartitioner.hpp"
+	"basic.hpp"
+	"dispatcher.hpp"
+
+1477237266 r.hpp"
+
+1477219581 source:c:\afshin\utp\src\sch_blas.cpp
+	"sch_blas.hpp"
+
+1477578655 hpp"
+
+1477224935 c:\afshin\utp\include\sch_blas.hpp
+	<string>
+	<iostream>
+	"utp.hpp"
+
+1477587709 c:\afshin\utp\include\utp.hpp
+	"operation.hpp"
+	"dispatcher.hpp"
+	"config_schedulers.hpp"
+	"utp_basic.hpp"
+	"GData.hpp"
+
+1477236909 c:\afshin\utp\include\config_schedulers.hpp
+	"cfg_blas_only.hpp"
+	"cfg_cu_blas_only.hpp"
+	"cfg_sg_blas.hpp"
+	"cfg_dt_blas.hpp"
+	"cfg_dt_sg_blas.hpp"
+	"cfg_dt_fork_sg_spu.hpp"
+
+1477236909 rk_sg_spu.hpp"
+
+1477578655 c:\afshin\utp\include\cfg_blas_only.hpp
+	"utp.hpp"
+	"sch_blas.hpp"
+
+1477236548 c:\afshin\utp\include\cfg_cu_blas_only.hpp
+	"dispatcher.hpp"
+	"sch_cu_blas.hpp"
+
+1477236548 as.hpp"
+
+1477236935 c:\afshin\utp\include\sch_cu_blas.hpp
+	<string>
+	<iostream>
+	"utp.hpp"
+
+1477167992 c:\afshin\utp\include\cfg_sg_blas.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_superglue.hpp"
+
+1477635263 glue.hpp"
+
+1477639798 c:\afshin\utp\include\sch_superglue.hpp
+	"operation.hpp"
+	"dispatcher.hpp"
+	<thread>
+	<chrono>
+
+1476963384 c:\afshin\utp\include\cfg_dt_blas.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_ductteip.hpp"
+
+1476962900 eip.hpp"
+
+1477336487 c:\afshin\utp\include\sch_ductteip.hpp
+	<iostream>
+	"operation.hpp"
+	"dispatcher.hpp"
+
+1477007460 c:\afshin\utp\include\cfg_dt_sg_blas.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_ductteip.hpp"
+	"sch_superglue.hpp"
+
+1477128946 c:\afshin\utp\include\cfg_dt_fork_sg_spu.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_ductteip.hpp"
+	"sch_superglue.hpp"
+	"sch_starpu.hpp"
+
+1477128946 u.hpp"
+
+1477237266 c:\afshin\utp\include\sch_starpu.hpp
+	"operation.hpp"
+	"dispatcher.hpp"
+
+1477635263 source:c:\afshin\utp\src\sch_superglue.cpp
+	"sch_superglue.hpp"
+
+1477607154 source:c:\afshin\utp\src\ugemm.cpp
+	"ugemm.hpp"
+	<vector>
+
+1477607136 c:\afshin\utp\include\ugemm.hpp
+	"utp.hpp"
+
+1477604329 source:c:\afshin\utp\src\utp_basic.cpp
+	"utp_basic.hpp"
+
+1477608748 source:c:\afshin\utp\src\utrsm.cpp
+	"utrsm.hpp"
+
+1477608741 c:\afshin\utp\include\utrsm.hpp
+	"operation.hpp"
+	"ugemm.hpp"
+	"utp_basic.hpp"
+
+1476962900 source:c:\afshin\utp\src\sch_ductteip.cpp
+	"sch_ductteip.hpp"
+
+1477764283 source:/home/cppdev/UTP/src/GData.cpp
+	"GData.hpp"
+	"dispatcher.hpp"
+	"brdcast.hpp"
+	"basic.hpp"
+
+1477578474 /home/cppdev/UTP/include/GData.hpp
+	<string>
+	<iomanip>
+	<sstream>
+	<iostream>
+	<vector>
+	"utp_basic.hpp"
+	"GHandle.hpp"
+	"GPartitioner.hpp"
+	"memory_manager.hpp"
+
+1477604374 /home/cppdev/UTP/include/utp_basic.hpp
+	<vector>
+	<cassert>
+
+1475439290 /home/cppdev/UTP/include/GHandle.hpp
+	<string>
+
+1477579764 /home/cppdev/UTP/include/GPartitioner.hpp
+	<vector>
+
+1477766933 /home/cppdev/UTP/include/memory_manager.hpp
+	"utp_basic.hpp"
+	<vector>
+
+1477765227 /home/cppdev/UTP/include/dispatcher.hpp
+	<iostream>
+	"operation.hpp"
+	"GData.hpp"
+
+1477605068 /home/cppdev/UTP/include/operation.hpp
+	<iostream>
+	"utp_basic.hpp"
+
+1477578374 /home/cppdev/UTP/include/basic.hpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/time.h>
+	<assert.h>
+	<sched.h>
+	<errno.h>
+	<pthread.h>
+	"mpi.h"
+	"sg/platform/gettime.hpp"
+
+1475439306 source:/home/cppdev/UTP/src/GHandle.cpp
+	"GHandle.hpp"
+	"basic.hpp"
+	<string>
+	<stdint.h>
+
+1477764409 source:/home/cppdev/UTP/src/GPartitioner.cpp
+	"GPartitioner.hpp"
+	"basic.hpp"
+	"dispatcher.hpp"
+	"brdcast.hpp"
+
+1477236422 source:/home/cppdev/UTP/src/sch_cu_blas.cpp
+	"sch_cu_blas.hpp"
+
+1477236936 /home/cppdev/UTP/include/sch_cu_blas.hpp
+	<string>
+	<iostream>
+	"utp.hpp"
+
+1477587710 /home/cppdev/UTP/include/utp.hpp
+	"operation.hpp"
+	"dispatcher.hpp"
+	"config_schedulers.hpp"
+	"utp_basic.hpp"
+	"GData.hpp"
+
+1477236910 /home/cppdev/UTP/include/config_schedulers.hpp
+	"cfg_blas_only.hpp"
+	"cfg_cu_blas_only.hpp"
+	"cfg_sg_blas.hpp"
+	"cfg_dt_blas.hpp"
+	"cfg_dt_sg_blas.hpp"
+	"cfg_dt_fork_sg_spu.hpp"
+
+1477578656 /home/cppdev/UTP/include/cfg_blas_only.hpp
+	"utp.hpp"
+	"sch_blas.hpp"
+
+1477662529 /home/cppdev/UTP/include/sch_blas.hpp
+	<string>
+	<iostream>
+	"utp.hpp"
+
+1477236550 /home/cppdev/UTP/include/cfg_cu_blas_only.hpp
+	"dispatcher.hpp"
+	"sch_cu_blas.hpp"
+
+1477167994 /home/cppdev/UTP/include/cfg_sg_blas.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_superglue.hpp"
+
+1477769783 /home/cppdev/UTP/include/sch_superglue.hpp
+	"operation.hpp"
+	"dispatcher.hpp"
+	"sg/superglue.hpp"
+
+1476963384 /home/cppdev/UTP/include/cfg_dt_blas.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_ductteip.hpp"
+
+1477787655 /home/cppdev/UTP/include/sch_ductteip.hpp
+	<iostream>
+	"operation.hpp"
+	"dispatcher.hpp"
+	"ductteip.hpp"
+
+1477007460 /home/cppdev/UTP/include/cfg_dt_sg_blas.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_ductteip.hpp"
+	"sch_superglue.hpp"
+
+1477128946 /home/cppdev/UTP/include/cfg_dt_fork_sg_spu.hpp
+	"dispatcher.hpp"
+	"sch_blas.hpp"
+	"sch_ductteip.hpp"
+	"sch_superglue.hpp"
+	"sch_starpu.hpp"
+
+1477237268 /home/cppdev/UTP/include/sch_starpu.hpp
+	"operation.hpp"
+	"dispatcher.hpp"
+
+1477607156 source:/home/cppdev/UTP/src/ugemm.cpp
+	"ugemm.hpp"
+	<vector>
+
+1477607138 /home/cppdev/UTP/include/ugemm.hpp
+	"utp.hpp"
+
+1477786834 source:/home/cppdev/UTP/src/utp_basic.cpp
+	"utp_basic.hpp"
+
+1477608750 source:/home/cppdev/UTP/src/utrsm.cpp
+	"utrsm.hpp"
+
+1477608742 /home/cppdev/UTP/include/utrsm.hpp
+	"operation.hpp"
+	"ugemm.hpp"
+	"utp_basic.hpp"
+
+1474741341 /home/cppdev/sg/superglue/include/sg/platform/gettime.hpp
+	<windows.h>
+	<sys/time.h>
+
+1477219582 source:/home/cppdev/UTP/src/sch_blas.cpp
+	"sch_blas.hpp"
+
+1474741342 /home/cppdev/sg/superglue/include/sg/superglue.hpp
+	"sg/core/access.hpp"
+	"sg/core/accessutil.hpp"
+	"sg/core/handle.hpp"
+	"sg/core/schedulerver.hpp"
+	"sg/core/task.hpp"
+	"sg/core/taskexecutor.hpp"
+	"sg/core/taskqueue.hpp"
+	"sg/core/versionqueue.hpp"
+	"sg/core/supergluebase.hpp"
+	"sg/core/defaults.hpp"
+
+1474741335 /home/cppdev/sg/superglue/include/sg/core/access.hpp
+	<algorithm>
+	<cstring>
+
+1474741335 /home/cppdev/sg/superglue/include/sg/core/accessutil.hpp
+
+1474741336 /home/cppdev/sg/superglue/include/sg/core/handle.hpp
+	"sg/core/types.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<cassert>
+	<limits>
+	<string>
+
+1474741337 /home/cppdev/sg/superglue/include/sg/core/types.hpp
+	<vector>
+	<deque>
+
+1474741341 /home/cppdev/sg/superglue/include/sg/platform/atomic.hpp
+	<windows.h>
+	<intrin.h>
+	<atomic.h>
+	<sched.h>
+	<pthread.h>
+
+1474741337 /home/cppdev/sg/superglue/include/sg/core/spinlock.hpp
+	"sg/platform/atomic.hpp"
+	"sg/platform/platform.hpp"
+
+1474741341 /home/cppdev/sg/superglue/include/sg/platform/platform.hpp
+	<cstdlib>
+	<string>
+
+1474741336 /home/cppdev/sg/superglue/include/sg/core/schedulerver.hpp
+	"sg/core/access_rwa.hpp"
+	"sg/core/spinlock.hpp"
+	<cstring>
+	<algorithm>
+
+1474741335 /home/cppdev/sg/superglue/include/sg/core/access_rwa.hpp
+
+1477661792 /home/cppdev/sg/superglue/include/sg/core/task.hpp
+	"sg/core/types.hpp"
+	"sg/platform/atomic.hpp"
+	<string>
+	<stdint.h>
+
+1477661739 /home/cppdev/sg/superglue/include/sg/core/taskexecutor.hpp
+	"sg/platform/atomic.hpp"
+	<iostream>
+	<cstdlib>
+	<cstdio>
+
+1474741337 /home/cppdev/sg/superglue/include/sg/core/taskqueue.hpp
+	"sg/core/taskqueueunsafe.hpp"
+	"sg/core/taskqueuesafe.hpp"
+	<stdint.h>
+
+1474741337 /home/cppdev/sg/superglue/include/sg/core/taskqueueunsafe.hpp
+	"sg/core/types.hpp"
+	"sg/core/spinlock.hpp"
+	"sg/core/taskqueuesafe.hpp"
+	<stdint.h>
+	<iostream>
+
+1474741337 /home/cppdev/sg/superglue/include/sg/core/taskqueuesafe.hpp
+	"sg/core/spinlock.hpp"
+	<cassert>
+
+1474741337 /home/cppdev/sg/superglue/include/sg/core/versionqueue.hpp
+	"sg/core/types.hpp"
+	"sg/core/orderedvec.hpp"
+	"sg/core/spinlock.hpp"
+	"sg/platform/atomic.hpp"
+	<limits>
+
+1474741336 /home/cppdev/sg/superglue/include/sg/core/orderedvec.hpp
+
+1474741337 /home/cppdev/sg/superglue/include/sg/core/supergluebase.hpp
+	"sg/core/barrierprotocol.hpp"
+	<cassert>
+
+1474741336 /home/cppdev/sg/superglue/include/sg/core/barrierprotocol.hpp
+	"sg/platform/atomic.hpp"
+
+1474741336 /home/cppdev/sg/superglue/include/sg/core/defaults.hpp
+	"sg/core/access_rwa.hpp"
+	"sg/platform/affinity.hpp"
+	<memory>
+	"sg/option/threadingmanager_omp.hpp"
+	"sg/option/threadingmanager_default.hpp"
+
+1474741341 /home/cppdev/sg/superglue/include/sg/platform/affinity.hpp
+	<cassert>
+	<unistd.h>
+	<sched.h>
+	<unistd.h>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<windows.h>
+
+1474741340 /home/cppdev/sg/superglue/include/sg/option/threadingmanager_omp.hpp
+	"sg/platform/openmputil.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<cassert>
+
+1474741341 /home/cppdev/sg/superglue/include/sg/platform/openmputil.hpp
+	<omp.h>
+
+1474741340 /home/cppdev/sg/superglue/include/sg/option/threadingmanager_default.hpp
+	"sg/platform/threads.hpp"
+	"sg/platform/threadutil.hpp"
+	"sg/platform/atomic.hpp"
+	"sg/core/spinlock.hpp"
+	<vector>
+	<cstdio>
+
+1474741342 /home/cppdev/sg/superglue/include/sg/platform/threads.hpp
+	<cassert>
+	<cstdlib>
+	<pthread.h>
+	<unistd.h>
+	<unistd.h>
+	<cstdlib>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<pthread.h>
+	<windows.h>
+
+1474741342 /home/cppdev/sg/superglue/include/sg/platform/threadutil.hpp
+	<cstdlib>
+	<pthread.h>
+	<unistd.h>
+	<unistd.h>
+	<cstdlib>
+	<sys/processor.h>
+	<sys/procset.h>
+	<sys/types.h>
+	<sys/cpuvar.h>
+	<pthread.h>
+	<windows.h>
+
+1477662052 source:/home/cppdev/UTP/src/sch_superglue.cpp
+	"sch_superglue.hpp"
+
+1477659462 source:/home/cppdev/UTP/src/cfg_sg_blas.cpp
+	"cfg_sg_blas.hpp"
+	"ugemm.hpp"
+	"utrsm.hpp"
+
+1477768411 /home/cppdev/UTP/include/brdcast.hpp
+	"sch_superglue.hpp"
+	"sch_ductteip.hpp"
+
+1477133500 source:/home/cppdev/UTP/src/main_SG_BLAS.cpp
+	<iostream>
+	"utp.hpp"
+	"ugemm.hpp"
+	"utrsm.hpp"
+
+1477766731 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/ductteip.hpp
+	"memory_manager.hpp"
+	"context.hpp"
+	"basic.hpp"
+	"engine.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/memory_manager.hpp
+	"basic.hpp"
+	<vector>
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/basic.hpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/time.h>
+	<assert.h>
+	<sched.h>
+	<errno.h>
+	<pthread.h>
+	"mpi.h"
+	"sg/platform/gettime.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/context.hpp
+	<string>
+	<cstdio>
+	<vector>
+	<list>
+	"config.hpp"
+	"procgrid.hpp"
+	"hostpolicy.hpp"
+	"data.hpp"
+	"glb_context.hpp"
+	"engine.hpp"
+	"dt_log.hpp"
+	"data_basic.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/config.hpp
+	<string>
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/procgrid.hpp
+	<string>
+	<iostream>
+	<vector>
+	<list>
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/hostpolicy.hpp
+	<string>
+	<iostream>
+	<vector>
+	<list>
+	"data_basic.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/data_basic.hpp
+	"basic.hpp"
+	<list>
+	<string>
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/data.hpp
+	<string>
+	<cstdio>
+	<iostream>
+	<sstream>
+	<vector>
+	<list>
+	<new>
+	"basic.hpp"
+	"partition.hpp"
+	"memory_manager.hpp"
+	"dt_log.hpp"
+	"data_basic.hpp"
+	"hostpolicy.hpp"
+	"listener.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/partition.hpp
+	"sg/superglue.hpp"
+	"sg/core/contrib.hpp"
+	"sg/option/instr_trace.hpp"
+	"basic.hpp"
+
+1474741336 /home/cppdev/sg/superglue/include/sg/core/contrib.hpp
+	<algorithm>
+	<new>
+
+1474741338 /home/cppdev/sg/superglue/include/sg/option/instr_trace.hpp
+	"sg/option/log.hpp"
+
+1474741338 /home/cppdev/sg/superglue/include/sg/option/log.hpp
+	"sg/core/spinlock.hpp"
+	"sg/platform/threads.hpp"
+	"sg/platform/gettime.hpp"
+	"sg/platform/tls.hpp"
+	<vector>
+	<fstream>
+	<algorithm>
+	<string>
+
+1474741342 /home/cppdev/sg/superglue/include/sg/platform/tls.hpp
+	<pthread.h>
+	<windows.h>
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/dt_log.hpp
+	<iomanip>
+	"dt_task.hpp"
+	"config.hpp"
+
+1477782112 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/dt_task.hpp
+	<string>
+	<cstdio>
+	<iostream>
+	<vector>
+	<list>
+	<string>
+	"basic.hpp"
+	"config.hpp"
+	"data_basic.hpp"
+	"partition.hpp"
+	<sstream>
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/listener.hpp
+	<string>
+	<cstdio>
+	<vector>
+	<list>
+	"data.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/glb_context.hpp
+	<list>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sstream>
+	"config.hpp"
+	"engine.hpp"
+	"hostpolicy.hpp"
+	"data.hpp"
+
+1477782671 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/engine.hpp
+	<pthread.h>
+	<sched.h>
+	<errno.h>
+	<algorithm>
+	<vector>
+	<map>
+	<iterator>
+	<dirent.h>
+	<cstdlib>
+	<cstdio>
+	<cassert>
+	"config.hpp"
+	"dt_task.hpp"
+	"listener.hpp"
+	"mailbox.hpp"
+	"mpi_comm.hpp"
+	"memory_manager.hpp"
+	"dt_log.hpp"
+	"dlb.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/mailbox.hpp
+	"basic.hpp"
+	"network.hpp"
+	"dt_log.hpp"
+	"memory_manager.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/network.hpp
+	"basic.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/mpi_comm.hpp
+	"basic.hpp"
+	"mpi.h"
+	"network.hpp"
+	"dt_log.hpp"
+	"memory_manager.hpp"
+	"mailbox.hpp"
+	"engine.hpp"
+
+1476373153 /home/cppdev/DT/DuctTeip/ResStudio/Prototype/include/dlb.hpp
+	"dt_task.hpp"
+	"mailbox.hpp"
+	"data.hpp"
+	"engine.hpp"
+	"glb_context.hpp"
+
+1476962900 source:/home/cppdev/UTP/src/sch_ductteip.cpp
+	"sch_ductteip.hpp"
+

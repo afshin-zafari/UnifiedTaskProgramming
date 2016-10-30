@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="utp_base" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/utp_base" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/utp_base" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="BLAS_ONLY">
+				<Option output="lib/utp_blas_only" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-DBLAS_ONLY" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="SG_BLAS">
+				<Option output="lib/utp_sg_blas" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-DSG_BLAS" />
+					<Add option="-DSG_INCLUDED" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-Wl,--allow-multiple-definition" />
+					<Add option="-pthread" />
+				</Linker>
+			</Target>
+			<Target title="DT_BLAS">
+				<Option output="lib/utp_dt_blas" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-Wliteral-suffix" />
+					<Add option="-DDT_BLAS" />
+					<Add directory="include" />
+					<Add directory="/home/cppdev/DT/DuctTeip/ResStudio/Prototype/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-Wl,--no-literal-suffix" />
+				</Linker>
+			</Target>
+			<Target title="DT_SG_BLAS">
+				<Option output="lib/utp_dt_sg_blas" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-DDT_SG_BLAS" />
+					<Add option="-DSG_INCLUDED" />
+					<Add option="-DDT_INCLUDED" />
+					<Add directory="include" />
+					<Add directory="/home/cppdev/DT/DuctTeip/ResStudio/Prototype/include" />
+				</Compiler>
+			</Target>
+			<Target title="CU_BLAS_ONLY">
+				<Option output="lib/utp_cu_blas_only" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-DCUBLAS_ONLY" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="DT_FORK_SG_SPU">
+				<Option output="lib/utp_dt_fork_sg_spu" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-DDT_FORK_SG_SPU" />
+					<Add option="-DSG_INCLUDED" />
+					<Add option="-DDT_INCLUDED" />
+					<Add directory="include" />
+					<Add directory="/home/cppdev/DT/DuctTeip/ResStudio/Prototype/include" />
+				</Compiler>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="ALL" targets="BLAS_ONLY;SG_BLAS;DT_BLAS;DT_SG_BLAS;CU_BLAS_ONLY;DT_FORK_SG_SPU;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="/home/cppdev/sg/superglue/include" />
+		</Compiler>
+		<Unit filename="include/GData.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/GHandle.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/GPartitioner.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/basic.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/brdcast.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/config_schedulers.hpp" />
+		<Unit filename="include/dispatcher.hpp" />
+		<Unit filename="include/memory_manager.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/operation.hpp" />
+		<Unit filename="include/sch_blas.hpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/sch_cu_blas.hpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="CU_BLAS_ONLY" />
+		</Unit>
+		<Unit filename="include/sch_ductteip.hpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/sch_starpu.hpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/sch_superglue.hpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/ublas.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/ugemm.hpp" />
+		<Unit filename="include/utp.hpp" />
+		<Unit filename="include/utp_basic.hpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="include/utrsm.hpp" />
+		<Unit filename="src/GData.cpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/GHandle.cpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/GPartitioner.cpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/cfg_sg_blas.cpp">
+			<Option target="SG_BLAS" />
+		</Unit>
+		<Unit filename="src/main_SG_BLAS.cpp">
+			<Option target="SG_BLAS" />
+		</Unit>
+		<Unit filename="src/sch_blas.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/sch_cu_blas.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="CU_BLAS_ONLY" />
+		</Unit>
+		<Unit filename="src/sch_ductteip.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/sch_spu.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/sch_superglue.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/ugemm.cpp" />
+		<Unit filename="src/utp_basic.cpp">
+			<Option target="BLAS_ONLY" />
+			<Option target="SG_BLAS" />
+			<Option target="DT_BLAS" />
+			<Option target="DT_SG_BLAS" />
+			<Option target="CU_BLAS_ONLY" />
+			<Option target="DT_FORK_SG_SPU" />
+		</Unit>
+		<Unit filename="src/utrsm.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
