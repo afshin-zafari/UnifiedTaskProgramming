@@ -1,4 +1,5 @@
 #include "memory_manager.hpp"
+namespace utp{
 
 /*----------------------------------------------------------------------------*/
 MemoryItem::MemoryItem ()
@@ -116,4 +117,5 @@ MemoryItem *MemoryManager::findFreeMemory()
 void MemoryManager::freeMemoryItem(MemoryItem *m )
 {
     m->setState(MemoryItem::Ready);
+}
 }

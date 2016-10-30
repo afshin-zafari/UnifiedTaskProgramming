@@ -2,7 +2,7 @@
 #define  __MEMORY_MANAGER_HPP__
 #include "utp_basic.hpp"
 #include <vector>
-
+namespace utp{
 typedef unsigned long MemoryKey;
 /*----------------------------------------------------------------------------*/
 struct MemoryItem{
@@ -51,5 +51,5 @@ public:
 
 };
 /*============================================================================*/
-
+}
 #endif // __MEMORY_MANAGER_HPP__
