@@ -5,6 +5,4 @@
 #include "config_schedulers.hpp"
 #include "utp_basic.hpp"
 #include "GData.hpp"
-namespace utp{
-}
 #endif // UTP_HPP

@@ -98,12 +98,19 @@ public:
         }
         if ( dwrt->getHost()==me){
             printf("task added.\n");
+	    setDataAccessList(dlist);
+	    setHost(me);
             glbCtx.incrementCounter(GlobalContext::TaskInsert);
             dtEngine.register_task(this);
         }
     }
     void run(){
-        Dispatcher::ready(_dt,gtask);
+      if ( isFinished())
+	return;
+      if ( getState() == Running )
+	return;
+      setState( Running);
+      Dispatcher::ready(_dt,gtask);
     }
 };
 /*=================================================================================*/

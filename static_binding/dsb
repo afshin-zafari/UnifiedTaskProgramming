@@ -2,7 +2,7 @@ CPP = mpic++
 LD  = mpic++
 AR  = ar
 
-COMP_FLAGS  = -std=c++11
+COMP_FLAGS  = -std=c++11 -g
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition 
 
@@ -20,9 +20,6 @@ DT_COMP_FLAGS = -I$(DT_INC) $(SG_COMP_FLAGS)
 
 all: dsb
 
-test:
-	$(info creating $(APP_TARGET_DSB))
-
 cleandsb:
 	rm -f $(OBJP_LIB_DSB) $(OBJP_APP_DSB) $(APP_TARGET_DSB) $(LIB_TARGET_DSB)
 
@@ -32,6 +29,7 @@ COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
 COMMON +=          GData.cpp
+COMMON +=        cmdline.cpp
 COMMON +=        GHandle.cpp
 COMMON +=      utp_basic.cpp
 COMMON +=    mem_manager.cpp
@@ -65,19 +63,19 @@ APP_TARGET_DSB =./bin/$(NAME_DSB)
 
 $(OBJP_LIB_DSB):./obj/%.o: ./src/%.cpp 
 	@$(info $(notdir $<) )
-	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
 
 $(OBJP_APP_DSB):./obj/%.o : ./src/%.cpp 
 	@$(info $(notdir $<) )
-	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
 
 $(LIB_TARGET_DSB):$(OBJP_LIB_DSB)
 	@$(AR) rcsv  $@ $^ 
 
 $(APP_TARGET_DSB):$(LIB_TARGET_DSB) $(OBJP_APP_DSB)
 	@$(info Linking ... to  $(APP_TARGET_DSB))
-	$(LD) -o $@ $(OBJP_APP_DSB) -L./lib -l$(NAME_DSB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
+	@$(LD) -o $@ $(OBJP_APP_DSB) -L./lib -l$(NAME_DSB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
 
 dsb:$(APP_TARGET_DSB)
-	$(info creating $(APP_TARGET_DSB))
+	@$(info creating $(APP_TARGET_DSB))
 

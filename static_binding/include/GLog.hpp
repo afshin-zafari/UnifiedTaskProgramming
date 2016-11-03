@@ -11,6 +11,46 @@
 #include "GData.hpp"
 #include "GTask.hpp"
 
+
+#define EnableOption(x) struct x : public ConfigBase { typedef Enable LogOutput;}
+#define DisableOption(x) struct x : public ConfigBase { typedef Disable LogOutput;}
+
+template <typename T,typename U = typename T::LogOutput>class LogConfig;
+
+template <typename T>
+class LogConfig<T,typename T::Enable>{
+public:
+    static void test(){std::cout << "A\n";}
+};
+template <typename T>
+class LogConfig<T,typename T::Disable >{
+public:
+    static void test(){}
+};
+template <typename Config>
+class Log : public LogConfig<Config>{
+};
+template <typename T, typename U= typename T::LogOutput, typename V=typename T::LogCategory> class Log2;
+template < typename T,typename U>
+class Log2<T,U,typename T::Enable>: public LogConfig<T,U>{
+public:
+    static void test(){std::cout << "B\n";}
+};
+template <typename T, typename U>
+class Log2<T,U,typename T::Disable >: public LogConfig<T,U>{
+public:
+    static void test(){}
+};
+
+
+class ConfigBase{
+    public:
+    struct Enable{};
+    struct Disable{};
+};
+
+
+
 using namespace std;
 typedef enum EventCode{
   ev_starting_number=10,

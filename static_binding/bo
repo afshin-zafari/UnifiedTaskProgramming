@@ -18,8 +18,9 @@ DT_COMP_FLAG = -I$(DT_INC)
 
 
 all: bo 
+
 clean:
-	rm -f ./obj/* lib/*
+	rm -f ./obj/* lib/utp_blas_only*
 
 test:
 	$(info $(COMMON))
@@ -32,6 +33,7 @@ COMMON +=          GData.cpp
 COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
+COMMON +=        cmdline.cpp
 COMMON +=        GHandle.cpp
 COMMON +=      utp_basic.cpp
 COMMON +=    mem_manager.cpp

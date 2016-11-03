@@ -58,5 +58,7 @@ void packAxs(Axs &a,T axs, P... args){
     packAxs(a,args...);
 }
 
+  void utp_initialize(int argc, char *argv[]);
+  void utp_finalize();
 }//namespace utp
 #endif //UTP_BASIC_HPP

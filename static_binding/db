@@ -2,7 +2,7 @@ CPP = mpic++
 LD  = mpic++
 AR  = ar
 
-COMP_FLAGS  = -std=c++11
+COMP_FLAGS  = -std=c++11 -g
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition 
 
@@ -29,6 +29,7 @@ COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
 COMMON +=          GData.cpp
+COMMON +=        cmdline.cpp
 COMMON +=        GHandle.cpp
 COMMON +=      utp_basic.cpp
 COMMON +=    mem_manager.cpp
@@ -61,18 +62,18 @@ APP_TARGET_DB =./bin/$(NAME_DB)
 
 $(OBJP_LIB_DB):./obj/%.o: ./src/%.cpp 
 	@$(info $(notdir $<) )
-	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_BLAS -DDT_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_BLAS -DDT_INCLUDED
 
 $(OBJP_APP_DB):./obj/%.o : ./src/%.cpp 
 	@$(info $(notdir $<) )
-	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_BLAS -DDT_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_BLAS -DDT_INCLUDED
 
 $(LIB_TARGET_DB):$(OBJP_LIB_DB)
 	@$(AR) rcsv  $@ $^ 
 
 $(APP_TARGET_DB):$(LIB_TARGET_DB) $(OBJP_APP_DB)
 	@$(info Linking ... to  $(APP_TARGET_DB))
-	$(LD) -o $@ $(OBJP_APP_DB) -L./lib -l$(NAME_DB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
+	@$(LD) -o $@ $(OBJP_APP_DB) -L./lib -l$(NAME_DB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
 
 db:$(APP_TARGET_DB)
 

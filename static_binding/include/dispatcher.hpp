@@ -124,7 +124,7 @@ public:
     template <typename T>
     static   void ready(second &s,Task<OperationBase<T>>*t){
         cout << s.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
-        t->o->split(s,t);
+        t->o->run(t);
     }
     template <typename T>
     static   void finished(first &s,Task<OperationBase<T>>*t){}
@@ -273,8 +273,8 @@ typedef PathDispatch<DT_SG_Edge,SG_BLAS_Edge> Dispatcher;
 typedef Edge<SG ,BLAS>   SG_BLAS_Edge;
 typedef Edge<SPU,BLAS>  SPU_BLAS_Edge;
 typedef ForkDispatch<Fork<DT, SG_BLAS_Edge,SPU_BLAS_Edge>> Dispatcher;
-//typedef Edge<DT2,BLAS>  DT2_BLAS_Edge;
-//typedef ForkDispatch<Fork<DT, DT2_BLAS_Edge,SG_BLAS_Edge>> Dispatcher;
+typedef Edge<DT2,BLAS>  DT2_BLAS_Edge;
+typedef ForkDispatch<Fork<DT, DT2_BLAS_Edge,SG_BLAS_Edge>> Dispatcher;
 #endif // DT_FORK_SG_SPU
 } // namespace utp
 #endif // DISPATCHER_HPP
