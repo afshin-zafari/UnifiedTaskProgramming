@@ -5,6 +5,6 @@
 #include "sch_blas.hpp"
 #include "sch_ductteip.hpp"
 
-void test_DT_BLAS();
+void test_DT_BLAS(utp::GData &,utp::GData &,utp::GData &);
 
 #endif // CFG_DT_BLAS_HPP

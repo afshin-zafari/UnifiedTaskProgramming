@@ -37,11 +37,11 @@ namespace utp{
                 {
                     sg_data_t *sgd = (sg_data_t *)a->args[i]->get_guest();
                     if ( sgd == NULL ){
-                            sgd =new sg_data_t;
-                        a->args[i]->set_guest((void*)sgd);
-                }
+		      sgd =new sg_data_t;
+		      a->args[i]->set_guest((void*)sgd);
+		    }
                     sg_data_t *h = sgd;//glb_to_sg[gh];
-                    if ( a->args[i]->axs==In)
+                    if ( gt->axs->axs[i]==In)
                         register_access(ReadWriteAdd::read,*h);
                     else
                         register_access(ReadWriteAdd::write,*h);
@@ -92,10 +92,6 @@ public:
     /*-----------------------------------------------------------------------------------*/
     template<typename T>
     static inline int submit(Task<OperationBase<T>>*t){
-        cout << "----\t  SG.submit\t" << t->o->name << "_" << t->id << endl;
-        if(t->id %2==0){
-            return 0;
-        }
         cout << "----\t  SG.submit\t" << t->o->name << "_" << t->id << endl;
         SGTask<T> *st = new SGTask<T> ( t);
         cout << st  << endl;

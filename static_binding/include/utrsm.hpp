@@ -16,6 +16,22 @@ namespace ublas{
         static inline void split(Scheduler &s,Task<OperationBase<Trsm>> *t);
         static inline void run(Task<OperationBase<Trsm>> *t){
             cout << "----\tTrsm.run\ttrsm_"<< t->id << endl;
+	    GData *a = t->args->args[0];
+	    GData *b = t->args->args[1];
+	    printf("trsm------------, B(%d) \n",b->get_child_index());
+
+
+	    double *A=(double *)a->get_memory();
+	    int ldA = a->get_rows();
+
+	    double *B=(double *)b->get_memory();
+	    int ldB = b->get_rows();
+	    int M = b->get_rows();
+	    int N = b->get_cols();
+
+	    // Signature: cblas_dtrsm (Order, Side, Uplo, TransA, Diag, M, N, alpha, A, lda, B, ldb)
+	    printf("trsm------------, B(%d) \n",b->get_child_index());
+	    cblas_dtrsm(CblasColMajor,CblasRight,CblasLower,CblasTrans,CblasNonUnit,M,N,1.0,A,ldA,B,ldB);
         }
     };
     /*===================================================================================*/

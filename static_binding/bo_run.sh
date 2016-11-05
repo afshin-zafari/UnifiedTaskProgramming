@@ -11,24 +11,26 @@
 module load gcc/4.9 openmpi/1.8.1 cuda/7.5
 
 set -x
-B1=4
-B2=1
-N=24
+B1=2
+B2=2
+N=12
 M=$N
-timeout=5
+timeout=10
 P=1
 p=1
 q=1
 ipn=1
-nt=1
+nt=2
 app_bo="./bin/utp_blas_only"
 app_db="./bin/utp_dt_blas"
 app_sb="./bin/utp_sg_blas"
 app_dsb="./bin/utp_dt_sg_blas"
 out="out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
+out2="dsb_out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
 app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T=$timeout >$out"
-mpi_params="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out"
-#mpi_params="-n $P -npernode $ipn --output-filename $out"
+mpi_params1="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out"
+mpi_params2="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out2"
+
 
 #-----BLAS ONLY
 echo "========================================================================="
@@ -43,12 +45,12 @@ $app_sb ${app_params} > sb_${out}
 #-----DT BLAS 
 echo "========================================================================="
 echo "========================================================================="
-mpirun ${mpi_params} ${app_db} ${app_params}
+mpirun ${mpi_params1} ${app_db} ${app_params}
 
 #-----DT SG BLAS 
 echo "========================================================================="
 echo "========================================================================="
-mpirun ${mpi_params} ${app_dsb} ${app_params}
+mpirun ${mpi_params2} ${app_dsb} ${app_params}
 
 
 

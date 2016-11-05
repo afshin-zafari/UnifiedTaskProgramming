@@ -12,9 +12,17 @@ void test_BLAS_ONLY(){
     A.set_partition(&P1);
     B.set_partition(&P1);
     C.set_partition(&P1);
-
+    A.set_memory(new double [N*N]);
+    B.set_memory(new double [N*N]);
+    C.set_memory(new double [N*N]);
+    A.fill_rows_with(1,10);
+    B.fill_rows_with(10,10);
+    C.fill_with(0);
+	
     utp::ublas::ugemm(A,B,C);
-
+    A.print();
+    B.print();
+    C.print();
     cout << "------------\n";
     utp::ublas::utrsm(A,B);
 }

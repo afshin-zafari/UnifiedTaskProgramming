@@ -13,7 +13,7 @@ namespace utp{
 class OneLevelData:public IData{
 private:
 public:
-  OneLevelData(string name,int,int,IContext *ctx)
+  OneLevelData(string name,int m,int n,IContext *ctx):IData(name,m,n,ctx)
   {
       IData::parent_data = NULL;
       if ( getParent())
@@ -69,7 +69,7 @@ public:
             daxs = new DataAccess;
             daxs->data = d;
             int h = -1;
-            if ( t->args->args[i]->axs == In){
+            if ( t->axs->axs[i]  == In){
               daxs->type = IData::READ;
               daxs->required_version = d->getWriteVersion();
               d->incrementVersion(IData::READ);
@@ -161,7 +161,7 @@ public:
     template <typename T>
     static inline void finished(Task<OperationBase<T>> *t){
         std::cout << "----\t DT.finished\t" << t->o->name << "_" << t->id << endl;
-        utp::Dispatcher::finished(_dt,t);
+        finishedTask(t);
     }
     /*------------------------------------------------------------------------------*/
     static void data_created(GData *d)

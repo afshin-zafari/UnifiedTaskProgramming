@@ -50,7 +50,8 @@ public:
     }
     void set_parent(Task *p){
         parent = p;
-        p->child_count ++; // ToDo: has to be Atomic ++
+	if ( p ) 
+	  p->child_count ++; // ToDo: has to be Atomic ++
     }
     Task *get_parent(){return parent;}
 private:

@@ -3,23 +3,11 @@
 #include "ugemm.hpp"
 #include "utrsm.hpp"
 
-void test_DT_BLAS(){
-  int N = config.M;
-  int B1= config.Mb;
-  int B2= config.mb;
-    utp::GData A(N,N,"A");
-    utp::GData B(N,N,"B");
-    utp::GData C(N,N,"C");
-    utp::GPartitioner P1(B1,B1);
-    utp::GPartitioner P2(B2,B2);
-    P1.set_next(&P2);
-    A.set_partition(&P1);
-    B.set_partition(&P1);
-    C.set_partition(&P1);
+void test_DT_BLAS(utp::GData &A,utp::GData &B,utp::GData &C){
     utp::ublas::ugemm(A,B,C);
 
 
     std::cout << "------------\n";
-    utp::ublas::utrsm(A,B);
+    //utp::ublas::utrsm(A,B);
     
 }

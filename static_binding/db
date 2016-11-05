@@ -4,7 +4,7 @@ AR  = ar
 
 COMP_FLAGS  = -std=c++11 -g
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--allow-multiple-definition 
+LINK_FLAGS  = -Wl,--allow-multiple-definition -lgsl -lgslcblas
 
 SG_DIR = /pica/h1/afshin/sg/superglue
 DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype

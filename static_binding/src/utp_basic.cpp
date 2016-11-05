@@ -18,12 +18,13 @@ namespace utp {
       DT::init();
       dtEngine.start(argc,argv);
       #endif
+
+      cmdLine.getCmdLine(argc,argv);
       
       #ifdef SG_INCLUDED
-      utp::SG_Engine = new SuperGlue<utp::SGWOptions>;
+      utp::SG_Engine = new SuperGlue<utp::SGWOptions>(cmdLine.nt);
       #endif
       
-      cmdLine.getCmdLine(argc,argv);
     }
     void utp_finalize(){
 

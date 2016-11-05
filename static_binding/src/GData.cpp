@@ -129,11 +129,15 @@ void GData::set_partition(GPartitioner *P)
 /*=====================================================================*/
 int GData::get_part_countY()
 {
-    return partitioner->y;
+  if ( partitioner == nullptr )
+    return 0;
+  return partitioner->y;
 }
 /*=====================================================================*/
 int GData::get_part_countX()
 {
+  if ( partitioner == nullptr )
+    return 0;
     return partitioner->x;
 }
 /*=====================================================================*/
@@ -169,6 +173,14 @@ void GData::set_memory(MemoryItem *m)
 void GData::set_memory(void *m)
 {
   content = (byte *)m;
+  if ( child_cnt ==0 )
+    return ;
+  int bz = children[0]->get_rows() *   children[0]->get_cols();
+  for(int i=0; i<child_cnt; i++){
+    children[i]->set_memory((double *)m+ i* bz);
+  }
+
+  
 }
 /*=====================================================================*/
 bool GData::is_memory_allocated()
