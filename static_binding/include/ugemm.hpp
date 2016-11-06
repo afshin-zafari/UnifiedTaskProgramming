@@ -11,8 +11,8 @@ namespace utp{
         Gemm(string n){this->name = n;};
         string get_name(){return name;}
         template <typename Scheduler>
-        static inline void split(Scheduler &s,Task<OperationBase<Gemm>> *t);
-        static inline void run(Task<OperationBase<Gemm>> *t){
+        static inline void split(Scheduler &s,Task<Gemm> *t);
+        static inline void run(Task<Gemm> *t){
             cout << "----\tGemm.run\tgemm_"<< t->id << endl;
 	    GData *a = t->args->args[0];
 	    GData *b = t->args->args[1];
@@ -58,14 +58,14 @@ namespace utp{
     /*===================================================================================*/
     extern Gemm gemm_instance;
     /*===================================================================================*/
-    class GemmTask: public Task<OperationBase<Gemm>>{
+    class GemmTask: public Task<Gemm>{
     public:
         static unsigned int task_count;
         static const int gemm_type_id=0;
-        Task<OperationBase<Gemm>>*getHost(){
+        Task<Gemm>*getHost(){
             return this;
         }
-      GemmTask(GData &A,GData &B,GData &C,Task *p=nullptr):Task<OperationBase<Gemm>>(&gemm_instance){
+      GemmTask(GData &A,GData &B,GData &C,Task *p=nullptr):Task<Gemm>(&gemm_instance){
             args = new Args;
             axs = new Axs;
             packArgs(args, A , B  , C    );
@@ -81,15 +81,13 @@ namespace utp{
         }
     };
     /*===================================================================================*/
-    static vector<GemmTask *> gemm_tasks;
-    /*===================================================================================*/
       void ugemm(GData &,GData &, GData &);
       template<typename S,typename Oper>
-      void ugemm(S &s,GData &A,GData &B, GData &C,Task<OperationBase<Oper> >* p=nullptr);
+      void ugemm(S &s,GData &A,GData &B, GData &C,Task<Oper >* p=nullptr);
 
     /*===================================================================================*/
     template <typename Scheduler>
-    void Gemm::split(Scheduler &s,Task<OperationBase<Gemm>> *t){
+    void Gemm::split(Scheduler &s,Task<Gemm> *t){
         cout << s.name <<"\tGemm.split\t" << t->o->name <<"_" << t->id << endl;
         ugemm<Scheduler,Gemm>(s,*t->args->args[0],*t->args->args[1],*t->args->args[2],t);
     }

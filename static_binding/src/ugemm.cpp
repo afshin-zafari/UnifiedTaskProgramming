@@ -4,7 +4,7 @@ namespace utp{
     namespace ublas{
         Gemm gemm_instance("gemm");
       template<typename S,typename Oper>
-      void ugemm(S &s,GData &A,GData &B, GData &C,Task<OperationBase<Oper>> *p=nullptr){
+      void ugemm(S &s,GData &A,GData &B, GData &C,Task<Oper> *p=nullptr){
             int m = A.get_part_countX();
             int n = B.get_part_countX();
             int o = C.get_part_countX();

@@ -47,7 +47,7 @@ template <typename T>
 class DTTask : public IDuctteipTask
 {
 public:
-    typedef  utp::Task<OperationBase<T>> GTask;
+    typedef  utp::Task<T> GTask;
     GTask * gtask;
     DTTask(GTask *t):gtask(t)
     {
@@ -141,25 +141,25 @@ public:
     }
     /*------------------------------------------------------------------------------*/
     template <typename T>
-    static int submit(Task<OperationBase<T>> *t){
+    static int submit(Task<T> *t){
         assert(new DTTask<T> (t));
         return 1;
     }
     template <typename T>
-    static void finishedTask(Task<OperationBase<T>>  *t)
+    static void finishedTask(Task<T>  *t)
     {
         DTTask<T>* dt =static_cast<DTTask<T>*>( t->guest);
         dt->setFinished(true);
     }
     /*------------------------------------------------------------------------------*/
     template <typename T>
-    static inline void ready(Task<OperationBase<T>> *t){
+    static inline void ready(Task<T> *t){
         cout << "----\t  DT.ready\t" << t->o->name << "_" << t->id << endl;
         utp::Dispatcher::ready(_dt,t);
     }
     /*------------------------------------------------------------------------------*/
     template <typename T>
-    static inline void finished(Task<OperationBase<T>> *t){
+    static inline void finished(Task<T> *t){
         std::cout << "----\t DT.finished\t" << t->o->name << "_" << t->id << endl;
         finishedTask(t);
     }

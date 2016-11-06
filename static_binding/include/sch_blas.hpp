@@ -16,18 +16,18 @@ public:
     static void data_created(GData *){
     }
     template <typename T>
-    static inline int submit(Task<OperationBase<T>> *t){
+    static inline int submit(Task<T> *t){
         std::cout << "----\tBLAS.submit\t" << t->o->name << "_" << t->id <<endl;
         t->o->run(t);
         Dispatcher::finished(_blas,t);
         return 1;
     }
     template <typename T>
-    static inline void run(Task<OperationBase<T>> *t){
+    static inline void run(Task<T> *t){
         std::cout << "run task " << t->o->name << " in BLAS.\n";
     }
     template <typename T>
-    static inline void finished(Task<OperationBase<T>> *t){
+    static inline void finished(Task<T> *t){
         std::cout << "----\tBLAS.finished\t" << t->o->name << "_" << t->id << endl;
     }
 };

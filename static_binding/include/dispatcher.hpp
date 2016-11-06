@@ -21,23 +21,27 @@ class NodeDispatch{
 public:
     typedef typename SingleNode<typename E::First>::First first;
     template <typename T>
-    static   void submit(UserProgram &, Task<OperationBase<T>>*t){
+    static   void submit(UserProgram &, Task<T>*t){
         cout << "Prog\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         E::First::submit(t);
     }
     template <typename T>
-    static   void submit( Task<OperationBase<T>>*t){
+    static   void submit( Task<T>*t){
         cout << "----\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         E::First::submit(t);
     }
     template <typename T>
-    static   void ready(first &f,Task<OperationBase<T>>*t){
+    static   void ready(first &f,Task<T>*t){
         cout <<  f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id << endl;
         t->o->split(f,t);
     }
     template <typename T>
-    static   void finished(first &f,Task<OperationBase<T>>*t){
-        cout <<  f.name <<"\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+    static   void finished(Task<T>*t){
+        cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+    }
+    template <typename T>
+    static   void finished(first &f,Task<T>*t){
+      cout << f.name << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
     }
 
 };
@@ -57,35 +61,35 @@ public:
     typedef typename Edge<typename E::First, typename E::Second>::First  first;
     typedef typename Edge<typename E::First, typename E::Second>::Second second;
     template <typename T>
-    static   void submit(UserProgram &, Task<OperationBase<T>>*t){
+    static   void submit(UserProgram &, Task<T>*t){
         cout << "Prog\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         E::First::submit(t);
     }
     template <typename T>
-    static   void submit( Task<OperationBase<T>>*t){
+    static   void submit( Task<T>*t){
         cout << "----\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         E::First::submit(t);
     }
     template <typename T>
-    static   void submit(first &f, Task<OperationBase<T>>*t){
+    static   void submit(first &f, Task<T>*t){
         cout << f.name << "\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         E::Second::submit(t);
     }
     template <typename T>
-    static   void ready(first &f,Task<OperationBase<T>>*t){
+    static   void ready(first &f,Task<T>*t){
         cout <<  f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id << endl;
         t->o->run(t);
     }
     template <typename T>
-    static   void finished(first &s,Task<OperationBase<T>>*t){}
+    static   void finished(first &s,Task<T>*t){}
   
     template <typename T>
-    static   void finished(Task<OperationBase<T>>*t){
+    static   void finished(Task<T>*t){
       E::First::finished(t);
     }
 
     template <typename T>
-    static   void finished(second &s,Task<OperationBase<T>>*t){
+    static   void finished(second &s,Task<T>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
             t->get_parent()->child_count--;
@@ -105,39 +109,39 @@ public:
     typedef typename Edge<typename E2::First, typename E2::Second>::Second third;
 
     template <typename T>
-    static   void submit(UserProgram &, Task<OperationBase<T>>*t){
+    static   void submit(UserProgram &, Task<T>*t){
         cout << "PROG\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         E1::First::submit(t);
     }
     template <typename T>
-    static   void submit( Task<OperationBase<T>>*t){
+    static   void submit( Task<T>*t){
         E1::First::submit(t);
     }
     template <typename T>
-    static   void submit(first &, Task<OperationBase<T>>*t){
+    static   void submit(first &, Task<T>*t){
         E1::Second::submit(t);
     }
     template <typename T>
-    static   void submit(second&, Task<OperationBase<T>>*t){
+    static   void submit(second&, Task<T>*t){
         if ( t->get_parent() != nullptr){
             t->get_parent()->child_count++;
 	}
         E2::Second::submit(t);
     }
     template <typename T>
-    static   void ready(first &f,Task<OperationBase<T>>*t){
+    static   void ready(first &f,Task<T>*t){
         cout << f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
         t->o->split(f,t);
     }
     template <typename T>
-    static   void ready(second &s,Task<OperationBase<T>>*t){
+    static   void ready(second &s,Task<T>*t){
         cout << s.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
         t->o->run(t);
     }
     template <typename T>
-    static   void finished(first &s,Task<OperationBase<T>>*t){}
+    static   void finished(first &s,Task<T>*t){}
     template <typename T>
-    static   void finished(Task<OperationBase<T>>*t){
+    static   void finished(Task<T>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 	E1::Second::finished(t);
         if ( t->get_parent() != nullptr){
@@ -148,7 +152,7 @@ public:
         }
     }
     template <typename T>
-    static   void finished(second &s,Task<OperationBase<T>>*t){
+    static   void finished(second &s,Task<T>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
             t->get_parent()->child_count--;
@@ -158,7 +162,7 @@ public:
         }
     }
     template <typename T>
-    static   void finished(third &s,Task<OperationBase<T>>*t){
+    static   void finished(third &s,Task<T>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
             t->get_parent()->child_count--;
@@ -191,48 +195,48 @@ public:
     typedef typename Edge2::Second fifth;
 
     template <typename T>
-    static   void submit(UserProgram &, Task<OperationBase<T>>*t){
+    static   void submit(UserProgram &, Task<T>*t){
         cout << "Prog\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         F::First::submit(t);
     }
     template <typename T>
-    static   void submit( Task<OperationBase<T>>*t){
+    static   void submit( Task<T>*t){
         cout << "----\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
         F::First::submit(t);
     }
     template <typename T>
-    static   void submit(first &, Task<OperationBase<T>>*t){
+    static   void submit(first &, Task<T>*t){
         if ( !F::Second::First::submit(t) ) // if rejected by 2nd scheduler, forward it to 3rd
             F::Third::First::submit(t);
     }
     template <typename T>
-    static   void submit(second&s, Task<OperationBase<T>>*t){
+    static   void submit(second&s, Task<T>*t){
         F::Second::Second::submit(t);
     }
     template <typename T>
-    static   void submit(third&, Task<OperationBase<T>>*t){
+    static   void submit(third&, Task<T>*t){
         F::Third::Second::submit(t);
     }
     template <typename T>
-    static   void ready(first &f,Task<OperationBase<T>>*t){
+    static   void ready(first &f,Task<T>*t){
         cout << f.name << "\t Dis.ready\t" << t->o->name << "_" << t->id << endl;
         t->o->split(f,t);
     }
     template <typename T>
-    static   void ready(second &s,Task<OperationBase<T>>*t){
+    static   void ready(second &s,Task<T>*t){
         cout << s.name << "\t Dis.ready\t" << t->o->name << "_" << t->id << endl;
         t->o->split(s,t);
     }
     template <typename T>
-    static   void ready(third &trd,Task<OperationBase<T>>*t){
+    static   void ready(third &trd,Task<T>*t){
         cout << trd.name << "\t Dis.ready\t" << t->o->name << "_" << t->id << endl;
         t->o->split(trd,t);
     }
     template <typename T>
-    static   void finished(first &s,Task<OperationBase<T>>*t){}
+    static   void finished(first &s,Task<T>*t){}
 
     template <typename T>
-    static   void finished(second &s,Task<OperationBase<T>>*t){
+    static   void finished(second &s,Task<T>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
             t->get_parent()->child_count--;
@@ -242,7 +246,7 @@ public:
         }
     }
     template <typename T>
-    static   void finished(third &s,Task<OperationBase<T>>*t){
+    static   void finished(third &s,Task<T>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
             t->get_parent()->child_count--;
@@ -252,7 +256,7 @@ public:
         }
     }
     template <typename T>
-    static   void finished(forth &frth,Task<OperationBase<T>>*t){
+    static   void finished(forth &frth,Task<T>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
             t->get_parent()->child_count--;

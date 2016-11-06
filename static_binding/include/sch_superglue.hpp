@@ -27,7 +27,7 @@ namespace utp{
     class SGTask:public sg::Task<SGWOptions>
     {
         public:
-            typedef  utp::Task<OperationBase<T>> GTask;
+            typedef  utp::Task<T> GTask;
             GTask * gtask;
             SGTask(GTask *gt):gtask(gt)
             {
@@ -85,13 +85,13 @@ public:
     }
     /*-----------------------------------------------------------------------------------*/
     template <typename T>
-    static inline void ready(Task<OperationBase<T>> *t){
+    static inline void ready(Task<T> *t){
         cout << "----\t  SG.ready\t" << t->o->name << "_" << t->id << endl;
         Dispatcher::ready(_sg,t);
     }
     /*-----------------------------------------------------------------------------------*/
     template<typename T>
-    static inline int submit(Task<OperationBase<T>>*t){
+    static inline int submit(Task<T>*t){
         cout << "----\t  SG.submit\t" << t->o->name << "_" << t->id << endl;
         SGTask<T> *st = new SGTask<T> ( t);
         cout << st  << endl;
@@ -100,7 +100,7 @@ public:
     }
     /*-----------------------------------------------------------------------------------*/
     template <typename T>
-    static inline void finished(Task<OperationBase<T>> *t){
+    static inline void finished(Task<T> *t){
         std::cout << "----\t  SG.finished\t" << t->o->name << "_" << t->id << endl;
         Dispatcher::finished(_sg,t);
     }

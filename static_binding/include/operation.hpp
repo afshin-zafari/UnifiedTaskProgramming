@@ -22,15 +22,15 @@ template <typename T>
 class ISplit{
   public:
       template <typename O>
-      Task<OperationBase<O>>* getHost(){
+      Task<O>* getHost(){
         static_cast<T*>(this)->getHost();
       }
     template<typename S,typename O>
-    void split(S&s,Task<OperationBase<O>>*t){
+    void split(S&s,Task<O>*t){
         static_cast<T*>(this)->split(s,t);
     }
     template<typename O>
-    void run(Task<OperationBase<O>>*t){
+    void run(Task<O>*t){
         static_cast<T*>(this)->run(t);
     }
 };
@@ -42,9 +42,9 @@ public:
     Axs *axs;
     void *guest;
     int type_id;
-    T *o;
+    OperationBase<T> *o;
     unsigned int id,child_count;
-    Task ( T *_o):o(_o){
+    Task ( OperationBase<T> *_o):o(_o){
         child_count =0;
         parent = nullptr;
     }
