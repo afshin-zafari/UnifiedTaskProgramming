@@ -2,6 +2,9 @@
 #define OPERATION_HPP
 #include <iostream>
 #include "utp_basic.hpp"
+#include "atomic.hpp"
+
+using namespace sg;
 namespace utp{
 
 
@@ -55,7 +58,7 @@ public:
     void set_parent(Parent  *p){
         parent = p;
 	if ( p ) 
-	  p->child_count ++; // ToDo: has to be Atomic ++
+	  Atomic::increase(&p->child_count) ;
     }
     Parent *get_parent(){return parent;}
 private:

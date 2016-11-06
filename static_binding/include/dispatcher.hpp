@@ -92,7 +92,7 @@ public:
     static   void finished(second &s,Task<T,P>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count--;
+	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
                 E::First::finished(t->get_parent());
             }
@@ -123,9 +123,6 @@ public:
     }
     template <typename T,typename P>
     static   void submit(second&, Task<T,P>*t){
-        if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count++;
-	}
         E2::Second::submit(t);
     }
     template <typename T,typename P>
@@ -145,7 +142,7 @@ public:
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 	E1::Second::finished(t);
         if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count--;
+	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
                 E1::First::finished(t->get_parent());
             }
@@ -155,7 +152,7 @@ public:
     static   void finished(second &s,Task<T,P>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count--;
+	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
                 E1::First::finished(t->get_parent());
             }
@@ -165,7 +162,7 @@ public:
     static   void finished(third &s,Task<T,P>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count--;
+	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
                 E1::Second::finished(t->get_parent());
             }
@@ -239,7 +236,7 @@ public:
     static   void finished(second &s,Task<T,P>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count--;
+	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
                 F::First::finished(t->get_parent());
             }
@@ -249,7 +246,7 @@ public:
     static   void finished(third &s,Task<T,P>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count--;
+	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
                 F::First::finished(t->get_parent());
             }
@@ -259,7 +256,7 @@ public:
     static   void finished(forth &frth,Task<T,P>*t){
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-            t->get_parent()->child_count--;
+	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
                 F::Second::First::finished(t->get_parent());
             }
