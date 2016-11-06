@@ -43,11 +43,11 @@ GenAlgorithm *dt_ctx;
 
 /*=================================================================================*/
 //template <typename T>void GenAddDTTask( utp::Task<OperationBase<T>>  *t);
-template <typename T>
+template <typename T,typename P>
 class DTTask : public IDuctteipTask
 {
 public:
-    typedef  utp::Task<T> GTask;
+  typedef  utp::Task<T,P> GTask;
     GTask * gtask;
     DTTask(GTask *t):gtask(t)
     {
@@ -140,26 +140,27 @@ public:
         dt_ctx = new GenAlgorithm;
     }
     /*------------------------------------------------------------------------------*/
-    template <typename T>
-    static int submit(Task<T> *t){
-        assert(new DTTask<T> (t));
-        return 1;
+    template <typename T,typename P>
+    static int submit(Task<T,P> *t){
+      DTTask<T,P> *temp = new DTTask<T,P> (t);
+      assert(temp);
+      return 1;
     }
-    template <typename T>
-    static void finishedTask(Task<T>  *t)
+    template <typename T,typename P>
+    static void finishedTask(Task<T,P>  *t)
     {
-        DTTask<T>* dt =static_cast<DTTask<T>*>( t->guest);
+      DTTask<T,P>* dt =static_cast<DTTask<T,P>*>( t->guest);
         dt->setFinished(true);
     }
     /*------------------------------------------------------------------------------*/
-    template <typename T>
-    static inline void ready(Task<T> *t){
+    template <typename T,typename P>
+    static inline void ready(Task<T,P> *t){
         cout << "----\t  DT.ready\t" << t->o->name << "_" << t->id << endl;
         utp::Dispatcher::ready(_dt,t);
     }
     /*------------------------------------------------------------------------------*/
-    template <typename T>
-    static inline void finished(Task<T> *t){
+    template <typename T,typename P>
+    static inline void finished(Task<T,P> *t){
         std::cout << "----\t DT.finished\t" << t->o->name << "_" << t->id << endl;
         finishedTask(t);
     }

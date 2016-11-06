@@ -10,9 +10,10 @@ namespace utp{
     public:
         Gemm(string n){this->name = n;};
         string get_name(){return name;}
-        template <typename Scheduler>
-        static inline void split(Scheduler &s,Task<Gemm> *t);
-        static inline void run(Task<Gemm> *t){
+        template <typename Scheduler,typename P>
+        static inline void split(Scheduler &s,Task<Gemm,P> *t);
+      template <typename P>
+      static inline void run(Task<Gemm,P> *t){
             cout << "----\tGemm.run\tgemm_"<< t->id << endl;
 	    GData *a = t->args->args[0];
 	    GData *b = t->args->args[1];
@@ -57,37 +58,38 @@ namespace utp{
     };
     /*===================================================================================*/
     extern Gemm gemm_instance;
+    extern unsigned int gemm_task_count;
     /*===================================================================================*/
-    class GemmTask: public Task<Gemm>{
+      template <typename P>
+      class GemmTask: public Task<Gemm,P>{
     public:
-        static unsigned int task_count;
         static const int gemm_type_id=0;
-        Task<Gemm>*getHost(){
+        Task<Gemm,P>*getHost(){
             return this;
         }
-      GemmTask(GData &A,GData &B,GData &C,Task *p=nullptr):Task<Gemm>(&gemm_instance){
-            args = new Args;
-            axs = new Axs;
-            packArgs(args, A , B  , C    );
-            packAxs (*axs, In, In , InOut);
-            id = GemmTask::task_count ++;
-            type_id = gemm_type_id;
-	    child_count=0;
-	    set_parent(p);
+	GemmTask(GData &A,GData &B,GData &C,P *p=nullptr):Task<Gemm,P>(&gemm_instance){
+	  Task<Gemm,P>::args = new Args;
+	  Task<Gemm,P>::axs = new Axs;
+            packArgs( Task<Gemm,P>::args, A , B  , C    );
+            packAxs (*Task<Gemm,P>::axs , In, In , InOut);
+	    Task<Gemm,P>::id = gemm_task_count ++;
+	    Task<Gemm,P>::type_id = gemm_type_id;
+	    Task<Gemm,P>::child_count=0;
+	    Task<Gemm,P>::set_parent(p);
         }
         ~GemmTask(){
-            delete args;
-            delete axs;
+            delete Task<Gemm,P>::args;
+            delete Task<Gemm,P>::axs;
         }
     };
     /*===================================================================================*/
       void ugemm(GData &,GData &, GData &);
-      template<typename S,typename Oper>
-      void ugemm(S &s,GData &A,GData &B, GData &C,Task<Oper >* p=nullptr);
+      template<typename S,typename Oper,typename P>
+      void ugemm(S &s,GData &A,GData &B, GData &C,Task<Oper,P >* p=nullptr);
 
     /*===================================================================================*/
-    template <typename Scheduler>
-    void Gemm::split(Scheduler &s,Task<Gemm> *t){
+    template <typename Scheduler,typename P>
+    void Gemm::split(Scheduler &s,Task<Gemm,P> *t){
         cout << s.name <<"\tGemm.split\t" << t->o->name <<"_" << t->id << endl;
         ugemm<Scheduler,Gemm>(s,*t->args->args[0],*t->args->args[1],*t->args->args[2],t);
     }

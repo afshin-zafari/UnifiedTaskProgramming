@@ -14,28 +14,32 @@ public:
     Operation(const char *n):name(n){}
 };
 
-template<typename T> class Task;
-template<typename T> class OperationBase;;
+  template<typename T,typename P> class Task;
+  template<typename T> class OperationBase;
 
 
 template <typename T>
 class ISplit{
   public:
-      template <typename O>
-      Task<O>* getHost(){
+      template <typename O,typename P>
+      Task<O,P>* getHost(){
         static_cast<T*>(this)->getHost();
       }
-    template<typename S,typename O>
-    void split(S&s,Task<O>*t){
+    template<typename S,typename O,typename P>
+    void split(S&s,Task<O,P>*t){
         static_cast<T*>(this)->split(s,t);
     }
-    template<typename O>
-    void run(Task<O>*t){
+    template<typename O,typename P>
+    void run(Task<O,P>*t){
         static_cast<T*>(this)->run(t);
     }
 };
 
-template<typename T>
+  class RootTask{
+  public :
+    unsigned int child_count ;
+  };
+  template<typename T,typename Parent>
 class Task{
 public:
     Args *args;
@@ -48,14 +52,14 @@ public:
         child_count =0;
         parent = nullptr;
     }
-    void set_parent(Task *p){
+    void set_parent(Parent  *p){
         parent = p;
 	if ( p ) 
 	  p->child_count ++; // ToDo: has to be Atomic ++
     }
-    Task *get_parent(){return parent;}
+    Parent *get_parent(){return parent;}
 private:
-    Task *parent;
+    Parent *parent;
 };
 
 

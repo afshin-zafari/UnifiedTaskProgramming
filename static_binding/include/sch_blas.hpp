@@ -15,19 +15,19 @@ public:
     BLAS():name("BLAS"){}
     static void data_created(GData *){
     }
-    template <typename T>
-    static inline int submit(Task<T> *t){
+  template <typename T,typename P>
+  static inline int submit(Task<T,P> *t){
         std::cout << "----\tBLAS.submit\t" << t->o->name << "_" << t->id <<endl;
         t->o->run(t);
         Dispatcher::finished(_blas,t);
         return 1;
     }
-    template <typename T>
-    static inline void run(Task<T> *t){
+    template <typename T,typename P>
+    static inline void run(Task<T,P> *t){
         std::cout << "run task " << t->o->name << " in BLAS.\n";
     }
-    template <typename T>
-    static inline void finished(Task<T> *t){
+  template <typename T,typename P>
+  static inline void finished(Task<T,P> *t){
         std::cout << "----\tBLAS.finished\t" << t->o->name << "_" << t->id << endl;
     }
 };

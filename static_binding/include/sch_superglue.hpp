@@ -6,7 +6,7 @@
 
 namespace utp{
     template <typename T> class OperationBase;
-    template <typename T> class Task;
+    template <typename T,typename P> class Task;
     class SG;
     extern SG _sg;
 
@@ -23,11 +23,11 @@ namespace utp{
     typedef Handle<SGWOptions> sg_data_t;
     /*============================================================*/
 
-    template <typename T>
+    template <typename T,typename P>
     class SGTask:public sg::Task<SGWOptions>
     {
         public:
-            typedef  utp::Task<T> GTask;
+      typedef  utp::Task<T,P> GTask;
             GTask * gtask;
             SGTask(GTask *gt):gtask(gt)
             {
@@ -84,23 +84,23 @@ public:
         }
     }
     /*-----------------------------------------------------------------------------------*/
-    template <typename T>
-    static inline void ready(Task<T> *t){
+    template <typename T,typename P>
+    static inline void ready(Task<T,P> *t){
         cout << "----\t  SG.ready\t" << t->o->name << "_" << t->id << endl;
         Dispatcher::ready(_sg,t);
     }
     /*-----------------------------------------------------------------------------------*/
-    template<typename T>
-    static inline int submit(Task<T>*t){
+    template<typename T,typename P>
+    static inline int submit(Task<T,P>*t){
         cout << "----\t  SG.submit\t" << t->o->name << "_" << t->id << endl;
-        SGTask<T> *st = new SGTask<T> ( t);
+        SGTask<T,P> *st = new SGTask<T,P> ( t);
         cout << st  << endl;
         SG_Engine->submit(st);
         return 1;
     }
     /*-----------------------------------------------------------------------------------*/
-    template <typename T>
-    static inline void finished(Task<T> *t){
+    template <typename T,typename P>
+    static inline void finished(Task<T,P> *t){
         std::cout << "----\t  SG.finished\t" << t->o->name << "_" << t->id << endl;
         Dispatcher::finished(_sg,t);
     }

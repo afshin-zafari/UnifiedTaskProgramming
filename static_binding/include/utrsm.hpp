@@ -12,9 +12,10 @@ namespace ublas{
         using OperationBase<Trsm>::split;
         Trsm (string n){this->name = n;}
         string get_name(){return name;}
-        template <typename Scheduler>
-        static inline void split(Scheduler &s,Task<Trsm> *t);
-        static inline void run(Task<Trsm> *t){
+        template <typename Scheduler,typename P>
+        static inline void split(Scheduler &s,Task<Trsm,P> *t);
+      template <typename P>
+      static inline void run(Task<Trsm,P> *t){
             cout << "----\tTrsm.run\ttrsm_"<< t->id << endl;
 	    GData *a = t->args->args[0];
 	    GData *b = t->args->args[1];
@@ -36,28 +37,29 @@ namespace ublas{
     };
     /*===================================================================================*/
     extern Trsm trsm_instance;
+    extern unsigned int trsm_task_count ;
     /*===================================================================================*/
-    class TrsmTask :public  Task<Trsm> {
+  template <typename P>
+  class TrsmTask :public  Task<Trsm,P> {
         public:
-            static unsigned int task_count ;
             static const int trsm_type_id=1;
-            TrsmTask(GData &A, GData &B):Task<Trsm>(&trsm_instance){
-                args = new Args;
-                axs  = new Axs;
-                packArgs(args,A,B);
-                packAxs( *axs, In, InOut);
-                id = TrsmTask::task_count ++;
+    TrsmTask(GData &A, GData &B):Task<Trsm,P>(&trsm_instance){
+                Task<Trsm,P>::args = new Args;
+                Task<Trsm,P>::axs  = new Axs;
+                packArgs(Task<Trsm,P>::args,A,B);
+                packAxs( *Task<Trsm,P>::axs, In, InOut);
+                Task<Trsm,P>::id = trsm_task_count ++;
             }
             ~TrsmTask(){
-                delete args;
-                delete axs;
+                delete Task<Trsm,P>::args;
+                delete Task<Trsm,P>::axs;
             }
     };
     /*===================================================================================*/
     void utrsm(GData &A, GData &B);
     /*===================================================================================*/
-    template <typename Scheduler>
-    void Trsm::split(Scheduler &s,Task<Trsm> *t){
+    template <typename Scheduler,typename P>
+    void Trsm::split(Scheduler &s,Task<Trsm,P> *t){
         cout << s.name <<"\tTrsm.split\t" << t->o->name <<"_" << t->id << endl;
     }
     /*===================================================================================*/
