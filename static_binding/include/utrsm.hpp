@@ -43,12 +43,15 @@ namespace ublas{
   class TrsmTask :public  Task<Trsm,P> {
         public:
             static const int trsm_type_id=1;
-    TrsmTask(GData &A, GData &B):Task<Trsm,P>(&trsm_instance){
+    TrsmTask(GData &A, GData &B, P* p):Task<Trsm,P>(&trsm_instance){
                 Task<Trsm,P>::args = new Args;
                 Task<Trsm,P>::axs  = new Axs;
-                packArgs(Task<Trsm,P>::args,A,B);
-                packAxs( *Task<Trsm,P>::axs, In, InOut);
+                packArgs (  Task<Trsm,P>::args, A , B    );
+                packAxs  ( *Task<Trsm,P>::axs , In, InOut);
                 Task<Trsm,P>::id = trsm_task_count ++;
+		Task<Trsm,P>::type_id = trsm_type_id;
+		Task<Trsm,P>::child_count=0; 
+		Task<Trsm,P>::set_parent(p);
             }
             ~TrsmTask(){
                 delete Task<Trsm,P>::args;
@@ -59,8 +62,26 @@ namespace ublas{
     void utrsm(GData &A, GData &B);
     /*===================================================================================*/
     template <typename Scheduler,typename P>
-    void Trsm::split(Scheduler &s,Task<Trsm,P> *t){
-        cout << s.name <<"\tTrsm.split\t" << t->o->name <<"_" << t->id << endl;
+    void Trsm::split(Scheduler &s,Task<Trsm,P> *task){
+        cout << s.name <<"\tTrsm.split\t" << task->o->name <<"_" << task->id << endl;
+	GData &A =  *task->args->args[0];
+	GData &B =  *task->args->args[1];
+	GData &C =  *task->args->args[2];
+        int xa = A.get_part_countX();
+        int ya = A.get_part_countY();
+        int yb = B.get_part_countY();
+        for(int i=0;i<xa;i++){
+            for(int j=0;j<yb;j++){
+	      TrsmTask<Task<Trsm,P>> *t = new TrsmTask<Task<Trsm,P>>(A(i,i),B(j,i),task);
+                Dispatcher::submit(s,t);
+                for ( int k=i+1;k<ya;k++){
+                    for (int l=0;l<xa;l++){
+		      GemmTask<Task<Trsm,P>> *g = new GemmTask<Task<Trsm,P>>(A(k,i),B(j,i),B(j,l),task);
+                        Dispatcher::submit(s,g);
+                    }
+                }
+            }
+        }
     }
     /*===================================================================================*/
  }// ublas namespace

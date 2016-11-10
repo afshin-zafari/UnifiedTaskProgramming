@@ -10,6 +10,7 @@ namespace ublas{
     /*========================================*/
   template<typename S, typename P>
   void utrsm(S &s,GData &A, GData &B, P *p=nullptr){
+    /*
         int xa = A.get_part_countX();
         int ya = A.get_part_countY();
         int yb = B.get_part_countY();
@@ -25,9 +26,13 @@ namespace ublas{
                 }
             }
         }
+	*/
     }
     void utrsm(GData &A, GData &B){
-      utrsm<UserProgram,RootTask>(prog,A,B);
+      //      utrsm<UserProgram,RootTask>(prog,A,B);
+      TrsmTask<RootTask> *t = new TrsmTask<RootTask>(A,B, nullptr);
+      Trsm::split(prog,t);
+      
     }
     /*========================================*/
  } // namespace ublas

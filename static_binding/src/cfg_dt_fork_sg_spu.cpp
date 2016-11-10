@@ -14,16 +14,13 @@ void test_DT_FORK_SG_SPU(){
     A.set_partition(&P1);
     B.set_partition(&P1);
     C.set_partition(&P1);
+
     utp::ublas::ugemm(A,B,C);
 
-    //utp::DT::ready(utp::ublas::t1); // simulate task ready in DT
-    //utp::SG::ready(utp::ublas::t2); // simulate task ready in SG
 
     cout << "---------------------\n";
 
-    utp::ublas::utrsm(A,B);
-    //utp::DT::ready(utp::ublas::tr1); // simulate task ready in DT
-    //utp::SPU::ready(utp::ublas::tr2); // simulate task ready in SPU
+    //utp::ublas::utrsm(A,B);
 
 }
 

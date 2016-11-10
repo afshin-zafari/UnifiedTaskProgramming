@@ -51,6 +51,7 @@ namespace utp{
 	      cout << "===============================\n";
 	    }
 	    cblas_dgemm(CblasColMajor,TransA,CblasNoTrans,M,N,K,alpha,A,ldA,B,ldB,beta,C,ldC);
+	    cout << M << "," << N << "," << K << "," << A << "," << ldA << "," << B << "," << ldB << "," << C << "," << ldC << endl;
 	    if (dbg)
 	      cout << "-----------\n" ;
 	    Dispatcher::finished(t);
@@ -89,9 +90,22 @@ namespace utp{
 
     /*===================================================================================*/
     template <typename Scheduler,typename P>
-    void Gemm::split(Scheduler &s,Task<Gemm,P> *t){
-        cout << s.name <<"\tGemm.split\t" << t->o->name <<"_" << t->id << endl;
-        ugemm<Scheduler,Gemm>(s,*t->args->args[0],*t->args->args[1],*t->args->args[2],t);
+    void Gemm::split(Scheduler &s,Task<Gemm,P> *task){
+        cout << s.name <<"\tGemm.split\t" << task->o->name <<"_" << task->id << endl;
+	GData &A = *task->args->args[0];
+	GData &B = *task->args->args[1];
+	GData &C = *task->args->args[2];
+	int m = A.get_part_countX();
+	int n = B.get_part_countX();
+	int o = C.get_part_countX();
+	for ( int i=0;i<m;i++){
+	  for (int j=0;j<n;j++){
+	    for (int k=0;k<o;k++){
+	      GemmTask<Task<Gemm,P>> *t = new GemmTask<Task<Gemm,P>>(A(i,k),B(k,j),C(i,j),task);
+	      Dispatcher::submit(s,t);
+	    }
+	  }
+	}
     }
  } // ublas namespace
 } // utp namespace

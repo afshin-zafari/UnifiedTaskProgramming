@@ -24,6 +24,9 @@ namespace utp {
       #ifdef SG_INCLUDED
       utp::SG_Engine = new SuperGlue<utp::SGWOptions>(cmdLine.nt);
       #endif
+      #if DT_INCLUDED && SG_INCLUDEDD
+      Dispatcher::Init();
+      #endif
       
     }
     void utp_finalize(){

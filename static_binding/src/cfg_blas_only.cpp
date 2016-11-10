@@ -24,6 +24,6 @@ void test_BLAS_ONLY(){
     B.print();
     C.print();
     cout << "------------\n";
-    utp::ublas::utrsm(A,B);
+    //utp::ublas::utrsm(A,B);
 }
 

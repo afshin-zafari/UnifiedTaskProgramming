@@ -6,8 +6,25 @@
 
 using namespace std;
 namespace utp{
-class UserProgram{};
+  class UserProgram{
+  public:
+    static string name;
+  };
 extern UserProgram prog;
+  class DispatcherBase  {
+  public:
+    static void Init(){
+      pthread_mutexattr_init   (&parent_task_mutex_attr);
+      pthread_mutexattr_settype(&parent_task_mutex_attr,PTHREAD_MUTEX_RECURSIVE);
+      pthread_mutex_init       (&parent_task_counter_lock,&parent_task_mutex_attr);
+    }
+    static void BeginCriticalSection(){ pthread_mutex_lock  (&parent_task_counter_lock); }
+    static void   EndCriticalSection(){ pthread_mutex_unlock(&parent_task_counter_lock); }
+  private:
+      static pthread_mutex_t 	parent_task_counter_lock;
+  static pthread_mutexattr_t 	parent_task_mutex_attr;  
+
+  };
 
 /*-----------SingleNode ----------------------------------*/
 template < typename T >
@@ -139,33 +156,45 @@ public:
     static   void finished(first &s,Task<T,P>*t){}
     template <typename T,typename P>
     static   void finished(Task<T,P>*t){
-        cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+        cout << "+++++++\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 	E1::Second::finished(t);
+	/*
         if ( t->get_parent() != nullptr){
-	  Atomic::decrease(&t->get_parent()->child_count);
-            if(t->get_parent()->child_count == 0 ){
-                E1::First::finished(t->get_parent());
-            }
+	  DispatcherBase::BeginCriticalSection();
+	  t->get_parent()->child_count--;
+	  bool finished = t->get_parent()->child_count == 0;
+	  if( finished){
+	    E1::First::finished(t->get_parent());
+	  }
+	  DispatcherBase::EndCriticalSection();
         }
+	*/
     }
     template <typename T,typename P>
     static   void finished(second &s,Task<T,P>*t){
-        cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+      cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-	  Atomic::decrease(&t->get_parent()->child_count);
-            if(t->get_parent()->child_count == 0 ){
-                E1::First::finished(t->get_parent());
-            }
+	  DispatcherBase::BeginCriticalSection();
+	  t->get_parent()->child_count--;
+	  bool finished = t->get_parent()->child_count == 0;
+	  if( finished){
+	    cout << "++++ Dis.finished\t" <<  t->get_parent()->o->name << "_" << t->get_parent()->id << endl;
+	    E1::First::finished(t->get_parent());
+	  }
+	  DispatcherBase::EndCriticalSection();
         }
     }
     template <typename T,typename P>
     static   void finished(third &s,Task<T,P>*t){
-        cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+      cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
         if ( t->get_parent() != nullptr){
-	  Atomic::decrease(&t->get_parent()->child_count);
-            if(t->get_parent()->child_count == 0 ){
-                E1::Second::finished(t->get_parent());
-            }
+	  DispatcherBase::BeginCriticalSection();
+	  t->get_parent()->child_count--;
+	  bool finished = t->get_parent()->child_count == 0;
+	  if( finished){
+	    E1::Second::finished(t->get_parent());
+	  }
+	  DispatcherBase::EndCriticalSection();
         }
     }
 };
@@ -287,7 +316,9 @@ typedef EdgeDispatch<Edge<DT,BLAS>> Dispatcher;
 #ifdef DT_SG_BLAS
 typedef Edge<DT,SG>   DT_SG_Edge;
 typedef Edge<SG,BLAS> SG_BLAS_Edge;
-typedef PathDispatch<DT_SG_Edge,SG_BLAS_Edge> Dispatcher;
+typedef PathDispatch<DT_SG_Edge,SG_BLAS_Edge> PathBase;
+  class Dispatcher : public PathBase, public DispatcherBase{};
+
 #endif // DT_SG_BLAS
 #ifdef DT_FORK_SG_SPU
 typedef Edge<SG ,BLAS>   SG_BLAS_Edge;

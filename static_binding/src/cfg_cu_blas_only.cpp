@@ -15,7 +15,7 @@ void test_cuBLAS_ONLY(){
     utp::ublas::ugemm(A,B,C);
 
     cout << "------------\n";
-    utp::ublas::utrsm(A,B);
+    //utp::ublas::utrsm(A,B);
 }
 
 

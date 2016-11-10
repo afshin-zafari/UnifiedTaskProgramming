@@ -11,9 +11,9 @@
 module load gcc/4.9 openmpi/1.8.1 cuda/7.5
 
 set -x
-B1=2
-B2=2
-N=12
+B1=4
+B2=4
+N=32
 M=$N
 timeout=10
 P=1
@@ -27,7 +27,7 @@ app_sb="./bin/utp_sg_blas"
 app_dsb="./bin/utp_dt_sg_blas"
 out="out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
 out2="dsb_out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
-app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T=$timeout >$out"
+app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout >$out"
 mpi_params1="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out"
 mpi_params2="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out2"
 
@@ -51,7 +51,7 @@ mpirun ${mpi_params1} ${app_db} ${app_params}
 echo "========================================================================="
 echo "========================================================================="
 mpirun ${mpi_params2} ${app_dsb} ${app_params}
-
+grep -i "timeout" dsb*.txt*
 
 
 

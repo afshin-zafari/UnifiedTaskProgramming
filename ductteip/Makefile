@@ -25,7 +25,7 @@ LIB =
 LDFLAGS = -Wl,--allow-multiple-definition 
 
 INC_DEBUG = $(INC) 
-CFLAGS_DEBUG = $(CFLAGS) -g 
+CFLAGS_DEBUG = $(CFLAGS) -g -std=c++11
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
@@ -36,7 +36,7 @@ DEP_DEBUG =
 OUT_DEBUG = bin/Debug/libductteip.a
 
 INC_RELEASE = $(INC)
-CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=RELEASE'
+CFLAGS_RELEASE = $(CFLAGS) -O2 -D'BUILD=RELEASE' -std=c++11
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
@@ -48,9 +48,47 @@ OUT_RELEASE = bin/Release/libductteip.a
 
 
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/$(OBJ_OUT)/hostpolicy.o  $(OBJDIR_DEBUG)/$(OBJ_OUT)/procgrid.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/partition.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/network.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/mpi_comm.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/memory_manager.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/mailbox.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/listener.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/glb_context.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/engine.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/ductteip.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/dt_task.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/dt_log.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/dlb.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/distribute.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/data_basic.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/data.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/context.o  $(OBJDIR_DEBUG)/$(OBJ_OUT)/config.o $(OBJDIR_DEBUG)/$(OBJ_OUT)/basic.o
+OBJ_DEBUG  = $(OBJDIR_DEBUG)/$(OBJ_OUT)/hostpolicy.o  
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/procgrid.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/partition.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/network.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/mpi_comm.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/memory_manager.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/mailbox.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/listener.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/glb_context.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/engine.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/ductteip.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/dt_task.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/dt_log.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/dlb.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/distribute.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/data_basic.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/data.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/context.o  
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/config.o 
+OBJ_DEBUG += $(OBJDIR_DEBUG)/$(OBJ_OUT)/basic.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/$(OBJ_OUT)/hostpolicy.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/procgrid.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/partition.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/network.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/mpi_comm.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/memory_manager.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/mailbox.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/listener.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/glb_context.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/engine.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/ductteip.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/dt_task.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/dt_log.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/dlb.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/distribute.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/data_basic.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/data.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/context.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/config.o $(OBJDIR_RELEASE)/$(OBJ_OUT)/basic.o
+OBJ_RELEASE  = $(OBJDIR_RELEASE)/$(OBJ_OUT)/hostpolicy.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/procgrid.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/partition.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/network.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/mpi_comm.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/memory_manager.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/mailbox.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/listener.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/glb_context.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/engine.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/ductteip.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/dt_task.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/dt_log.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/dlb.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/distribute.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/data_basic.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/data.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/context.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/config.o 
+OBJ_RELEASE += $(OBJDIR_RELEASE)/$(OBJ_OUT)/basic.o
 
 all: debug release
 

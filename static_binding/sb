@@ -31,6 +31,7 @@ COMMON +=          utrsm.cpp
 COMMON +=        cmdline.cpp
 COMMON +=        GHandle.cpp
 COMMON +=      utp_basic.cpp
+COMMON +=     dispatcher.cpp
 COMMON +=    mem_manager.cpp
 COMMON +=   GPartitioner.cpp
 

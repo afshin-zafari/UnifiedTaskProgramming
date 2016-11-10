@@ -1,10 +1,8 @@
 #include "dispatcher.hpp"
-#include "sch_superglue.hpp"
 
 namespace utp{
-    template <typename E>
-    void EdgeDispatch<E>::data_created(GData *d){
-        E::First::data_created(d);
-        E::Second::data_created(d);
-    }
+  string UserProgram::name = "MainProgram";
+  pthread_mutex_t 	DispatcherBase::parent_task_counter_lock;
+  pthread_mutexattr_t 	DispatcherBase::parent_task_mutex_attr;  
+
 }
