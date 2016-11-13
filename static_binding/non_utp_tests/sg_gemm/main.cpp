@@ -117,7 +117,7 @@ static double matmul(const int num_threads, const size_t numBlocks) {
     }
     sg.barrier();
     Time::TimeUnit t2= Time::getTime();
-    cout << "getTime: " << (t2-t1)/3.0e9 << endl;
+    cout << "getTime(ms): " << (t2-t1)/3.0e6 << endl;
     return toc();
 }
 

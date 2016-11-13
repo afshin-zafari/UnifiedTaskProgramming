@@ -1,0 +1,82 @@
+CPP = g++
+LD  = g++
+AR  = ar
+
+COMP_FLAGS  = -std=c++11 -DDEBUG=0
+COMP_FLAGS += -Iinclude
+LINK_FLAGS  = -Wl,--allow-multiple-definition  -pthread -lgsl -lgslcblas
+
+SG_DIR = /pica/h1/afshin/sg/superglue
+DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Release/libductteip.a
+
+SG_INC = $(SG_DIR)/include
+DT_INC = $(DT_DIR)/include
+
+SG_COMP_FLAG = -I$(SG_INC) 
+DT_COMP_FLAG = -I$(DT_INC) 
+
+
+all: bo 
+
+clean:
+	rm -f ./obj/* lib/utp_blas_only_rel*
+
+test:
+	$(info $(COMMON))
+	$(info $(APP_TARGET_BO))
+	$(info $(SRC_LIB_BO))
+
+#------------------------------
+COMMON  =          basic.cpp
+COMMON +=          GData.cpp
+COMMON +=          ublas.cpp
+COMMON +=          ugemm.cpp
+COMMON +=          utrsm.cpp
+COMMON +=        cmdline.cpp
+COMMON +=        GHandle.cpp
+COMMON +=      utp_basic.cpp
+COMMON +=     dispatcher.cpp
+COMMON +=    mem_manager.cpp
+COMMON +=   GPartitioner.cpp
+
+#--------- BLAS_ONLY (BO) ---------
+
+SRC_LIB_BO  = $(COMMON)
+SRC_LIB_BO +=       sch_blas.cpp
+
+SRC_APP_BO  = 
+SRC_APP_BO +=  cfg_blas_only.cpp
+SRC_APP_BO += main_BLAS_ONLY.cpp
+
+OBJ_LIB_BO = $(subst .cpp,.o,$(SRC_LIB_BO))
+OBJ_APP_BO = $(subst .cpp,.o,$(SRC_APP_BO))
+
+
+SRCP_LIB_BO = $(addprefix ./src/,$(SRC_LIB_BO))
+OBJP_LIB_BO = $(addprefix ./obj/,$(OBJ_LIB_BO))
+
+SRCP_APP_BO = $(addprefix ./src/,$(SRC_APP_BO))
+OBJP_APP_BO = $(addprefix ./obj/,$(OBJ_APP_BO))
+
+      NAME_BO = utp_blas_only_release
+LIB_TARGET_BO =./lib/lib$(NAME_BO).a
+APP_TARGET_BO =./bin/$(NAME_BO)
+
+$(OBJP_LIB_BO):./obj/%.o: ./src/%.cpp #$(SRCP_LIB_BO)
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) -DBLAS_ONLY
+
+$(OBJP_APP_BO):./obj/%.o : ./src/%.cpp #$(SRCP_APP_BO)
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) -DBLAS_ONLY
+
+$(LIB_TARGET_BO):$(OBJP_LIB_BO)
+	@$(AR) rcsv  $@ $^ 
+
+$(APP_TARGET_BO):$(LIB_TARGET_BO) $(OBJP_APP_BO)
+	@$(info Linking ... to  $(APP_TARGET_BO))
+	@$(LD) -o $@ $(OBJP_APP_BO) -L./lib -l$(NAME_BO)  $(LINK_FLAGS)
+
+bo:$(APP_TARGET_BO)
+

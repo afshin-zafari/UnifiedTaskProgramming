@@ -14,7 +14,9 @@ namespace utp{
         static inline void split(Scheduler &s,Task<Gemm,P> *t);
       template <typename P>
       static inline void run(Task<Gemm,P> *t){
+#if DEBUG != 0 
             cout << "----\tGemm.run\tgemm_"<< t->id << endl;
+#     endif
 	    GData *a = t->args->args[0];
 	    GData *b = t->args->args[1];
 	    GData *c = t->args->args[2];
@@ -35,9 +37,8 @@ namespace utp{
 	    double alpha= 1.0;
 	    auto TransA = CblasNoTrans;
 	    //Order,TransA, TransB, M, N, K, alpha, A, lda, B, ldb, beta, C, ldc)
-	    bool dbg = false;
 
-	    if (dbg) {
+#       if DEBUG != 0 
 	      cout << "-----------\n" <<
 		a->get_name() << "*"  <<
 		b->get_name() << "->" <<
@@ -50,10 +51,14 @@ namespace utp{
 	      b->print();
 	      cout << "===============================\n";
 	    }
+#     endif
+      
 	    cblas_dgemm(CblasColMajor,TransA,CblasNoTrans,M,N,K,alpha,A,ldA,B,ldB,beta,C,ldC);
+      
+#     if DEBUG != 0 
 	    cout << M << "," << N << "," << K << "," << A << "," << ldA << "," << B << "," << ldB << "," << C << "," << ldC << endl;
-	    if (dbg)
-	      cout << "-----------\n" ;
+            cout << "-----------\n" ;
+#     endif
 	    Dispatcher::finished(t);
         }
     };

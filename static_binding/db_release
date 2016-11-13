@@ -1,0 +1,81 @@
+CPP = mpic++
+LD  = mpic++
+AR  = ar
+
+COMP_FLAGS  = -std=c++11  -DDEBUG=0
+COMP_FLAGS += -Iinclude
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
+
+SG_DIR = /pica/h1/afshin/sg/superglue
+DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+
+DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Release
+
+SG_INC = $(SG_DIR)/include
+DT_INC = $(DT_DIR)/include
+
+SG_COMP_FLAGS = -I$(SG_INC)
+DT_COMP_FLAGS = -I$(DT_INC) $(SG_COMP_FLAGS)
+ DT_LIB_FLAGS = -L$(DT_LIB) -lductteip
+
+
+all: db
+
+cleandb:
+	rm -f $(OBJP_LIB_DB) $(OBJP_APP_DB) $(APP_TARGET_DB) $(LIB_TARGET_DB)
+
+#------------------------------
+COMMON  =          basic.cpp
+COMMON +=          ublas.cpp
+COMMON +=          ugemm.cpp
+COMMON +=          utrsm.cpp
+COMMON +=          GData.cpp
+COMMON +=        cmdline.cpp
+COMMON +=        GHandle.cpp
+COMMON +=      utp_basic.cpp
+COMMON +=     dispatcher.cpp
+COMMON +=    mem_manager.cpp
+COMMON +=   GPartitioner.cpp
+
+
+#--------- DT_BLAS ---------
+SRC_LIB_DB  = $(COMMON) 
+SRC_LIB_DB +=      sch_blas.cpp
+SRC_LIB_DB +=  sch_ductteip.cpp
+
+
+SRC_APP_DB  = 
+SRC_APP_DB +=  cfg_dt_blas.cpp
+SRC_APP_DB += main_DT_BLAS.cpp
+
+OBJ_LIB_DB = $(subst .cpp,.o,$(SRC_LIB_DB))
+OBJ_APP_DB = $(subst .cpp,.o,$(SRC_APP_DB))
+
+
+SRCP_LIB_DB = $(addprefix ./src/,$(SRC_LIB_DB))
+OBJP_LIB_DB = $(addprefix ./obj/,$(OBJ_LIB_DB))
+
+SRCP_APP_DB = $(addprefix ./src/,$(SRC_APP_DB))
+OBJP_APP_DB = $(addprefix ./obj/,$(OBJ_APP_DB))
+
+      NAME_DB = utp_dt_blas_release
+LIB_TARGET_DB =./lib/lib$(NAME_DB).a
+APP_TARGET_DB =./bin/$(NAME_DB)
+
+$(OBJP_LIB_DB):./obj/%.o: ./src/%.cpp 
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_BLAS -DDT_INCLUDED
+
+$(OBJP_APP_DB):./obj/%.o : ./src/%.cpp 
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_BLAS -DDT_INCLUDED
+
+$(LIB_TARGET_DB):$(OBJP_LIB_DB)
+	@$(AR) rcsv  $@ $^ 
+
+$(APP_TARGET_DB):$(LIB_TARGET_DB) $(OBJP_APP_DB)
+	@$(info Linking ... to  $(APP_TARGET_DB))
+	@$(LD) -o $@ $(OBJP_APP_DB) -L./lib -l$(NAME_DB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
+
+db:$(APP_TARGET_DB)
+

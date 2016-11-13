@@ -10,21 +10,7 @@ namespace utp{
   public:
     static string name;
   };
-extern UserProgram prog;
-  class DispatcherBase  {
-  public:
-    static void Init(){
-      pthread_mutexattr_init   (&parent_task_mutex_attr);
-      pthread_mutexattr_settype(&parent_task_mutex_attr,PTHREAD_MUTEX_RECURSIVE);
-      pthread_mutex_init       (&parent_task_counter_lock,&parent_task_mutex_attr);
-    }
-    static void BeginCriticalSection(){ pthread_mutex_lock  (&parent_task_counter_lock); }
-    static void   EndCriticalSection(){ pthread_mutex_unlock(&parent_task_counter_lock); }
-  private:
-      static pthread_mutex_t 	parent_task_counter_lock;
-  static pthread_mutexattr_t 	parent_task_mutex_attr;  
-
-  };
+  extern UserProgram prog;
 
 /*-----------SingleNode ----------------------------------*/
 template < typename T >
@@ -39,26 +25,37 @@ public:
     typedef typename SingleNode<typename E::First>::First first;
     template <typename T,typename P>
     static   void submit(UserProgram &, Task<T,P>*t){
+#     if DEBUG!=0
         cout << "Prog\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         E::First::submit(t);
     }
     template <typename T,typename P>
     static   void submit( Task<T,P>*t){
+#     if DEBUG!=0
         cout << "----\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
+	
         E::First::submit(t);
     }
     template <typename T,typename P>
     static   void ready(first &f,Task<T,P>*t){
+#     if DEBUG!=0
         cout <<  f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
         t->o->split(f,t);
     }
     template <typename T,typename P>
     static   void finished(Task<T,P>*t){
+#     if DEBUG!=0
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
     }
     template <typename T,typename P>
     static   void finished(first &f,Task<T,P>*t){
+#     if DEBUG!=0
       cout << f.name << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
     }
 
 };
@@ -79,22 +76,30 @@ public:
     typedef typename Edge<typename E::First, typename E::Second>::Second second;
     template <typename T,typename P>
     static   void submit(UserProgram &, Task<T,P>*t){
+#     if DEBUG!=0
         cout << "Prog\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         E::First::submit(t);
     }
     template <typename T,typename P>
     static   void submit( Task<T,P>*t){
+#     if DEBUG!=0
         cout << "----\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         E::First::submit(t);
     }
     template <typename T,typename P>
     static   void submit(first &f, Task<T,P>*t){
+#     if DEBUG!=0
         cout << f.name << "\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         E::Second::submit(t);
     }
     template <typename T,typename P>
     static   void ready(first &f,Task<T,P>*t){
+#     if DEBUG!=0
         cout <<  f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
         t->o->run(t);
     }
     template <typename T,typename P>
@@ -107,7 +112,9 @@ public:
 
     template <typename T,typename P>
     static   void finished(second &s,Task<T,P>*t){
+#     if DEBUG!=0
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
         if ( t->get_parent() != nullptr){
 	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
@@ -127,7 +134,9 @@ public:
 
     template <typename T,typename P>
     static   void submit(UserProgram &, Task<T,P>*t){
+#     if DEBUG!=0
         cout << "PROG\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         E1::First::submit(t);
     }
     template <typename T,typename P>
@@ -144,58 +153,59 @@ public:
     }
     template <typename T,typename P>
     static   void ready(first &f,Task<T,P>*t){
+#     if DEBUG!=0
         cout << f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
+#     endif
         t->o->split(f,t);
     }
     template <typename T,typename P>
     static   void ready(second &s,Task<T,P>*t){
+#     if DEBUG!=0
         cout << s.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
+#     endif
         t->o->run(t);
     }
     template <typename T,typename P>
     static   void finished(first &s,Task<T,P>*t){}
     template <typename T,typename P>
     static   void finished(Task<T,P>*t){
+#     if DEBUG!=0
         cout << "+++++++\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
 	E1::Second::finished(t);
-	/*
-        if ( t->get_parent() != nullptr){
-	  DispatcherBase::BeginCriticalSection();
-	  t->get_parent()->child_count--;
-	  bool finished = t->get_parent()->child_count == 0;
-	  if( finished){
-	    E1::First::finished(t->get_parent());
-	  }
-	  DispatcherBase::EndCriticalSection();
-        }
-	*/
     }
     template <typename T,typename P>
     static   void finished(second &s,Task<T,P>*t){
       cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
-        if ( t->get_parent() != nullptr){
-	  DispatcherBase::BeginCriticalSection();
-	  t->get_parent()->child_count--;
-	  bool finished = t->get_parent()->child_count == 0;
+      P *p = t->get_parent();
+        if ( p != nullptr){
+	  p->BeginCriticalSection();
+	  p->child_count--;
+	  bool finished = p->child_count == 0;
 	  if( finished){
-	    cout << "++++ Dis.finished\t" <<  t->get_parent()->o->name << "_" << t->get_parent()->id << endl;
-	    E1::First::finished(t->get_parent());
+#     if DEBUG!=0
+	    cout << "++++ Dis.finished\t" <<  p->o->name << "_" << p->id << endl;
+#     endif
+	    E1::First::finished(p);
 	  }
-	  DispatcherBase::EndCriticalSection();
+	  p->EndCriticalSection();
         }
     }
     template <typename T,typename P>
     static   void finished(third &s,Task<T,P>*t){
+#     if DEBUG!=0
       cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
-        if ( t->get_parent() != nullptr){
-	  DispatcherBase::BeginCriticalSection();
-	  t->get_parent()->child_count--;
-	  bool finished = t->get_parent()->child_count == 0;
-	  if( finished){
-	    E1::Second::finished(t->get_parent());
-	  }
-	  DispatcherBase::EndCriticalSection();
-        }
+#     endif
+      P *p = t->get_parent();
+      if ( p != nullptr){
+	p->BeginCriticalSection();
+	p->child_count--;
+	bool finished = p->child_count == 0;
+	if(finished){
+	  E1::Second::finished(p);
+	}
+	p->EndCriticalSection();
+      }
     }
 };
 /*--------Fork -------------------------------------*/
@@ -222,12 +232,16 @@ public:
 
     template <typename T,typename P>
     static   void submit(UserProgram &, Task<T,P>*t){
+#     if DEBUG!=0
         cout << "Prog\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         F::First::submit(t);
     }
     template <typename T,typename P>
     static   void submit( Task<T,P>*t){
+#     if DEBUG!=0
         cout << "----\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         F::First::submit(t);
     }
     template <typename T,typename P>
@@ -245,17 +259,23 @@ public:
     }
     template <typename T,typename P>
     static   void ready(first &f,Task<T,P>*t){
+#     if DEBUG!=0
         cout << f.name << "\t Dis.ready\t" << t->o->name << "_" << t->id << endl;
+#     endif
         t->o->split(f,t);
     }
     template <typename T,typename P>
     static   void ready(second &s,Task<T,P>*t){
+#     if DEBUG!=0
         cout << s.name << "\t Dis.ready\t" << t->o->name << "_" << t->id << endl;
+#     endif
         t->o->split(s,t);
     }
     template <typename T,typename P>
     static   void ready(third &trd,Task<T,P>*t){
+#     if DEBUG!=0
         cout << trd.name << "\t Dis.ready\t" << t->o->name << "_" << t->id << endl;
+#     endif
         t->o->split(trd,t);
     }
     template <typename T,typename P>
@@ -263,7 +283,9 @@ public:
 
     template <typename T,typename P>
     static   void finished(second &s,Task<T,P>*t){
+#     if DEBUG!=0
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
         if ( t->get_parent() != nullptr){
 	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
@@ -273,7 +295,9 @@ public:
     }
     template <typename T,typename P>
     static   void finished(third &s,Task<T,P>*t){
+#     if DEBUG!=0
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
         if ( t->get_parent() != nullptr){
 	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
@@ -283,7 +307,9 @@ public:
     }
     template <typename T,typename P>
     static   void finished(forth &frth,Task<T,P>*t){
+#     if DEBUG!=0
         cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
         if ( t->get_parent() != nullptr){
 	  Atomic::decrease(&t->get_parent()->child_count);
             if(t->get_parent()->child_count == 0 ){
@@ -316,9 +342,7 @@ typedef EdgeDispatch<Edge<DT,BLAS>> Dispatcher;
 #ifdef DT_SG_BLAS
 typedef Edge<DT,SG>   DT_SG_Edge;
 typedef Edge<SG,BLAS> SG_BLAS_Edge;
-typedef PathDispatch<DT_SG_Edge,SG_BLAS_Edge> PathBase;
-  class Dispatcher : public PathBase, public DispatcherBase{};
-
+typedef PathDispatch<DT_SG_Edge,SG_BLAS_Edge> Dispatcher;
 #endif // DT_SG_BLAS
 #ifdef DT_FORK_SG_SPU
 typedef Edge<SG ,BLAS>   SG_BLAS_Edge;

@@ -1,0 +1,77 @@
+CPP = g++
+LD  = g++
+AR  = ar
+
+COMP_FLAGS  = -std=c++11  -g 
+COMP_FLAGS += -Iinclude
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
+
+SG_DIR = /pica/h1/afshin/sg/superglue
+DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+DT_LIB = $(DT_DIR)/lib
+
+SG_INC = $(SG_DIR)/include
+DT_INC = $(DT_DIR)/include
+
+SG_COMP_FLAGS = -I$(SG_INC)
+DT_COMP_FLAGS = -I$(DT_INC) 
+ DT_LIB_FLAGS = -L$(DT_LIB) -lductteip
+
+all: sb
+
+cleansb:
+	rm -f $(OBJP_LIB_SB) $(OBJP_APP_SB) $(APP_TARGET_SB) $(LIB_TARGET_SB)
+
+#------------------------------
+COMMON  =          basic.cpp
+COMMON +=          GData.cpp
+COMMON +=          ublas.cpp
+COMMON +=          ugemm.cpp
+COMMON +=          utrsm.cpp
+COMMON +=        cmdline.cpp
+COMMON +=        GHandle.cpp
+COMMON +=      utp_basic.cpp
+COMMON +=     dispatcher.cpp
+COMMON +=    mem_manager.cpp
+COMMON +=   GPartitioner.cpp
+
+#--------- SG BLAS (SB)---------
+SRC_LIB_SB = $(COMMON)
+SRC_LIB_SB +=       sch_blas.cpp
+SRC_LIB_SB +=  sch_superglue.cpp
+
+SRC_APP_SB  =
+SRC_APP_SB +=  cfg_sg_blas.cpp
+SRC_APP_SB += main_SG_BLAS.cpp
+
+OBJ_LIB_SB = $(subst .cpp,.o,$(SRC_LIB_SB))
+OBJ_APP_SB = $(subst .cpp,.o,$(SRC_APP_SB))
+
+
+SRCP_LIB_SB = $(addprefix ./src/,$(SRC_LIB_SB))
+OBJP_LIB_SB = $(addprefix ./obj/,$(OBJ_LIB_SB))
+
+SRCP_APP_SB = $(addprefix ./src/,$(SRC_APP_SB))
+OBJP_APP_SB = $(addprefix ./obj/,$(OBJ_APP_SB))
+
+      NAME_SB = utp_sg_blas_release
+LIB_TARGET_SB =./lib/lib$(NAME_SB).a
+APP_TARGET_SB =./bin/$(NAME_SB)
+
+$(OBJP_LIB_SB):./obj/%.o: ./src/%.cpp #$(SRCP_LIB_SB)
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(SG_COMP_FLAGS) -DSG_BLAS -DSG_INCLUDED
+
+$(OBJP_APP_SB):./obj/%.o : ./src/%.cpp #$(SRCP_APP_SB)
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(SG_COMP_FLAGS) -DSG_BLAS -DSG_INCLUDED
+
+$(LIB_TARGET_SB):$(OBJP_LIB_SB)
+	@$(AR) rcsv  $@ $^ 
+
+$(APP_TARGET_SB):$(LIB_TARGET_SB) $(OBJP_APP_SB)
+	@$(info Linking ... to  $(APP_TARGET_SB))
+	@$(LD) -o $@ $(OBJP_APP_SB) -L./lib -l$(NAME_SB)  $(LINK_FLAGS) -pthread
+
+sb:$(APP_TARGET_SB)
+

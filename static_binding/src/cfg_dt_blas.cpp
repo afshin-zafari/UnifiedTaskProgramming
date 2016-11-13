@@ -5,9 +5,4 @@
 
 void test_DT_BLAS(utp::GData &A,utp::GData &B,utp::GData &C){
     utp::ublas::ugemm(A,B,C);
-
-
-    std::cout << "------------\n";
-    //utp::ublas::utrsm(A,B);
-    
 }

@@ -1,5 +1,6 @@
 #include <sys/time.h>
-typedef unsigned long TimeUnit;
+//typedef unsigned long TimeUnit;
+typedef double TimeUnit;
 
 TimeUnit UserTime() {
   timeval tv;

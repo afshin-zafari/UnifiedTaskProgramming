@@ -1,0 +1,4 @@
+@stats Msg Sizes D,T,L: 524480,150,64
+execution time in ms (DT + BLAS without UUTP): 7.205
+[****] Time = 11384861254.000000, N = 1024 , NB= 4 , nb= 2 , p= 2, q = 1, gf= 0.000000
+Result is correct

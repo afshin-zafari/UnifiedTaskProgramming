@@ -15,20 +15,23 @@ public:
     SPU():name("SPU"){}
     template <typename T,typename P>
     static inline void ready(Task<T,P> *t){
+#     if DEBUG != 0
         cout << "----\t SPU.ready\t" << t->o->name << "_" << t->id << endl;
+#     endif
         utp::Dispatcher::ready(_spu,t);
     }
     template<typename T,typename P>
     static inline int submit(Task<T,P>*t){
+#     if DEBUG != 0
         cout << "----\t SPU.submit\t" << t->o->name << "_" << t->id << endl;
-        if ( t->id %2==1)
-            return 0;
-        cout << "----\t SPU.submit\t" << t->o->name << "_" << t->id << endl;
+#     endif
         return 1;
     }
     template <typename T,typename P>
     static inline void finished(Task<T,P> *t){
+#     if DEBUG != 0
         std::cout << "----\t SPU.finished\t" << t->o->name << "_" << t->id << endl;
+#     endif
         utp::Dispatcher::finished(_spu,t);
     }
 

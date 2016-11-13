@@ -3,6 +3,13 @@
 #include <vector>
 #include <cassert>
 
+#if DEBUG != 0
+#define PRINTF(x,y...) printf(x,##y);
+#else
+#define PRINTF(x,y...)
+#endif
+
+
 
 namespace utp{
 

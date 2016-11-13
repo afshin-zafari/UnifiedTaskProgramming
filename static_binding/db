@@ -2,20 +2,20 @@ CPP = mpic++
 LD  = mpic++
 AR  = ar
 
-COMP_FLAGS  = -std=c++11 -g
+COMP_FLAGS  = -std=c++11  -g
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--allow-multiple-definition -lgsl -lgslcblas
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
 SG_DIR = /pica/h1/afshin/sg/superglue
 DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Debug/libductteip.a
+DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Debug
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include
 
-SG_COMP_FLAGS = -I$(SG_INC) -pthread
+SG_COMP_FLAGS = -I$(SG_INC)
 DT_COMP_FLAGS = -I$(DT_INC) $(SG_COMP_FLAGS)
- DT_LIB_FLAGS = -L/pica/h1/afshin/Damavand/D3/ductteip/bin/Debug -lductteip
+ DT_LIB_FLAGS = -L$(DT_LIB) -lductteip
 
 
 all: db

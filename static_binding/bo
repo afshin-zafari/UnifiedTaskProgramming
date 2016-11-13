@@ -4,7 +4,7 @@ AR  = ar
 
 COMP_FLAGS  = -std=c++11 -g
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--allow-multiple-definition  -lgsl -lgslcblas
+LINK_FLAGS  = -Wl,--allow-multiple-definition  -pthread -lgsl -lgslcblas
 
 SG_DIR = /pica/h1/afshin/sg/superglue
 DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
@@ -13,7 +13,7 @@ DT_LIB = $(DT_DIR)/lib/libductteip.a
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include
 
-SG_COMP_FLAG = -I$(SG_INC) -pthread
+SG_COMP_FLAG = -I$(SG_INC) 
 DT_COMP_FLAG = -I$(DT_INC) 
 
 

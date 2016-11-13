@@ -31,8 +31,6 @@
 //#define DLB_MODE 0
 #define POST_RECV_DATA 0
 
-#define DEBUG 0
-
 
 #define DUMP_FLAG DEBUG
 #define EXPORT_FLAG 0
@@ -88,6 +86,7 @@ typedef unsigned char byte;
 
 
 
+
 #define LOG_ERROR(p,args...) fprintf(stderr,p , ##args )
 
 
@@ -119,7 +118,7 @@ struct MessageBuffer{
 #ifdef CLUSTER_DEV
 typedef unsigned long ClockTimeUnit;
 #ifdef MPI_WALL_TIME
-typedef unsigned long TimeUnit;
+typedef double  TimeUnit;
 static inline TimeUnit getTime(){
   double ti=MPI_Wtick()/1000;
 
@@ -133,7 +132,8 @@ static inline TimeUnit getTime(){
 #endif
 #endif // CLUSTER_DEV
 #ifndef CLUSTER_DEV
-typedef unsigned long TimeUnit;
+//typedef unsigned long TimeUnit;
+typedef double TimeUnit;
 typedef unsigned long ClockTimeUnit;
 #endif // CLUSTER_DEV
 
@@ -162,6 +162,7 @@ void paste(byte * b,int &o,T *a){
   memcpy((char *)a,b+o,sizeof(T));
   o +=  sizeof(T);
 }
+
 
 
 

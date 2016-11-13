@@ -113,16 +113,15 @@ void GData::set_partition(GPartitioner *P)
 	 << "_" << setw(2) << setfill('0') << py
 	 << "_" << setw(2) << setfill('0') << px;
       string ch_name = os.str();
-      printf("Child data :%s of %dx%d at blk(%d,%d) is being created.\n",ch_name.c_str(),m,n,py,px);
+      PRINTF("Child data :%s of %dx%d at blk(%d,%d) is being created.\n",ch_name.c_str(),m,n,py,px);
       children[i] = new GData(m,n,ch_name,this,i);
     }
-    //Dispatcher *dis = get_dispatcher();    if ( dis != nullptr)        dis->data_partitioned(this);
     BroadCast::data_partitioned(this);
     GPartitioner *next_p=partitioner->get_next();
     if ( next_p != nullptr)
       for(int i=0; i<child_cnt; i++)
 	{
-	  printf("Cascade partition to %s with %dx%d\n",children[i]->get_name().c_str(),next_p->y,next_p->x);
+	  PRINTF("Cascade partition to %s with %dx%d\n",children[i]->get_name().c_str(),next_p->y,next_p->x);
 	  children[i]->set_partition(next_p);
 	}
 }
@@ -220,30 +219,33 @@ void GData::fill_with(double v)
 /*=====================================================================*/
 void GData::print()
 {
-  if ( M > 15 ) return;
-  double *d = (double*)content;
-  if ( d != nullptr){
-    int py,px,by;
-    if ( partitioner ){
-      py = M/partitioner->y;
-      px = N/partitioner->x;
-      by = partitioner->y;
-    }
-    else {
-      py = M;
-      px = N;
-      by = 1;
-    }
-    for ( int i=0;i<M;i++){
-      for ( int j=0;j<N;j++){
-	int ii=i/py;
-	int jj=j/px;
-	printf("%+02.2lf ",d[jj*py*px*by+ii*py*px+(j%px)*py+i%py]);
+  if ( M<16 ) {
+    double *d = (double*)content;
+    if ( d != nullptr){
+      int py,px,by;
+      if ( partitioner ){
+	py = M/partitioner->y;
+	px = N/partitioner->x;
+	by = partitioner->y;
       }
-      printf("\n");
+      else {
+	py = M;
+	px = N;
+	by = 1;
+      }
+      for ( int i=0;i<M;i++){
+	for ( int j=0;j<N;j++){
+	  int ii=i/py;
+	  int jj=j/px;
+	  printf("%+02.2lf ",d[jj*py*px*by+ii*py*px+(j%px)*py+i%py]);
+	}
+	printf("\n");
+      }
     }
   }
-  printf("%s,child cnt :%d\n",get_name().c_str(),child_cnt);
+  
+  if (child_cnt)
+    printf("%s,child cnt :%d\n",get_name().c_str(),child_cnt);
   for ( int i=0;i<child_cnt;i++){
     if ( children[i] != nullptr)
       children[i]->print();

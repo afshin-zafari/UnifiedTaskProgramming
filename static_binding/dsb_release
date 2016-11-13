@@ -1,0 +1,82 @@
+CPP = mpic++
+LD  = mpic++
+AR  = ar
+
+COMP_FLAGS  = -std=c++11  -DDEBUG=0
+COMP_FLAGS += -Iinclude
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
+
+SG_DIR = /pica/h1/afshin/sg/superglue
+DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Release
+
+SG_INC = $(SG_DIR)/include
+DT_INC = $(DT_DIR)/include
+
+SG_COMP_FLAGS = -I$(SG_INC)
+DT_COMP_FLAGS = -I$(DT_INC) $(SG_COMP_FLAGS)
+ DT_LIB_FLAGS = -L$(DT_LIB) -lductteip
+
+
+all: dsb
+
+cleandsb:
+	rm -f $(OBJP_LIB_DSB) $(OBJP_APP_DSB) $(APP_TARGET_DSB) $(LIB_TARGET_DSB)
+
+#------------------------------
+COMMON  =          basic.cpp
+COMMON +=          ublas.cpp
+COMMON +=          ugemm.cpp
+COMMON +=          utrsm.cpp
+COMMON +=          GData.cpp
+COMMON +=        cmdline.cpp
+COMMON +=        GHandle.cpp
+COMMON +=      utp_basic.cpp
+COMMON +=     dispatcher.cpp
+COMMON +=    mem_manager.cpp
+COMMON +=   GPartitioner.cpp
+
+
+#--------- DT SG BLAS ---------
+SRC_LIB_DSB  = $(COMMON) 
+SRC_LIB_DSB +=       sch_blas.cpp
+SRC_LIB_DSB +=   sch_ductteip.cpp
+SRC_LIB_DSB +=  sch_superglue.cpp
+
+SRC_APP_DSB  =
+SRC_APP_DSB +=  cfg_dt_sg_blas.cpp
+SRC_APP_DSB += main_DT_SG_BLAS.cpp
+
+
+OBJ_LIB_DSB = $(subst .cpp,.o,$(SRC_LIB_DSB))
+OBJ_APP_DSB = $(subst .cpp,.o,$(SRC_APP_DSB))
+
+
+SRCP_LIB_DSB = $(addprefix ./src/,$(SRC_LIB_DSB))
+OBJP_LIB_DSB = $(addprefix ./obj/,$(OBJ_LIB_DSB))
+
+SRCP_APP_DSB = $(addprefix ./src/,$(SRC_APP_DSB))
+OBJP_APP_DSB = $(addprefix ./obj/,$(OBJ_APP_DSB))
+
+      NAME_DSB = utp_dt_sg_blas_release
+LIB_TARGET_DSB =./lib/lib$(NAME_DSB).a
+APP_TARGET_DSB =./bin/$(NAME_DSB)
+
+$(OBJP_LIB_DSB):./obj/%.o: ./src/%.cpp 
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+
+$(OBJP_APP_DSB):./obj/%.o : ./src/%.cpp 
+	@$(info $(notdir $<) )
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+
+$(LIB_TARGET_DSB):$(OBJP_LIB_DSB)
+	@$(AR) rcsv  $@ $^ 
+
+$(APP_TARGET_DSB):$(LIB_TARGET_DSB) $(OBJP_APP_DSB)
+	@$(info Linking ... to  $(APP_TARGET_DSB))
+	@$(LD) -o $@ $(OBJP_APP_DSB) -L./lib -l$(NAME_DSB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
+
+dsb:$(APP_TARGET_DSB)
+	@$(info creating $(APP_TARGET_DSB))
+

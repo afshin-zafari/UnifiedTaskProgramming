@@ -36,7 +36,12 @@ int main(int argc, char *argv[])
     A.print();
     B.print();
     C.print();
-
+    double *c = (double *)C.get_memory();
+    double sum = 0.0;
+    for(int i=0;i<N*N;i++){
+      sum += c[i];
+    }
+    cout << " sum of C: " <<sum << endl;
     return 0;
 }
 

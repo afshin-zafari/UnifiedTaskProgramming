@@ -4,7 +4,7 @@
 #include "utp.hpp"
 #include "sch_blas.hpp"
 
-void test_BLAS_ONLY();
+void test_BLAS_ONLY(utp::GData &,utp::GData &, utp::GData &);
 
 
 #endif // CFG_BLAS_ONLY_HPP
