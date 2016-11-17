@@ -2,7 +2,7 @@ CPP = g++
 LD  = g++
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -g 
+COMP_FLAGS  = -std=c++11  -DDEBUG=0 
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
@@ -23,8 +23,7 @@ cleansb:
 	rm -f $(OBJP_LIB_SB) $(OBJP_APP_SB) $(APP_TARGET_SB) $(LIB_TARGET_SB)
 
 #------------------------------
-COMMON  =          basic.cpp
-COMMON +=          GData.cpp
+COMMON  =          GData.cpp
 COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp

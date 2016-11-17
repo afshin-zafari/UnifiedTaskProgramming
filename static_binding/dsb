@@ -24,8 +24,7 @@ cleandsb:
 	rm -f $(OBJP_LIB_DSB) $(OBJP_APP_DSB) $(APP_TARGET_DSB) $(LIB_TARGET_DSB)
 
 #------------------------------
-COMMON  =          basic.cpp
-COMMON +=          ublas.cpp
+COMMON  =          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
 COMMON +=          GData.cpp

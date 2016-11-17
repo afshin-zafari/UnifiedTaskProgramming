@@ -1,5 +1,5 @@
 #include "GPartitioner.hpp"
-#include "basic.hpp"
+#include "utp_basic.hpp"
 #include "dispatcher.hpp"
 #include "brdcast.hpp"
 namespace utp{
@@ -60,24 +60,24 @@ int GPartitioner::get_key(){
 void GPartitioner::serialize(byte *buf,int &ofs)
 {
     decltype(key) invalid=-1;
-    copy(buf,ofs,key);
-    copy(buf,ofs,x);
-    copy(buf,ofs,y);
+    utp::copy(buf,ofs,key);
+    utp::copy(buf,ofs,x);
+    utp::copy(buf,ofs,y);
     if ( next == nullptr){
-        copy(buf,ofs,invalid);
+        utp::copy(buf,ofs,invalid);
     }
     else{
         decltype(key) k= next->get_key();
-        copy(buf,ofs,k);
+        utp::copy(buf,ofs,k);
     }
 }
 /*-------------------------------------------------------------*/
 void GPartitioner::deserialize(byte *buf,int &ofs){
     decltype(key) k;
-    paste(buf,ofs,&key);
-    paste(buf,ofs,&x);
-    paste(buf,ofs,&y);
-    paste(buf,ofs,&k);
+    utp::paste(buf,ofs,&key);
+    utp::paste(buf,ofs,&x);
+    utp::paste(buf,ofs,&y);
+    utp::paste(buf,ofs,&k);
     if (k)
         next = (*part_list)[k];
     else
@@ -94,7 +94,7 @@ void GPartitioner::set_for_ownership(bool f){ownership = f;}
 GPartitioner * DeserializePartitioner(byte *buf,int &ofs)
 {
     int k;
-    paste(buf,ofs,&k);
+    utp::paste(buf,ofs,&k);
     if (k>=0 && (unsigned)k<part_list->size())
         return (*part_list)[k];
     return nullptr;
@@ -102,9 +102,9 @@ GPartitioner * DeserializePartitioner(byte *buf,int &ofs)
 GPartitioner * CreatePartition(byte * buf,int &ofs)
 {
     int y,x,k;
-    paste(buf,ofs,&k);
-    paste(buf,ofs,&y);
-    paste(buf,ofs,&x);
+    utp::paste(buf,ofs,&k);
+    utp::paste(buf,ofs,&y);
+    utp::paste(buf,ofs,&x);
     GPartitioner *p = new GPartitioner(y,x);
     assert(k == p->get_key());
     return p;

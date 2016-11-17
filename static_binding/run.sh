@@ -1,5 +1,3 @@
-
-
 #!/bin/bash
 
 #SBATCH -A p2009014
@@ -13,7 +11,7 @@
 module load gcc/4.9 openmpi/1.8.1 cuda/7.5
 
 set -x
-B1=8
+B1=4
 B2=2
 N=128
 M=$N
@@ -21,7 +19,7 @@ timeout=100
 P=2
 p=2
 q=1
-ipn=4
+ipn=2
 nt=2
 app_bo="./bin/utp_blas_only$1"
 app_db="./bin/utp_dt_blas$1"
@@ -53,7 +51,7 @@ mpirun ${mpi_params1} ${app_db} ${app_params}
 echo "========================================================================="
 echo "========================================================================="
 mpirun ${mpi_params2} ${app_dsb} ${app_params}
-grep -i "error" dsb*.txt*
+#grep -i "error" dsb*.txt*
 
 
 

@@ -1,5 +1,5 @@
 #include "GHandle.hpp"
-#include "basic.hpp"
+#include "utp_basic.hpp"
 #include <string>
 #include <stdint.h>
 GHandleKey GHandle::lastKey=0;
@@ -32,11 +32,11 @@ GHandleKey GHandle::get_key()
 }
 void GHandle::serialize(byte *buf, int &ofs)
 {
-    copy(buf,ofs,key);
+  utp::copy(buf,ofs,key);
 }
 void GHandle::deserialize(byte *buf, int &ofs)
 {
-    paste(buf,ofs,&key);
+  utp::paste(buf,ofs,&key);
 }
 GHandle::operator std::string() const
 {

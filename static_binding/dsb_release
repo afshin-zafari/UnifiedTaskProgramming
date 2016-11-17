@@ -24,8 +24,7 @@ cleandsb:
 	rm -f $(OBJP_LIB_DSB) $(OBJP_APP_DSB) $(APP_TARGET_DSB) $(LIB_TARGET_DSB)
 
 #------------------------------
-COMMON  =          basic.cpp
-COMMON +=          ublas.cpp
+COMMON  =          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
 COMMON +=          GData.cpp
@@ -64,11 +63,11 @@ APP_TARGET_DSB =./bin/$(NAME_DSB)
 
 $(OBJP_LIB_DSB):./obj/%.o: ./src/%.cpp 
 	@$(info $(notdir $<) )
-	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
 
 $(OBJP_APP_DSB):./obj/%.o : ./src/%.cpp 
 	@$(info $(notdir $<) )
-	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
 
 $(LIB_TARGET_DSB):$(OBJP_LIB_DSB)
 	@$(AR) rcsv  $@ $^ 

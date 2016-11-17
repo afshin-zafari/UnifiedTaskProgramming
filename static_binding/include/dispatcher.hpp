@@ -176,7 +176,9 @@ public:
     }
     template <typename T,typename P>
     static   void finished(second &s,Task<T,P>*t){
-      cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     if DEBUG!=0
+        cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
       P *p = t->get_parent();
         if ( p != nullptr){
 	  p->BeginCriticalSection();

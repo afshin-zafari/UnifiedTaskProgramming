@@ -4,7 +4,7 @@ typedef double TimeUnit;
 
 TimeUnit UserTime() {
   timeval tv;
-  long unit=1000000;
+  TimeUnit  unit=1000000.0;
   gettimeofday(&tv, 0);
-  return (tv.tv_sec*unit+tv.tv_usec/unit);
+  return (tv.tv_sec*unit+tv.tv_usec);
 }

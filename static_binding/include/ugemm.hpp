@@ -96,7 +96,10 @@ namespace utp{
     /*===================================================================================*/
     template <typename Scheduler,typename P>
     void Gemm::split(Scheduler &s,Task<Gemm,P> *task){
+
+#if DEBBUG !=0 
         cout << s.name <<"\tGemm.split\t" << task->o->name <<"_" << task->id << endl;
+#endif
 	GData &A = *task->args->args[0];
 	GData &B = *task->args->args[1];
 	GData &C = *task->args->args[2];

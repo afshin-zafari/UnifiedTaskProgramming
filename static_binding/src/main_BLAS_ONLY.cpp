@@ -1,6 +1,6 @@
 #include <iostream>
 #include "utp.hpp"
-#include "basic.hpp"
+//#include "basic.hpp"
 #include "cmdline.hpp"
 using namespace std;
 
@@ -24,11 +24,11 @@ int main(int argc, char *argv[])
     A.fill_rows_with(1,10);
     B.fill_rows_with(10,10);
     C.fill_with(0);
-    TimeUnit start = UserTime();
+    utp::TimeUnit start = utp::UserTime();
     test_BLAS_ONLY(A,B,C);
 
     utp::utp_finalize();
-    TimeUnit end = UserTime();
+    utp::TimeUnit end = utp::UserTime();
     cout << "Finished\n";
     cout << "executione time in ms (BLAS ONLY with UTP)" << (end-start)/1000.0<< endl;
     A.print();

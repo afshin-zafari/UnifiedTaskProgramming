@@ -1,5 +1,7 @@
 #include "utp_basic.hpp"
 #include "cmdline.hpp"
+#include <sys/time.h>
+
 
 #ifdef DT_INCLUDED
 #include "engine.hpp"
@@ -40,4 +42,13 @@ namespace utp {
       utp::SG_Engine->barrier();
       #endif
     }
+  
+
+  TimeUnit UserTime() {
+    timeval tv;
+    TimeUnit  unit=1000000.0;
+    gettimeofday(&tv, 0);
+    return (tv.tv_sec*unit+tv.tv_usec);
+  }
+
 }

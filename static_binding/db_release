@@ -2,14 +2,14 @@ CPP = mpic++
 LD  = mpic++
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -DDEBUG=0
+COMP_FLAGS  = -std=c++11  -DDEBUG=0 
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
 SG_DIR = /pica/h1/afshin/sg/superglue
 DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
 
-DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Release
+DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/no_sub_task/Release
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include
@@ -25,8 +25,7 @@ cleandb:
 	rm -f $(OBJP_LIB_DB) $(OBJP_APP_DB) $(APP_TARGET_DB) $(LIB_TARGET_DB)
 
 #------------------------------
-COMMON  =          basic.cpp
-COMMON +=          ublas.cpp
+COMMON  =          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
 COMMON +=          GData.cpp
@@ -75,7 +74,7 @@ $(LIB_TARGET_DB):$(OBJP_LIB_DB)
 
 $(APP_TARGET_DB):$(LIB_TARGET_DB) $(OBJP_APP_DB)
 	@$(info Linking ... to  $(APP_TARGET_DB))
-	@$(LD) -o $@ $(OBJP_APP_DB) -L./lib -l$(NAME_DB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
+	$(LD) -o $@ $(OBJP_APP_DB) -L./lib -l$(NAME_DB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
 
 db:$(APP_TARGET_DB)
 

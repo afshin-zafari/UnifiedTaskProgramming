@@ -44,40 +44,6 @@ CommandLine::CommandLine ( int n,int m , int _nb , int _mb , int P_, int p_,
 /*-----------------------------------------------------------------*/
 void CommandLine::getCmdLine(int argc, char **argv){
 
-  cout << argc << endl;
-  static struct option opts[]=
-    {
-      {"dyn-load-bal" ,no_argument      , 0,'D'}, // 0
-      {"dlb"          ,no_argument      , 0,'D'},
-      {"BLAS"         ,no_argument      , 0,'L'}, // 2
-      {"blas"         ,no_argument      , 0,'L'},
-      {"num-proc"     ,required_argument, 0,'P'}, // 4
-      {"proc-grid-row",required_argument, 0,'p'},
-      {"proc-grid-col",required_argument, 0,'q'}, // 6
-      {"data-rows"    ,required_argument, 0,'N'},
-      {"data-cols"    ,required_argument, 0,'M'}, // 8
-      {"num-threads"  ,required_argument, 0,'t'},
-      {"inst-per-node",required_argument, 0,'I'}, // 10
-      {"ipn"          ,required_argument, 0,'I'},
-      {"timeout"      ,required_argument, 0,'T'}, // 12
-      {"poll-sleep"   ,required_argument, 0,'S'}, //
-      {"simulation"   ,no_argument      , 0,'U'}, // 14
-      {"silent-dur"   ,required_argument, 0,'u'}, // 15
-      {"dlb-threshold",required_argument, 0,'r'}, // 16
-      {"dlb-smart"    ,no_argument      , 0,'m'}, // 17
-      {"scheduler1"   ,required_argument, 0,'x' }, // 18
-      {"scheduler2"   ,required_argument, 0,'y' }, // 19
-      {"scheduler3"   ,required_argument, 0,'z' }, // 20
-      {"sched-lib1"   ,required_argument, 0,'X' }, // 21
-      {"sched-lib2"   ,required_argument, 0,'Y' }, // 22
-      {"sched-lib3"   ,required_argument, 0,'Z' }, // 23
-      {"mq-send"      ,required_argument, 0,24  }, // 24
-      {"mq-recv"      ,required_argument, 0,25  }, // 25
-      {"mq-ip"        ,required_argument, 0,26  }, // 26
-      {"mq-name"      ,required_argument, 0,27  }, // 27
-      {"mq-pass"      ,required_argument, 0,28  }, // 28
-      {0,0,0,0}
-    };
   int index=1;
   while(index < argc){
     

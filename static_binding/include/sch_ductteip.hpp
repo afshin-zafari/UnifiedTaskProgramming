@@ -34,7 +34,10 @@ public :
   GenAlgorithm(){
      name = "DTContext";
   }
-  void taskFinished(IDuctteipTask *task, TimeUnit dur){}
+  void taskFinished(IDuctteipTask *task, ::TimeUnit dur){
+    int i = 0 ;
+    (void ) i;
+  }
   void runKernels(IDuctteipTask *task){}
   string getTaskName(unsigned long) {return name;}
 

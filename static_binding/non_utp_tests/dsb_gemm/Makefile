@@ -1,5 +1,3 @@
-
-
 SUPERGLUE_DIR=/pica/h1/afshin/sg/superglue/include
 SUPERGLUE_FLAGS=-pthread -I$(SUPERGLUE_DIR)  #-pedantic -Wno-long-long -Wno-format
 HEADER_DIR=/pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype/include
@@ -32,19 +30,19 @@ else
 
 	BLAS_LINK_FLAGS=-lgsl -lgslcblas
 	LINK_FLAGS=-lm -lrt -march=bdver1 $(BLAS_LINK_FLAGS) -lstdc++ -lpthread -Wl,--allow-multiple-definition #-fprofile-arcs 
-	COMP_FLAGS= -std=c++11 $(SUPERGLUE_FLAGS) $(DUCTTEIP_FLAGS) $(BLAS_COMP_FLAGS) $(SPECIAL_FLAGS)
+	COMP_FLAGS= -std=c++11 $(SUPERGLUE_FLAGS) $(DUCTTEIP_FLAGS) $(BLAS_COMP_FLAGS) $(SPECIAL_FLAGS) 
 endif
 #########################################################
 headers:=$(shell ls -Sr *.hpp)
 DT_LIB_DIR=/pica/h1/afshin/Damavand/D3/ductteip/bin/no_sub_task/Release
 
 
-all: bin/non_utp_dt_blas
+all: bin/non_utp_dt_sg_blas
 
-bin/non_utp_dt_blas: bin/dt_gemm.o bin/main.o
+bin/non_utp_dt_sg_blas: bin/dt_gemm.o bin/main.o
 	$(info )
 	$(info Link with DTLib.)
-	$(LINKER) $? -L$(DT_LIB_DIR) -lductteip $(LINK_FLAGS) -pthread -lgsl -lgslcblas -o bin/non_utp_dt_blas 
+	$(LINKER) $? -L$(DT_LIB_DIR) -lductteip $(LINK_FLAGS) -pthread -lgsl -lgslcblas -o bin/non_utp_dt_sg_blas 
 	$(info )
 
 bin/dt_gemm.o : dt_gemm.cpp $(headers)
@@ -62,4 +60,4 @@ bin/main.o : main.cpp $(headers)
 
 
 clean: 
-	rm -f bin/*.o bin/non_utp_dt_blas
+	rm -f bin/*.o bin/non_utp_dt_sg_blas

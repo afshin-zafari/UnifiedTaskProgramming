@@ -28,8 +28,7 @@ test:
 	$(info $(SRC_LIB_BO))
 
 #------------------------------
-COMMON  =          basic.cpp
-COMMON +=          GData.cpp
+COMMON  =          GData.cpp
 COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp

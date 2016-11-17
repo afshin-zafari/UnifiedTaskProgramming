@@ -1,11 +1,10 @@
 #include "dt_gemm.hpp"
-  double  myUserTime() {
-    timeval tv;
-    double   unit=1000000.0;
-    gettimeofday(&tv, 0);
-    return (tv.tv_sec*unit+tv.tv_usec);
-  }
-
+double  myUserTime() {
+  timeval tv;
+  double   unit=1000000.0;
+  gettimeofday(&tv, 0);
+  return (tv.tv_sec*unit+tv.tv_usec);
+}
 
 int main (int argc, char * argv[])
 {
@@ -18,7 +17,7 @@ int main (int argc, char * argv[])
   DTGemm *G=new DTGemm((DuctTeip_Data *)&A,
 		       (DuctTeip_Data *)&B,
 		       (DuctTeip_Data *)&C);
-  double  start = myUserTime();
+  double start = myUserTime();
   G->taskified();
 
 
@@ -27,10 +26,10 @@ int main (int argc, char * argv[])
   double end = myUserTime();
   if ( me == 0){
     double t=dt_log.getStattime(DuctteipLog::ProgramExecution);
-    cout << "execution time in ms (DT + BLAS without UUTP): " << (end - start) /  1000.0 << endl;
+    cout << "execution time in ms (DT + SG+BLAS without UTP): " << (end - start) /  1000.0 << endl;
     fprintf(stderr,"[****] Time = %lf, N = %ld , NB= %ld , nb= %ld , p= %ld, q = %ld, gf= %lf\n",
 	    t,config.N,config.Nb,config.nb,config.p,config.q,
-	    double(config.N)*double(config.N)*double(config.N)/3e9/t);
+	    double(config.N)*double(config.N)*double(config.N)/1e9/t);
   }
   G->checkCorrectness();
 }

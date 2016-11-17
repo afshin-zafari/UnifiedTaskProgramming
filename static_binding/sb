@@ -23,8 +23,7 @@ cleansb:
 	rm -f $(OBJP_LIB_SB) $(OBJP_APP_SB) $(APP_TARGET_SB) $(LIB_TARGET_SB)
 
 #------------------------------
-COMMON  =          basic.cpp
-COMMON +=          GData.cpp
+COMMON  =          GData.cpp
 COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp

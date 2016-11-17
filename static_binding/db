@@ -8,7 +8,7 @@ LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
 SG_DIR = /pica/h1/afshin/sg/superglue
 DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Debug
+DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/no_sub_task/Debug
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include
@@ -24,8 +24,7 @@ cleandb:
 	rm -f $(OBJP_LIB_DB) $(OBJP_APP_DB) $(APP_TARGET_DB) $(LIB_TARGET_DB)
 
 #------------------------------
-COMMON  =          basic.cpp
-COMMON +=          ublas.cpp
+COMMON  =          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
 COMMON +=          GData.cpp

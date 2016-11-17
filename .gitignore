@@ -5,6 +5,8 @@
 core.*
 *.out*
 */bin/*
+*/*/bin/*
+*/*/*/bin/*
 */obj/*
 */test/*
 */build/*

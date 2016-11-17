@@ -28,11 +28,13 @@ int main(int argc, char *argv[])
     A.fill_rows_with(1,0);
     B.fill_rows_with(2,0);
     C.fill_with(0);
-
+    utp::TimeUnit start = utp::UserTime();
     test_DT_SG_BLAS(A,B,C);
 
     utp::utp_finalize();
+    utp::TimeUnit end = utp::UserTime();
     cout << "Finished\n";
+    cout << "execution time in ms (DSB with UTP): " <<  (end - start) /1000.0 << endl;
     A.print();
     B.print();
     C.print();
