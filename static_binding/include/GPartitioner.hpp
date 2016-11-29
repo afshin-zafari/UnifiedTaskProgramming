@@ -2,8 +2,8 @@
 #define GPARTITIONER_HPP
 #include <vector>
 namespace utp{
-typedef unsigned char byte;
-
+  typedef unsigned char byte;
+  class GData;
 class GPartitioner
 {
     public:
@@ -24,6 +24,7 @@ class GPartitioner
         void serialize(byte *buf,int &offset);
         void deserialize(byte *buf, int &offset);
         int get_key();
+        virtual bool is_owner(GData *);
     protected:
         GPartitioner  *next;
         int key;

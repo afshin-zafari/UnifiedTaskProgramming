@@ -11,8 +11,10 @@ namespace utp{
 
 class BLAS{
 public:
-    std::string name ;
-    BLAS():name("BLAS"){}
+    static string name ;
+  static int level;
+    BLAS(){}
+  
     static void data_created(GData *){
     }
   template <typename T,typename P>

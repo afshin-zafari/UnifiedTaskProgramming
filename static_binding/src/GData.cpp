@@ -169,14 +169,19 @@ void GData::set_memory(MemoryItem *m)
   }
 }
 /*=====================================================================*/
-void GData::set_memory(void *m)
+void GData::set_memory(void *m,int ld)
 {
   content = (byte *)m;
+  leading_dim = ld;
+  PRINTF("set_memory for %s, m:%p , ld:%d\n",get_name().c_str(),m,ld);
   if ( child_cnt ==0 )
     return ;
   int bz = children[0]->get_rows() *   children[0]->get_cols();
+  if ( m == nullptr )
+    bz = 0;
+  PRINTF("set_memory, m:%p , bz:%d\n",m,bz);
   for(int i=0; i<child_cnt; i++){
-    children[i]->set_memory((double *)m+ i* bz);
+    children[i]->set_memory((double *)m+ i* bz,ld);
   }
 
   
@@ -192,6 +197,11 @@ int GData::get_rows()
     return M;
 }
 /*=====================================================================*/
+int GData::get_ld()
+{
+    return leading_dim;
+}
+/*=====================================================================*/
 int GData::get_cols()
 {
     return N;
@@ -202,17 +212,44 @@ byte *GData::get_memory()
     return content;
 }
 /*=====================================================================*/
-void GData::fill_with(double v)
+void GData::fill_with(double v,double inc)
 {
+  GPartitioner *p = partitioner;
+  bool owner;
+  double org_v=v;
+  if ( p == nullptr )
+    owner = true;
+  else
+    owner = p->is_owner(this);
+  
+  PRINTF("Fill with %s, mem:%p , %dx%d , ld:%d, owner:%d, v:%lf\n",get_name().c_str(), (double *)content, M,N,leading_dim, owner,v);
   double *d = (double*)content;
   if ( d != nullptr){
-    for ( int i=0;i<M*N;i++){
-      d[i]=v;
+    PRINTF("###%p, result mem:%p\n",d,d+N*M);
+    for(int j=0;j<N;j++){
+      for(int i=0;i<M;i++){
+	d[ j*M + i ]=v;
+	v+=inc;
+      }
     }
   }
+  else if (owner){
+    int z=get_element_count();
+    set_memory( (void *)new double[z],M );
+    v = org_v;
+    d = (double*)content;
+    PRINTF("^^^%p, length:%d, result mem:%p\n",d,(N-1)*leading_dim+M-1,d+(N-1)*leading_dim+M-1);
+    for(int j=0;j<N;j++){
+      for(int i=0;i<M;i++){
+	d[ j*M + i ]=v;
+	v+=inc;
+      }
+    }    
+  }  
+  v= org_v;
   for ( int c=0;c<child_cnt; c++){
     if ( children[c] != nullptr){
-      children[c]->fill_with(v);
+      children[c]->fill_with(v,inc);
     }
   }
 }
@@ -233,14 +270,19 @@ void GData::print()
 	px = N;
 	by = 1;
       }
+      printf("%s with memory:%p lead_dim:%d has contents:\n",get_name().c_str(),content,leading_dim);
       for ( int i=0;i<M;i++){
 	for ( int j=0;j<N;j++){
 	  int ii=i/py;
 	  int jj=j/px;
 	  printf("%+02.2lf ",d[jj*py*px*by+ii*py*px+(j%px)*py+i%py]);
+	  //printf("%+02.2lf ",d[j*M + i]);
 	}
 	printf("\n");
       }
+    }
+    else{
+      printf("%s has no memory allocated.\n",get_name().c_str());
     }
   }
   

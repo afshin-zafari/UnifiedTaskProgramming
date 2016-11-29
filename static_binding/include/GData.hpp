@@ -24,6 +24,7 @@ class GData
         GData& operator=(const GData& other);
         void set_partition ( GPartitioner *);
         GPartitioner *get_partition();
+        int get_ld();
         int get_part_countY();
         int get_part_countX();
         GData & operator ()(int i, int j =0) ;
@@ -31,12 +32,12 @@ class GData
         GHandle *get_handle();
         bool is_memory_allocated();
         void set_memory(MemoryItem*);
-        void set_memory(void *);
+        void set_memory(void *,int);
         long get_element_count();
         int get_rows();
         int get_cols();
         byte *get_memory();
-        void fill_with(double);
+        void fill_with(double,double);
         void fill_rows_with ( double start , double scale);
         void print();
         void dump();
@@ -55,7 +56,7 @@ class GData
     protected:
 
     private:
-        int M,N,child_idx,child_cnt,level,key;
+  int M,N,child_idx,child_cnt,level,key,leading_dim;
         GHandle *handle;
         GData *parent, **children;
         MemoryItem *memory;

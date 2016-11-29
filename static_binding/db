@@ -8,7 +8,7 @@ LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
 SG_DIR = /pica/h1/afshin/sg/superglue
 DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/no_sub_task/Debug
+DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Debug
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include

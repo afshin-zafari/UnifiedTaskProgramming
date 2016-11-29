@@ -50,7 +50,8 @@ public:
     void *guest;
     int type_id;
     OperationBase<T> *o;
-    unsigned int id,child_count;
+    int id,child_count;
+    bool is_generating;
     Task ( OperationBase<T> *_o):o(_o){
         child_count =0;
         parent = nullptr;
@@ -63,12 +64,14 @@ public:
     }
     Parent *get_parent(){return parent;}
      void Init(){
+       /*
       pthread_mutexattr_init   (&parent_task_mutex_attr);
       pthread_mutexattr_settype(&parent_task_mutex_attr,PTHREAD_MUTEX_RECURSIVE);
       pthread_mutex_init       (&parent_task_counter_lock,&parent_task_mutex_attr);
+       */
     }
-     void BeginCriticalSection(){ pthread_mutex_lock  (&parent_task_counter_lock); }
-     void   EndCriticalSection(){ pthread_mutex_unlock(&parent_task_counter_lock); }
+     void BeginCriticalSection_obsolete(){ pthread_mutex_lock  (&parent_task_counter_lock); }
+     void   EndCriticalSection_obsolete(){ pthread_mutex_unlock(&parent_task_counter_lock); }
 private:
     pthread_mutex_t 	parent_task_counter_lock;
     pthread_mutexattr_t parent_task_mutex_attr;  

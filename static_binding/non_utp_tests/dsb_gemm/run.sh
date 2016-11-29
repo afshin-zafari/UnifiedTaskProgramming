@@ -11,18 +11,18 @@
 module load gcc/4.9 openmpi/1.8.1 
 
 set -x
-B1=8
-B2=2
-N=1024
+B1=3
+B2=4
+N=36
 M=$N
-timeout=100
+timeout=1000
 P=2
 p=2
 q=1
 ipn=2
-nt=2
+nt=16
 
-app_dsb="./bin/non_utp_dt_sg_blas_release"
+app_dsb="./bin/non_utp_dt_sg_blas$1"
 out="out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
 app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout >$out"
 mpi_params="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out"

@@ -55,6 +55,7 @@ public:
     DTTask(GTask *t):gtask(t)
     {
         gtask->guest = (void*)this;
+	gtask->child_count = 0;
 #     if DEBUG != 0 
         cout << "----\t  DT.submit\t" << t->o->name << "_" << t->id << endl;
 #     endif
@@ -105,7 +106,24 @@ public:
             PRINTF("task added.\n");
 	    setDataAccessList(dlist);
 	    setHost(me);
+	    list<DataAccess *>::iterator it;
+	    DataAccess *daxs ;
+	    for ( it = dlist->begin(); it != dlist->end(); it ++){
+	      DataAccess *daxs = *it ;
+	      GData *gd = (GData *)daxs->data->get_guest();
+	      if ( daxs->data->getHost() != me ){
+		daxs->data->allocateMemory();
+		PRINTF("%s,%d: %s\n",__FILE__,__LINE__,__FUNCTION__);
+		gd->set_memory((void *)daxs->data->getContentAddress(), daxs->data->get_rows());
+		//cout << gd->get_name() << "??"  << (double *)gd->get_memory() << endl;
+	      }
+	      else{
+		dtEngine.insertDataMemory(daxs->data,(byte *)gd->get_memory());
+		//cout << gd->get_name() << "??+"  << (double*)gd->get_memory() << endl;
+	      }
+	    }
             glbCtx.incrementCounter(GlobalContext::TaskInsert);
+	    //cout << "((task added))\n";
             dtEngine.register_task(this);
         }
     }
@@ -115,27 +133,38 @@ public:
       if ( getState() == Running )
 	return;
       setState( Running);
+      gtask->is_generating = true;
+      #if SHORTCUT==0
       Dispatcher::ready(_dt,gtask);
+      #else
+      gtask->o->split(_dt,gtask);
+      gtask->is_generating = false;
+      #endif
     }
 };
 /*=================================================================================*/
 class DT{
 public:
 
-    pthread_mutex_t 	thread_lock;
-    pthread_mutexattr_t 	mutex_attr;
-    string name ;
-    DT():name("DT")
+    pthread_mutex_t 	thread_lock_obsolete;
+    pthread_mutexattr_t 	mutex_attr_obsolete;
+    static int level;
+    static string name ;
+    DT()
     {
         dt_ctx = nullptr;
+	/*
         pthread_mutexattr_init(&mutex_attr);
         pthread_mutexattr_settype(&mutex_attr,PTHREAD_MUTEX_RECURSIVE);
         pthread_mutex_init(&thread_lock,&mutex_attr);
+	*/
     }
     ~DT()
     {
+      /*
         pthread_mutex_destroy(&thread_lock);
         pthread_mutexattr_destroy(&mutex_attr);
+      */
     }
     static void finalize()
     {
@@ -152,7 +181,7 @@ public:
       return 1;
     }
     template <typename T,typename P>
-    static void finishedTask(Task<T,P>  *t)
+    static inline void finishedTask(Task<T,P>  *t)
     {
       DTTask<T,P>* dt =static_cast<DTTask<T,P>*>( t->guest);
         dt->setFinished(true);
@@ -181,7 +210,7 @@ public:
         return;
 
 
-      PRINTF("child data:%s\n",d->get_name().c_str());
+      PRINTF("%s,%d  child data:%s\n",__FUNCTION__,__LINE__,d->get_name().c_str());
 
       int M = d->get_rows();
       int N = d->get_cols();
@@ -197,11 +226,11 @@ public:
     {
       int by = d->get_part_countY();
       int bx = d->get_part_countX();
-      PRINTF("data:%s %dx%d, level:%d\n",d->get_name().c_str(),by,bx,d->get_level());
       if  ( d->get_level() > 0 )
         return;
 
-      IData *dt ;
+      PRINTF("%s,%d, data:%s %dx%d, level:%d\n",__FUNCTION__,__LINE__,d->get_name().c_str(),by,bx,d->get_level());
+      IData *dt;
       dt = (IData *)d->get_guest();
       dt->setPartition(by,bx);
       for ( int i =0 ; i < by; i++){
@@ -210,7 +239,8 @@ public:
           GData &d_ch = (*d)(i,j);
           assert(dt_ch);
           PRINTF("gd_ch:%s, dt_ch:%s\n",d_ch.get_name().c_str(),dt_ch->get_name().c_str());
-          d_ch.set_memory((void *)dt_ch->getContentAddress());
+	  PRINTF("%s,%d: %s\n",__FILE__,__LINE__,__FUNCTION__);
+          d_ch.set_memory((void *)dt_ch->getContentAddress(),dt_ch->getYLocalDimension());
           PRINTF("gdata memory:%p dt_ch memory:%p\n",d_ch.get_memory(),dt_ch->getContentAddress());
           dt_ch->setParentData(dt);
             d_ch.set_guest((void*) dt_ch);

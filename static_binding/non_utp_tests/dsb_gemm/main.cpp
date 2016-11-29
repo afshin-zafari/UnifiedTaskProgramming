@@ -1,4 +1,5 @@
 #include "dt_gemm.hpp"
+
 double  myUserTime() {
   timeval tv;
   double   unit=1000000.0;
@@ -8,15 +9,15 @@ double  myUserTime() {
 
 int main (int argc, char * argv[])
 {
-  DuctTeip_Start(argc,argv);
+  DuctTeip_Start(argc,argv,false);
 
   DuctTeip_Data A(config.N,config.N);
   DuctTeip_Data B(config.N,config.N);
   DuctTeip_Data C(config.N,config.N);
 
-  DTGemm *G=new DTGemm((DuctTeip_Data *)&A,
-		       (DuctTeip_Data *)&B,
-		       (DuctTeip_Data *)&C);
+  DTGemm *G=new DTGemm((DuctTeip_Data*)&A,
+		       (DuctTeip_Data*)&B,
+		       (DuctTeip_Data*)&C);
   double start = myUserTime();
   G->taskified();
 

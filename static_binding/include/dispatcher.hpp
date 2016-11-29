@@ -23,6 +23,9 @@ template < typename E >
 class NodeDispatch{
 public:
     typedef typename SingleNode<typename E::First>::First first;
+  
+    static bool is_distributed(int level){return false;}
+  
     template <typename T,typename P>
     static   void submit(UserProgram &, Task<T,P>*t){
 #     if DEBUG!=0
@@ -74,15 +77,20 @@ class EdgeDispatch{
 public:
     typedef typename Edge<typename E::First, typename E::Second>::First  first;
     typedef typename Edge<typename E::First, typename E::Second>::Second second;
+  static bool is_distributed(int level){
+    if ( level ==1 && first::name == "DT" )
+      return true;
+    return false;
+  }
     template <typename T,typename P>
-    static   void submit(UserProgram &, Task<T,P>*t){
+    static void submit(UserProgram &, Task<T,P>*t){
 #     if DEBUG!=0
         cout << "Prog\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
 #     endif
         E::First::submit(t);
     }
     template <typename T,typename P>
-    static   void submit( Task<T,P>*t){
+    static void submit( Task<T,P>*t){
 #     if DEBUG!=0
         cout << "----\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
 #     endif
@@ -132,19 +140,41 @@ public:
     typedef typename Edge<typename E1::First, typename E1::Second>::Second second;
     typedef typename Edge<typename E2::First, typename E2::Second>::Second third;
 
+  static void Init(){
+     first::level = 0;
+    second::level = 1;
+    //third::level = 2;
+  }
+  static bool is_distributed(int level){
+    switch(level){
+    case 0:
+      return false;
+    case 1:
+      if ( first::name == "DT")
+	return true;
+      return false;
+    case 2:
+      if ( second::name == "DT")
+	return true;
+      return false;
+    case 3:
+      return false;
+    }
+    return false;
+  }
     template <typename T,typename P>
-    static   void submit(UserProgram &, Task<T,P>*t){
+    static   inline void submit(UserProgram &, Task<T,P>*t){
 #     if DEBUG!=0
         cout << "PROG\t Dis.submit\t" << t->o->name << "_" << t->id << endl;
 #     endif
         E1::First::submit(t);
     }
     template <typename T,typename P>
-    static   void submit( Task<T,P>*t){
+    static   inline void submit( Task<T,P>*t){
         E1::First::submit(t);
     }
     template <typename T,typename P>
-    static   void submit(first &, Task<T,P>*t){
+    static   inline void submit(first &, Task<T,P>*t){
         E1::Second::submit(t);
     }
     template <typename T,typename P>
@@ -152,14 +182,14 @@ public:
         E2::Second::submit(t);
     }
     template <typename T,typename P>
-    static   void ready(first &f,Task<T,P>*t){
+    static   inline void ready(first &f,Task<T,P>*t){
 #     if DEBUG!=0
         cout << f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
 #     endif
         t->o->split(f,t);
     }
     template <typename T,typename P>
-    static   void ready(second &s,Task<T,P>*t){
+    static   inline void ready(second &s,Task<T,P>*t){
 #     if DEBUG!=0
         cout << s.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
 #     endif
@@ -168,46 +198,44 @@ public:
     template <typename T,typename P>
     static   void finished(first &s,Task<T,P>*t){}
     template <typename T,typename P>
-    static   void finished(Task<T,P>*t){
+    static  inline  void finished(Task<T,P>*t){
 #     if DEBUG!=0
         cout << "+++++++\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 #     endif
 	E1::Second::finished(t);
     }
     template <typename T,typename P>
-    static   void finished(second &s,Task<T,P>*t){
+    static   inline void finished(second &s,Task<T,P>*t){
 #     if DEBUG!=0
         cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 #     endif
       P *p = t->get_parent();
         if ( p != nullptr){
-	  p->BeginCriticalSection();
-	  p->child_count--;
-	  bool finished = p->child_count == 0;
+	  unsigned int new_count=1;
+	  new_count = Atomic::decrease_nv(&p->child_count);
+	  bool finished = new_count == 0;
 	  if( finished){
 #     if DEBUG!=0
-	    cout << "++++ Dis.finished\t" <<  p->o->name << "_" << p->id << endl;
+	    cout << "ppppp Dis.finished\t" <<  p->o->name << "_" << p->id << endl;
 #     endif
 	    E1::First::finished(p);
 	  }
-	  p->EndCriticalSection();
         }
     }
-    template <typename T,typename P>
-    static   void finished(third &s,Task<T,P>*t){
+  template <typename T,typename P>
+  static   inline  void finished(third &s,Task<T,P>*t){
 #     if DEBUG!=0
-      cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+    cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 #     endif
-      P *p = t->get_parent();
-      if ( p != nullptr){
-	p->BeginCriticalSection();
-	p->child_count--;
-	bool finished = p->child_count == 0;
-	if(finished){
-	  E1::Second::finished(p);
-	}
-	p->EndCriticalSection();
+    P *p = t->get_parent();
+    if ( p != nullptr){
+      unsigned int new_count=1;
+      new_count = Atomic::decrease_nv(&p->child_count);
+      bool finished = new_count == 0;
+      if(finished){
+	E1::Second::finished(p);
       }
+    }
     }
 };
 /*--------Fork -------------------------------------*/
@@ -231,7 +259,11 @@ public:
     typedef typename Edge2::First third;                                                            //           --> 3rd   --> 5th
     typedef typename Edge1::Second forth;                                                           //              ---Edge2------
     typedef typename Edge2::Second fifth;
-
+  static bool is_distributed(int level){
+    if ( level ==1)
+      return true;
+    return false;
+  }
     template <typename T,typename P>
     static   void submit(UserProgram &, Task<T,P>*t){
 #     if DEBUG!=0

@@ -3,6 +3,7 @@
 
 void DTGemm::taskified(){
   int Nb = A->getXNumBlocks();
+  //cout << "<<<<" << Nb << endl;
   DuctTeip_Data &a  = *A;
   DuctTeip_Data &b  = *B;
   DuctTeip_Data &c  = *C;
@@ -27,35 +28,6 @@ void DTGemm::runKernels(DuctTeip_Task *task ) /*@\label{line:runkernelsdef_start
     }
 }
 /*----------------------------------------------------------------------------*/
-/*
-void DTGemm::GEMM_kernel(DuctTeip_Task  *dt_task)
-{
-  DuctTeip_Data  *a = (DuctTeip_Data *)dt_task->getArgument(0);
-  DuctTeip_Data  *b = (DuctTeip_Data *)dt_task->getArgument(1);
-  DuctTeip_Data  *c = (DuctTeip_Data *)dt_task->getArgument(2);
-
-  double *mA = a->getContentAddress();
-  double *mB = b->getContentAddress();
-  double *mC = c->getContentAddress();
-
-  int Bz  = config.M / config.Mb ; 
-  int ldA = Bz;
-  int M   = Bz;
-
-  int ldB = Bz;
-  int N   = Bz;
-
-  int ldC = Bz;
-  int K   = Bz;
-  double beta= 1.0; 
-  double alpha= 1.0;
-  auto TransA = CblasNoTrans;
-  //Order,TransA, TransB, M, N, K, alpha, A, lda, B, ldb, beta, C, ldc)
-  cblas_dgemm(CblasColMajor,TransA,CblasNoTrans,M,N,K,alpha,mA,ldA,mB,ldB,beta,mC,ldC);
-  dt_task->setFinished(true);
-  
-}
-*/
 
 void DTGemm::GEMM_kernel(DuctTeip_Task  *dt_task)
 {
@@ -63,17 +35,18 @@ void DTGemm::GEMM_kernel(DuctTeip_Task  *dt_task)
   DuctTeip_Data  *b = (DuctTeip_Data *)dt_task->getArgument(1);
   DuctTeip_Data  *c = (DuctTeip_Data *)dt_task->getArgument(2);
 
-  SuperGlue_Data A = a->getSuperGlueData();
-  SuperGlue_Data B = b->getSuperGlueData();
-  SuperGlue_Data C = c->getSuperGlueData();
-  int n = A.get_rows_count();
+  if ( dt_task)
+    dt_task->child_count = 0;
+  Handle <Options> **A = dt_task->getDataAccess(0)->createSuperGlueHandles();
+  Handle <Options> **B = dt_task->getDataAccess(1)->createSuperGlueHandles();
+  Handle <Options> **C = dt_task->getDataAccess(2)->createSuperGlueHandles();
+  int n = config.nb;
+  //cout << "<<<" << n << endl;
   for(int i = 0; i<n; i++){
     for(int j = 0; j<n; j++){
       for(int k = 0; k<n; k++){
-	GemmTask *gemm=new GemmTask(dt_task,A(i,k),B(k,j),C(i,j));
+	GemmTask *gemm=new GemmTask(dt_task,A[i][k],B[k][j],C[i][j]);
 	dtEngine.getThrdManager()->submit(gemm);
-	cout << i*n*n+j*n+k << endl;
-	//dt_task->subtask(gemm);
       }
     }
   }
@@ -84,19 +57,20 @@ DTGemm::DTGemm(DuctTeip_Data *A_, DuctTeip_Data *B_, DuctTeip_Data  *C_ )
 {
   name=static_cast<string>("chol");
   setParent(this);
-  A_->setDataHandle(createDataHandle());
-      A  = A_->clone();
-      A->setParent(this);
-      A->configure();
+  A  = A_;
+  A->setDataHandle(createDataHandle());
+  A->setParent(this);
+  A->configure();
 
-  B_->setDataHandle(createDataHandle());
-      B  = B_->clone();
-      B->setParent(this);
-      B->configure();
-  C_->setDataHandle(createDataHandle());
-      C  = C_->clone();
-      C->setParent(this);
-      C->configure();
+  B  = B_;
+  B->setDataHandle(createDataHandle());
+  B->setParent(this);
+  B->configure();
+  
+  C  = C_;
+  C->setDataHandle(createDataHandle());
+  C->setParent(this);
+  C->configure();
 
   populateMatrice();
   addInOutData(A);
@@ -116,6 +90,7 @@ string DTGemm::getTaskName(unsigned long key)
 void DTGemm::taskFinished(IDuctteipTask *task, TimeUnit dur)
 {
   long key = task->getKey();
+  cout << "zzz" << endl;
   double  n = config.N / config.Nb,gflops;
   switch(key) {
     case  GEMM:      gflops=(2*(n*n*n/3.0)/dur);    break;
@@ -132,12 +107,14 @@ void DTGemm::checkCorrectness()
   IData &c=*C;
   bool found = false;
   double exp = cfg->getYDimension() * 2;
+  printf("Boundaries:  %d,%d,%d,%d\n",I,J,K,L);
   for ( int i=0; i < I; i ++ )
     {
       for ( int j=0 ; j < J ; j ++)
 	{
 	  if ( c(i,j)->getHost() == me )
 	    {
+	      cout << "C_Block: " << i << "," << j <<endl;
 	      for ( int k=0; k < K; k++)
 		{
 		  for ( int l=0; l <L; l++)
@@ -196,6 +173,8 @@ void DTGemm::dumpAllData(){
   IData &c=*C;
   bool found = false;
   double exp = cfg->getYDimension() * 2;
+  if ( I > 10 )
+    return;
   for ( int i=0; i < I; i ++ )
     {
       for ( int j=0 ; j < J ; j ++)

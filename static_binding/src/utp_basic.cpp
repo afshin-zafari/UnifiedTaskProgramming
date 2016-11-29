@@ -18,15 +18,23 @@ namespace utp {
       
       #ifdef DT_INCLUDED
       DT::init();
-      dtEngine.start(argc,argv);
+         #ifdef SG_INCLUDED
+           dtEngine.start(argc,argv,true);
+	   utp::SG_Engine = new SuperGlue<utp::SGWOptions>(cmdLine.nt);
+	   //	   dtEngine.set_superglue(utp::SG_Engine);
+         #else      
+           dtEngine.start(argc,argv);
+         #endif
       #endif
 
       cmdLine.getCmdLine(argc,argv);
       
       #ifdef SG_INCLUDED
-      utp::SG_Engine = new SuperGlue<utp::SGWOptions>(cmdLine.nt);
+        #ifndef DT_INCLUDED 
+          utp::SG_Engine = new SuperGlue<utp::SGWOptions>(cmdLine.nt);
+        #endif
       #endif
-      #if DT_INCLUDED && SG_INCLUDEDD
+      #if DT_INCLUDED && SG_INCLUDED
       Dispatcher::Init();
       #endif
       

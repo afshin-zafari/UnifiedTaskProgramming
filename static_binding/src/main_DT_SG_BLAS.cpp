@@ -22,12 +22,9 @@ int main(int argc, char *argv[])
     B.set_partition(&P1);
     C.set_partition(&P1);
 
-    A.set_memory(new double [N*N]);
-    B.set_memory(new double [N*N]);
-    C.set_memory(new double [N*N]);
-    A.fill_rows_with(1,0);
-    B.fill_rows_with(2,0);
-    C.fill_with(0);
+    A.fill_with(1.0,0.0);
+    B.fill_with(2.0,0.0);
+    C.fill_with(0.0,0.0);
     utp::TimeUnit start = utp::UserTime();
     test_DT_SG_BLAS(A,B,C);
 
@@ -38,12 +35,16 @@ int main(int argc, char *argv[])
     A.print();
     B.print();
     C.print();
-    double *c = (double *)C.get_memory();
-    double sum = 0.0;
-    for(int i=0;i<N*N;i++){
-      sum += c[i];
+    if ( config.P  ==1 ) {
+      double *c = (double *)C.get_memory();
+      if (  c == nullptr)
+	return 0 ;
+      double sum = 0.0;
+      for(int i=0;i<N*N;i++){
+	sum += c[i];
+      }
+      cout << " sum of C: " <<sum << endl;
     }
-    cout << " sum of C: " <<sum << endl;
     return 0;
 }
 

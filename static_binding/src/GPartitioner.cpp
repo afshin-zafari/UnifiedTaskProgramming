@@ -2,6 +2,10 @@
 #include "utp_basic.hpp"
 #include "dispatcher.hpp"
 #include "brdcast.hpp"
+#include "cmdline.hpp"
+#include "GData.hpp"
+
+extern int me;
 namespace utp{
 std::vector<GPartitioner*> *part_list;
 /*-------------------------------------------------------------*/
@@ -89,6 +93,21 @@ bool GPartitioner::is_for_ownership(){return ownership;}
 void GPartitioner::set_for_comm(bool f){comm = f;}
 void GPartitioner::set_for_allocation(bool f){alloc = f;}
 void GPartitioner::set_for_ownership(bool f){ownership = f;}
+/*-------------------------------------------------------------*/
+  bool GPartitioner::is_owner(GData *d){
+    int level = d->get_level();
+    if ( level == 0 )
+      return false;
+    bool dist = Dispatcher::is_distributed(level);
+    if (!dist)
+      return is_owner(d->get_parent());
+    int row,col,depth;
+    d->getCoordination(row,col,depth);
+    int owner = (row % y) * cmdLine.q + col %x;
+    return owner == me;
+    
+    
+  }
 /*-------------------------------------------------------------*/
 
 GPartitioner * DeserializePartitioner(byte *buf,int &ofs)

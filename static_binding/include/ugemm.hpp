@@ -14,9 +14,10 @@ namespace utp{
         static inline void split(Scheduler &s,Task<Gemm,P> *t);
       template <typename P>
       static inline void run(Task<Gemm,P> *t){
-#if DEBUG != 0 
+#if UTP_DEBUG != 0 
             cout << "----\tGemm.run\tgemm_"<< t->id << endl;
 #     endif
+
 	    GData *a = t->args->args[0];
 	    GData *b = t->args->args[1];
 	    GData *c = t->args->args[2];
@@ -54,12 +55,13 @@ namespace utp{
 #     endif
       
 	    cblas_dgemm(CblasColMajor,TransA,CblasNoTrans,M,N,K,alpha,A,ldA,B,ldB,beta,C,ldC);
-      
 #     if DEBUG != 0 
 	    cout << M << "," << N << "," << K << "," << A << "," << ldA << "," << B << "," << ldB << "," << C << "," << ldC << endl;
             cout << "-----------\n" ;
 #     endif
+      #if SHORTCUT == 0 
 	    Dispatcher::finished(t);
+      #endif
         }
     };
     /*===================================================================================*/
@@ -97,7 +99,7 @@ namespace utp{
     template <typename Scheduler,typename P>
     void Gemm::split(Scheduler &s,Task<Gemm,P> *task){
 
-#if DEBBUG !=0 
+#if DEBUG !=0 
         cout << s.name <<"\tGemm.split\t" << task->o->name <<"_" << task->id << endl;
 #endif
 	GData &A = *task->args->args[0];
@@ -106,6 +108,7 @@ namespace utp{
 	int m = A.get_part_countX();
 	int n = B.get_part_countX();
 	int o = C.get_part_countX();
+	//cout << "&&&&&&&" << m <<"," << n << "," << o << endl;
 	for ( int i=0;i<m;i++){
 	  for (int j=0;j<n;j++){
 	    for (int k=0;k<o;k++){

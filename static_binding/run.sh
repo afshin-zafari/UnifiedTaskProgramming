@@ -11,16 +11,16 @@
 module load gcc/4.9 openmpi/1.8.1 cuda/7.5
 
 set -x
-B1=4
-B2=2
-N=128
+B1=3
+B2=4
+N=36
 M=$N
 timeout=100
 P=2
 p=2
 q=1
 ipn=2
-nt=2
+nt=1
 app_bo="./bin/utp_blas_only$1"
 app_db="./bin/utp_dt_blas$1"
 app_sb="./bin/utp_sg_blas$1"
@@ -35,23 +35,23 @@ mpi_params2="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --outpu
 #-----BLAS ONLY
 echo "========================================================================="
 echo "========================================================================="
-$app_bo ${app_params} > bo_${out}
+#$app_bo ${app_params} > bo_${out}
 
 #-----SG BLAS 
 echo "========================================================================="
 echo "========================================================================="
-$app_sb ${app_params} > sb_${out}
+#$app_sb ${app_params} > sb_${out}
 
 #-----DT BLAS 
 echo "========================================================================="
 echo "========================================================================="
-mpirun ${mpi_params1} ${app_db} ${app_params}
+#mpirun ${mpi_params1} ${app_db} ${app_params}
 
 #-----DT SG BLAS 
 echo "========================================================================="
 echo "========================================================================="
 mpirun ${mpi_params2} ${app_dsb} ${app_params}
-#grep -i "error" dsb*.txt*
+grep -i "error" dsb*.txt*
 
 
 

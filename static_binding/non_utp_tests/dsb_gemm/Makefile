@@ -22,7 +22,7 @@ else
 	BLAS_COMP_FLAGS=-I$(ACML_DIR)/include 
 
 	GCOV_FLAGS=-fprofile-arcs -ftest-coverage
-	OPTIM_FLAGS=-mavx  -Wwrite-strings -march=bdver1 -O3 -mfma4
+	OPTIM_FLAGS=-mavx  -Wwrite-strings -march=bdver1 -mfma4
 	SPECIAL_FLAGS=$(OPTIM_FLAGS)     
 
 
@@ -30,11 +30,11 @@ else
 
 	BLAS_LINK_FLAGS=-lgsl -lgslcblas
 	LINK_FLAGS=-lm -lrt -march=bdver1 $(BLAS_LINK_FLAGS) -lstdc++ -lpthread -Wl,--allow-multiple-definition #-fprofile-arcs 
-	COMP_FLAGS= -std=c++11 $(SUPERGLUE_FLAGS) $(DUCTTEIP_FLAGS) $(BLAS_COMP_FLAGS) $(SPECIAL_FLAGS) 
+	COMP_FLAGS= -std=c++11 $(SUPERGLUE_FLAGS) $(DUCTTEIP_FLAGS) #$(BLAS_COMP_FLAGS) #$(SPECIAL_FLAGS) 
 endif
 #########################################################
 headers:=$(shell ls -Sr *.hpp)
-DT_LIB_DIR=/pica/h1/afshin/Damavand/D3/ductteip/bin/no_sub_task/Release
+DT_LIB_DIR=/pica/h1/afshin/Damavand/D3/ductteip/bin/Release
 
 
 all: bin/non_utp_dt_sg_blas

@@ -2,9 +2,9 @@ CPP = mpic++
 LD  = mpic++
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -g
+COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=1 -DUTP_DEBUG=0
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
+LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
 SG_DIR = /pica/h1/afshin/sg/superglue
 DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype

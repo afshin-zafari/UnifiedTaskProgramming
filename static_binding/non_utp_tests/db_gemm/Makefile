@@ -36,7 +36,7 @@ else
 endif
 #########################################################
 headers:=$(shell ls -Sr *.hpp)
-DT_LIB_DIR=/pica/h1/afshin/Damavand/D3/ductteip/bin/no_sub_task/Release
+DT_LIB_DIR=/pica/h1/afshin/Damavand/D3/ductteip/bin/Release
 
 
 all: bin/non_utp_dt_blas

@@ -2,7 +2,7 @@ CPP = mpic++
 LD  = mpic++
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -DDEBUG=0
+COMP_FLAGS  = -std=c++11  -DDEBUG=0 -DSHORTCUT=1
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
@@ -63,11 +63,11 @@ APP_TARGET_DSB =./bin/$(NAME_DSB)
 
 $(OBJP_LIB_DSB):./obj/%.o: ./src/%.cpp 
 	@$(info $(notdir $<) )
-	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
 
 $(OBJP_APP_DSB):./obj/%.o : ./src/%.cpp 
 	@$(info $(notdir $<) )
-	$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
 
 $(LIB_TARGET_DSB):$(OBJP_LIB_DSB)
 	@$(AR) rcsv  $@ $^ 
