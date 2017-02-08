@@ -35,7 +35,9 @@ namespace utp{
 	Args *a=gt->args;
 	P *p = gtask->get_parent();
 	int cnt = p->child_count;
-	//cout << "++++ " << cnt << ", " << p->id << endl;
+	#if UTP_DEBUG !=0
+	cout << "++++ " << cnt << ", " << p->id << endl;
+	#endif
 	for(uint i=0; i< a->args.size(); i++)
 	  {
 	    sg_data_t *sgd = (sg_data_t *)a->args[i]->get_guest();
@@ -57,7 +59,9 @@ namespace utp{
 #else
 	gtask->o->run(gtask);
 #endif
-	//cout << "---- \n" ;
+	#if UTP_DEBUG != 0
+	cout << "---- \n" ;
+	#endif
 	P *p = gtask->get_parent();
         if ( p != nullptr){
 	  if ( p->child_count !=0){
@@ -66,7 +70,9 @@ namespace utp{
 	    const int new_count(Atomic::decrease_nv(&p->child_count));	  
 	    if( new_count ==0){
 	       int new_cn = Atomic::decrease_nv(&p->child_count);
-	       //cout << "==== sg_Parent finished\t" <<  p->o->name << "_" << p->id << "cnt: "<<new_cn <<  endl;
+	       #if UTP_DEBUG != 0
+	       cout << "==== sg_Parent finished\t" <<  p->o->name << "_" << p->id << "cnt: "<<new_cn <<  endl;
+	       #endif
 	       DT::finished(p);
 	     }
 	  }

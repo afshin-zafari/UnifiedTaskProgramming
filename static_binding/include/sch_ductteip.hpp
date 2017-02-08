@@ -115,10 +115,11 @@ public:
 		daxs->data->allocateMemory();
 		PRINTF("%s,%d: %s\n",__FILE__,__LINE__,__FUNCTION__);
 		gd->set_memory((void *)daxs->data->getContentAddress(), daxs->data->get_rows());
+		//cout << "Data Header size: " << daxs->data->getHeaderSize() << endl;
 		//cout << gd->get_name() << "??"  << (double *)gd->get_memory() << endl;
 	      }
 	      else{
-		dtEngine.insertDataMemory(daxs->data,(byte *)gd->get_memory());
+		//dtEngine.insertDataMemory(daxs->data,(byte *)gd->get_memory());
 		//cout << gd->get_name() << "??+"  << (double*)gd->get_memory() << endl;
 	      }
 	    }
@@ -126,6 +127,11 @@ public:
 	    //cout << "((task added))\n";
             dtEngine.register_task(this);
         }
+	else{
+	  PRINTF("Task is not mine.\n");
+	}
+
+	
     }
     void run(){
       if ( isFinished())

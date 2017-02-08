@@ -11,20 +11,20 @@
 module load gcc/4.9 openmpi/1.8.1 cuda/7.5
 
 set -x
-B1=3
-B2=4
-N=36
+B1=4
+B2=3
+N=48
 M=$N
-timeout=100
+timeout=10
 P=2
 p=2
 q=1
 ipn=2
-nt=1
+nt=2
 app_bo="./bin/utp_blas_only$1"
 app_db="./bin/utp_dt_blas$1"
 app_sb="./bin/utp_sg_blas$1"
-app_dsb="./bin/utp_dt_sg_blas$1"
+app_dsb="./bin/utp_dt_sg_blas_release"
 out="out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
 out2="dsb_out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
 app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout >$out"

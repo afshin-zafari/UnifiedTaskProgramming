@@ -234,6 +234,7 @@ void GData::fill_with(double v,double inc)
     }
   }
   else if (owner){
+    /*
     int z=get_element_count();
     set_memory( (void *)new double[z],M );
     v = org_v;
@@ -244,7 +245,8 @@ void GData::fill_with(double v,double inc)
 	d[ j*M + i ]=v;
 	v+=inc;
       }
-    }    
+    } 
+    */   
   }  
   v= org_v;
   for ( int c=0;c<child_cnt; c++){
