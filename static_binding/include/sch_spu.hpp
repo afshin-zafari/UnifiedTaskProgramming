@@ -2,21 +2,106 @@
 #define SCH_SPU_HPP
 #include "operation.hpp"
 #include "dispatcher.hpp"
+#include "starpu.h"
+
+#define FPRINTF(ofile, fmt, ...) do { if (!getenv("STARPU_SSILENT")) {fprintf(ofile, fmt, ## __VA_ARGS__); }} while(0)
 
 
 namespace utp{
   template <typename T> class OperationBase;
   template <typename T,typename P> class Task;
+  typedef double ElementType;
   class SPU;
   extern SPU _spu;
+  /*===============================================================================================*/
+  class SPUData{
+  public:
+    starpu_data_handle_t handle;
+    GData *gdata;
+  /*-----------------------------------------------------------------------------------------*/
+    SPUData(GData *x){
+      gdata = x;
+      int M = gdata->get_rows();
+      int N = gdata->get_cols();
+      ElementType *mem = (ElementType *)gdata->get_memory();
+      starpu_matrix_data_register(&handle, 0, (uintptr_t)mem, N, N, M, sizeof(ElementType));
+    }
+  /*-----------------------------------------------------------------------------------------*/
+    void destroy(){
+      starpu_data_unregister(handle ) ;
+    }
+  /*-----------------------------------------------------------------------------------------*/
+    ~SPUData(){ destroy();  }
+  };
+  /*===============================================================================================*/
+  template<typename T, typename P>
+  class SPUTask{
+  public:
+    struct starpu_codelet *clp;
+    std::vector<GData*>  args;
 
+    typedef Task<T,P> GTask;
+    GTask *gtask;
+  /*-----------------------------------------------------------------------------------------*/
+    SPUTask(GTask *t):gtask(t){
+      clp = new starpu_codelet;
+      starpu_codelet_init(clp);
+      starpu_codelet &cl = *clp;
+      cl.cpu_funcs[0] =SPUTask::run;
+      cl.nbuffers = 2;
+      cl.modes[0] = STARPU_RW ;
+      cl.modes[1] = STARPU_R  ;
+      cl.name = "incrementer";
+    }
+  /*-----------------------------------------------------------------------------------------*/
+    starpu_task *get_spu_task(){
+      starpu_task *spu_task = starpu_task_create();
+      spu_task->cl = clp;
+      spu_task->cl_arg = (void  *) gtask;
+      spu_task->cl_arg_size = sizeof(gtask );
+    
+      SPUData *a = static_cast<SPUData *>(args[0]->get_guest());
+      SPUData *b = static_cast<SPUData *>(args[1]->get_guest());
+      spu_task->handles[0] = a->handle;
+      spu_task->handles[1] = b->handle;
+      return spu_task;
+    }
+  /*-----------------------------------------------------------------------------------------*/
+    static void run(void *descr[], void *_args){
+      GTask *t= (GTask *)_args;
+#if SHORTCUT == 0
+      Dispatcher::ready(_spu,t);
+#else
+      if ( t )
+	t->o->run(t);
+      else
+	printf("null task *\n");
+#endif
+      
+    }
+  };
+  /*===============================================================================================*/
   class SPU{
   public:
     static string name;
     static int    level;
+    /*-------------------------------------------------------------------------------*/
     SPU(){}
     /*-------------------------------------------------------------------------------*/
-    static void data_created(GData *d){}
+    static void Init(){
+      int ret=starpu_init(NULL);    
+      STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+    }
+    /*-------------------------------------------------------------------------------*/
+    static void finalize(){
+      starpu_task_wait_for_all();
+      starpu_shutdown();
+    }
+    /*-------------------------------------------------------------------------------*/
+    static void data_created(GData *d){
+      SPUData *x = new SPUData (d);
+      d->set_guest ( static_cast<void *>(x) );
+    }
     /*-------------------------------------------------------------------------------*/
     template <typename T,typename P>
     static inline void ready(Task<T,P> *t){
@@ -31,7 +116,14 @@ namespace utp{
 #     if DEBUG != 0
       cout << "----\t SPU.submit\t" << t->o->name << "_" << t->id << endl;
 #     endif
-      return 1;
+      SPUTask<T,P> *spu_task = new SPUTask<T,P>(t);
+      int ret = starpu_task_submit(spu_task->get_spu_task() );
+      if (STARPU_UNLIKELY(ret == -ENODEV))
+	{
+	  FPRINTF(stderr, "No worker may execute this task\n");
+	  exit(77);
+	}
+      return ret;
     }
     /*-------------------------------------------------------------------------------*/
     template <typename T,typename P>

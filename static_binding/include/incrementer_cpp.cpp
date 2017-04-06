@@ -105,8 +105,8 @@ public:
     spu_task->cl_arg = (void  *) stask;
     spu_task->cl_arg_size = 100*sizeof(SPUTask );
     
-    SPUData *a = static_cast<SPUData *>(args[0]->guest);
-    SPUData *b = static_cast<SPUData *>(args[1]->guest);
+    SPUData *a = static_cast<SPUData *>(args[0]->get_guest());
+    SPUData *b = static_cast<SPUData *>(args[1]->get_guest());
     spu_task->handles[0] = a->handle;
     spu_task->handles[1] = b->handle;
     return spu_task;

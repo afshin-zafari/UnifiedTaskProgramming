@@ -84,7 +84,7 @@ $(LIB_TARGET_DSB):$(OBJP_LIB_DSB)
 
 $(APP_TARGET_DSB):$(LIB_TARGET_DSB) $(OBJP_APP_DSB)
 	@$(info Linking ... to  $(APP_TARGET_DSB))
-	$(LD) -o $@ $(OBJP_APP_DSB) -L./lib -l$(NAME_DSB) $(LINK_FLAGS)
+	@$(LD) -o $@ $(OBJP_APP_DSB) -L./lib -l$(NAME_DSB) $(LINK_FLAGS)
 
 dsb:$(APP_TARGET_DSB)
 	@$(info creating $(APP_TARGET_DSB))

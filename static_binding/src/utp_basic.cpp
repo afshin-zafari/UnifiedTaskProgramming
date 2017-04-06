@@ -10,6 +10,9 @@
 #ifdef SG_INCLUDED
 #include "sch_superglue.hpp"
 #endif
+#ifdef SPU_INCLUDED
+#include "sch_spu.hpp"
+#endif
 
 namespace utp {
     void packArgs(Args *){}
@@ -24,6 +27,9 @@ namespace utp {
 	   //	   dtEngine.set_superglue(utp::SG_Engine);
          #else      
            dtEngine.start(argc,argv);
+	   #ifdef SPU_INCLUDED
+	   SPU::Init();
+	   #endif
          #endif
       #endif
 
@@ -48,6 +54,9 @@ namespace utp {
       
       #ifdef SG_INCLUDED
       utp::SG_Engine->barrier();
+      #endif
+      #ifdef SPU_INCLUDED
+      utp::SPU::finalize();
       #endif
     }
   
