@@ -6,9 +6,10 @@ COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=1 -DUTP_DEBUG=0
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
-SG_DIR = /pica/h1/afshin/sg/superglue
-DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Debug
+SRC_DIR=/home/a/afshin/src
+SG_DIR = $(SRC_DIR)/superglue
+DT_DIR = $(SRC_DIR)/DuctTeip/ResStudio/Prototype
+DT_LIB = $(DT_DIR)/lib
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include

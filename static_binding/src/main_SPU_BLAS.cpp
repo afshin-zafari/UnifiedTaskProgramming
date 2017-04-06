@@ -31,12 +31,12 @@ int main(int argc, char *argv[])
     B.fill_rows_with(2,0);
     C.fill_with(0,0);
     utp::TimeUnit start = utp::UserTime();
-    test_SG_BLAS(A,B,C);
+    test_SPU_BLAS(A,B,C);
 
     utp::utp_finalize();
     utp::TimeUnit end = utp::UserTime();
     cout << "Finished\n";
-    cout << "execution time in ms (SG BLAS with UTP): " << (end-start)/1000.0 << endl;
+    cout << "execution time in ms (SPU BLAS with UTP): " << (end-start)/1000.0 << endl;
     A.print();
     B.print();
     C.print();

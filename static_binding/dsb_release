@@ -1,5 +1,5 @@
-CPP = mpic++
-LD  = mpic++
+CPP = mpiicpc
+LD  = mpiicpc
 AR  = ar
 
 COMP_FLAGS  = -std=c++11  -DDEBUG=0 -DSHORTCUT=1

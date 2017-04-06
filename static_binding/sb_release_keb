@@ -1,21 +1,24 @@
-CPP = icpc
-LD  = icpc
+CPP = mpiicpc
+LD  = mpiicpc
 AR  = ar
 
 COMP_FLAGS  = -std=c++11  -DDEBUG=0 
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
-SG_DIR = /pica/h1/afshin/sg/superglue
-DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+SRC_DIR=/home/a/afshin/src
+SG_DIR = $(SRC_DIR)/superglue
+DT_DIR = $(SRC_DIR)/DuctTeip/ResStudio/Prototype
 DT_LIB = $(DT_DIR)/lib
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include
 
-SG_COMP_FLAGS = -I$(SG_INC)
-DT_COMP_FLAGS = -I$(DT_INC) 
- DT_LIB_FLAGS = -L$(DT_LIB) -lductteip
+SG_COMP_FLAGS  = -I$(SG_INC)
+DT_COMP_FLAGS  = -I$(DT_INC) 
+ DT_LIB_FLAGS  = -L$(DT_LIB) -lductteip
+   COMP_FLAGS += $(SG_COMP_FLAGS) $(DT_COMP_FLAGS)
+   LINK_FLAGS += -L$(DT_LIB) -lductteip
 
 all: sb
 
@@ -58,18 +61,23 @@ LIB_TARGET_SB =./lib/lib$(NAME_SB).a
 APP_TARGET_SB =./bin/$(NAME_SB)
 
 $(OBJP_LIB_SB):./obj/%.o: ./src/%.cpp #$(SRCP_LIB_SB)
-	@$(info $(notdir $<) )
+#@$(info $(notdir $<) )
+	@echo $? $(words $?)
+	@echo -n "."
 	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(SG_COMP_FLAGS) -DSG_BLAS -DSG_INCLUDED
 
 $(OBJP_APP_SB):./obj/%.o : ./src/%.cpp #$(SRCP_APP_SB)
-	@$(info $(notdir $<) )
+#@$(info $(notdir $<) )
+	@echo -n "."
 	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(SG_COMP_FLAGS) -DSG_BLAS -DSG_INCLUDED
 
 $(LIB_TARGET_SB):$(OBJP_LIB_SB)
+	@echo
 	@$(AR) rcsv  $@ $^ 
 
 $(APP_TARGET_SB):$(LIB_TARGET_SB) $(OBJP_APP_SB)
-	@$(info Linking ... to  $(APP_TARGET_SB))
+	@echo
+	@echo "Linking ... to  $(APP_TARGET_SB)"
 	@$(LD) -o $@ $(OBJP_APP_SB) -L./lib -l$(NAME_SB)  $(LINK_FLAGS) -pthread
 
 sb:$(APP_TARGET_SB)

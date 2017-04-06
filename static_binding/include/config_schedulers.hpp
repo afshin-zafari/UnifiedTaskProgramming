@@ -14,6 +14,11 @@
     #include "cfg_sg_blas.hpp"
 #endif // SG_BLAS
 
+#ifdef SPU_BLAS
+    #include "cfg_spu_blas.hpp"
+#endif // SPU_BLAS
+
+
 #ifdef DT_BLAS
     #include "cfg_dt_blas.hpp"
 #endif // DT_BLAS
@@ -21,6 +26,10 @@
 #ifdef DT_SG_BLAS
 #include "cfg_dt_sg_blas.hpp"
 #endif // DT_SG_BLAS
+
+#ifdef DT_SPU_BLAS
+#include "cfg_dt_spu_blas.hpp"
+#endif // DT_SPU_BLAS
 
 #ifdef DT_FORK_SG_SPU
 #include "cfg_dt_fork_sg_spu.hpp"

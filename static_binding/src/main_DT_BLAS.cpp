@@ -21,12 +21,12 @@ int main(int argc, char *argv[])
     A.set_partition(&P1);
     B.set_partition(&P1);
     C.set_partition(&P1);
-    A.set_memory(new double [N*N]);
-    B.set_memory(new double [N*N]);
-    C.set_memory(new double [N*N]);
+    A.set_memory(new double [N*N],N*N);
+    B.set_memory(new double [N*N],N*N);
+    C.set_memory(new double [N*N],N*N);
     A.fill_rows_with(1,0);
     B.fill_rows_with(2,0);
-    C.fill_with(0);
+    C.fill_with(0,0);
     utp::TimeUnit start = utp::UserTime();
     test_DT_BLAS(A,B,C);
 

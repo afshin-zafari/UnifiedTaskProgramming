@@ -6,17 +6,27 @@ COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=1 -DUTP_DEBUG=0
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
-SG_DIR = /pica/h1/afshin/sg/superglue
-DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Debug
+SRC_DIR = /home/a/afshin/src
+ SG_DIR = $(SRC_DIR)/superglue
+ DT_DIR = $(SRC_DIR)/DuctTeip/ResStudio/Prototype
+SPU_DIR = /home/a/afshin/pfs/StarPU/starpu-1.2.0/BUILD
 
-SG_INC = $(SG_DIR)/include
-DT_INC = $(DT_DIR)/include
+ DT_LIB =  $(DT_DIR)/lib
+SPU_LIB = $(SPU_DIR)/lib
 
-SG_COMP_FLAGS = -I$(SG_INC)
-DT_COMP_FLAGS = -I$(DT_INC) $(SG_COMP_FLAGS)
- DT_LIB_FLAGS = -L$(DT_LIB) -lductteip
+ SG_INC =  $(SG_DIR)/include
+ DT_INC =  $(DT_DIR)/include
+SPU_INC = $(SPU_DIR)/include/starpu/1.2
 
+ SG_COMP_FLAGS =  -I$(SG_INC)
+ DT_COMP_FLAGS =  -I$(DT_INC) 
+SPU_COMP_FLAGS = -I$(SPU_INC)
+
+ DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip
+SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2
+
+LINK_FLAGS += $(SPU_LIB_FLAGS) $(DT_LIB_FLAGS)
+COMP_FLAGS += $(SG_COMP_FLAGS) $(DT_COMP_FLAGS) $(SPU_COMP_FLAGS)
 
 all: dsb
 
@@ -36,15 +46,15 @@ COMMON +=    mem_manager.cpp
 COMMON +=   GPartitioner.cpp
 
 
-#--------- DT SG BLAS ---------
+#--------- DT SPU BLAS ---------
 SRC_LIB_DSB  = $(COMMON) 
+SRC_LIB_DSB +=        sch_spu.cpp
 SRC_LIB_DSB +=       sch_blas.cpp
 SRC_LIB_DSB +=   sch_ductteip.cpp
-SRC_LIB_DSB +=  sch_superglue.cpp
 
 SRC_APP_DSB  =
-SRC_APP_DSB +=  cfg_dt_sg_blas.cpp
-SRC_APP_DSB += main_DT_SG_BLAS.cpp
+SRC_APP_DSB +=  cfg_dt_spu_blas.cpp
+SRC_APP_DSB += main_DT_SPU_BLAS.cpp
 
 
 OBJ_LIB_DSB = $(subst .cpp,.o,$(SRC_LIB_DSB))
@@ -57,24 +67,24 @@ OBJP_LIB_DSB = $(addprefix ./obj/,$(OBJ_LIB_DSB))
 SRCP_APP_DSB = $(addprefix ./src/,$(SRC_APP_DSB))
 OBJP_APP_DSB = $(addprefix ./obj/,$(OBJ_APP_DSB))
 
-      NAME_DSB = utp_dt_sg_blas
+      NAME_DSB = utp_dt_spu_blas
 LIB_TARGET_DSB =./lib/lib$(NAME_DSB).a
 APP_TARGET_DSB =./bin/$(NAME_DSB)
 
 $(OBJP_LIB_DSB):./obj/%.o: ./src/%.cpp 
 	@$(info $(notdir $<) )
-	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) -DDT_SPU_BLAS -DDT_INCLUDED -DSPU_INCLUDED
 
 $(OBJP_APP_DSB):./obj/%.o : ./src/%.cpp 
 	@$(info $(notdir $<) )
-	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(DT_COMP_FLAGS) -DDT_SG_BLAS -DDT_INCLUDED -DSG_INCLUDED
+	@$(CPP) -o $@ -c $< $(COMP_FLAGS) -DDT_SPU_BLAS -DDT_INCLUDED -DSPU_INCLUDED
 
 $(LIB_TARGET_DSB):$(OBJP_LIB_DSB)
 	@$(AR) rcsv  $@ $^ 
 
 $(APP_TARGET_DSB):$(LIB_TARGET_DSB) $(OBJP_APP_DSB)
 	@$(info Linking ... to  $(APP_TARGET_DSB))
-	@$(LD) -o $@ $(OBJP_APP_DSB) -L./lib -l$(NAME_DSB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
+	$(LD) -o $@ $(OBJP_APP_DSB) -L./lib -l$(NAME_DSB) $(LINK_FLAGS)
 
 dsb:$(APP_TARGET_DSB)
 	@$(info creating $(APP_TARGET_DSB))

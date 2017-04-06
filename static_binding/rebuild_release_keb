@@ -1,0 +1,7 @@
+#!/bin/bash 
+
+for  prj in bo sb db dsb spub dspub
+do
+	rm -f ./obj/*
+	make -f ${prj}_release_keb
+done

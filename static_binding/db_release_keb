@@ -2,13 +2,14 @@ CPP = mpiicpc
 LD  = mpiicpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -g
+COMP_FLAGS  = -std=c++11  -DDEBUG=0 
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
-SG_DIR = /pica/h1/afshin/sg/superglue
-DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-DT_LIB = /pica/h1/afshin/Damavand/D3/ductteip/bin/Debug
+SRC_DIR=/home/a/afshin/src
+SG_DIR = $(SRC_DIR)/superglue
+DT_DIR = $(SRC_DIR)/DuctTeip/ResStudio/Prototype
+DT_LIB = $(DT_DIR)/lib
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include
@@ -56,7 +57,7 @@ OBJP_LIB_DB = $(addprefix ./obj/,$(OBJ_LIB_DB))
 SRCP_APP_DB = $(addprefix ./src/,$(SRC_APP_DB))
 OBJP_APP_DB = $(addprefix ./obj/,$(OBJ_APP_DB))
 
-      NAME_DB = utp_dt_blas
+      NAME_DB = utp_dt_blas_release
 LIB_TARGET_DB =./lib/lib$(NAME_DB).a
 APP_TARGET_DB =./bin/$(NAME_DB)
 
@@ -73,7 +74,7 @@ $(LIB_TARGET_DB):$(OBJP_LIB_DB)
 
 $(APP_TARGET_DB):$(LIB_TARGET_DB) $(OBJP_APP_DB)
 	@$(info Linking ... to  $(APP_TARGET_DB))
-	@$(LD) -o $@ $(OBJP_APP_DB) -L./lib -l$(NAME_DB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
+	$(LD) -o $@ $(OBJP_APP_DB) -L./lib -l$(NAME_DB) $(DT_LIB_FLAGS) $(LINK_FLAGS)
 
 db:$(APP_TARGET_DB)
 

@@ -1,5 +1,5 @@
-CPP = g++
-LD  = g++
+CPP = icpc
+LD  = icpc
 AR  = ar
 
 COMP_FLAGS  = -std=c++11  -g 

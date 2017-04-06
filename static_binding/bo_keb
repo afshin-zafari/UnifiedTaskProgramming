@@ -6,8 +6,9 @@ COMP_FLAGS  = -std=c++11 -g
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--allow-multiple-definition  -pthread -lgsl -lgslcblas
 
-SG_DIR = /pica/h1/afshin/sg/superglue
-DT_DIR = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+SRC_DIR=/home/a/afshin/src
+SG_DIR = $(SRC_DIR)/superglue
+DT_DIR = $(SRC_DIR)/DuctTeip/ResStudio/Prototype
 DT_LIB = $(DT_DIR)/lib/libductteip.a
 
 SG_INC = $(SG_DIR)/include
@@ -78,5 +79,5 @@ $(APP_TARGET_BO):$(LIB_TARGET_BO) $(OBJP_APP_BO)
 	@$(LD) -o $@ $(OBJP_APP_BO) -L./lib -l$(NAME_BO)  $(LINK_FLAGS)
 
 bo:$(APP_TARGET_BO)
-	@$(info Creating BO app.:  $(APP_TARGET_BO))
 
+.PHONY: bo

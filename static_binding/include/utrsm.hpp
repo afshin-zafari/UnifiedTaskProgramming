@@ -1,8 +1,8 @@
 #ifndef UTRSM_HPP
 #define UTRSM_HPP
-#include "operation.hpp"
+#include "utp.hpp"
 #include "ugemm.hpp"
-#include "utp_basic.hpp"
+
 namespace utp{
 
 namespace ublas{
