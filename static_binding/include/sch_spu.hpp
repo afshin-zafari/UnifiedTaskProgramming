@@ -38,7 +38,7 @@ namespace utp{
   class SPUTask{
   public:
     struct starpu_codelet *clp;
-    std::vector<GData*>  args;
+
 
     typedef Task<T,P> GTask;
     GTask *gtask;
@@ -48,10 +48,13 @@ namespace utp{
       starpu_codelet_init(clp);
       starpu_codelet &cl = *clp;
       cl.cpu_funcs[0] =SPUTask::run;
-      cl.nbuffers = 2;
-      cl.modes[0] = STARPU_RW ;
-      cl.modes[1] = STARPU_R  ;
-      cl.name = "incrementer";
+      cl.nbuffers = gtask->args->args.size();
+      for(int i=0;i<cl.nbuffers;i++){
+	if      (gtask->axs->axs[i] == In    ) cl.modes[i] =STARPU_R;
+	else if (gtask->axs->axs[i] == Out   ) cl.modes[i] =STARPU_W;
+	else if (gtask->axs->axs[i] == InOut ) cl.modes[i] =STARPU_RW;
+      }
+      cl.name = "general_spu_cl";
     }
   /*-----------------------------------------------------------------------------------------*/
     starpu_task *get_spu_task(){
@@ -60,8 +63,8 @@ namespace utp{
       spu_task->cl_arg = (void  *) gtask;
       spu_task->cl_arg_size = sizeof(gtask );
     
-      SPUData *a = static_cast<SPUData *>(args[0]->get_guest());
-      SPUData *b = static_cast<SPUData *>(args[1]->get_guest());
+      SPUData *a = static_cast<SPUData *>(gtask->args->args[0]->get_guest());
+      SPUData *b = static_cast<SPUData *>(gtask->args->args[1]->get_guest());
       spu_task->handles[0] = a->handle;
       spu_task->handles[1] = b->handle;
       return spu_task;
