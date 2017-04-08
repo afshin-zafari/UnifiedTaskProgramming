@@ -61,12 +61,12 @@ namespace utp{
       starpu_task *spu_task = starpu_task_create();
       spu_task->cl = clp;
       spu_task->cl_arg = (void  *) gtask;
-      spu_task->cl_arg_size = sizeof(gtask );
-    
-      SPUData *a = static_cast<SPUData *>(gtask->args->args[0]->get_guest());
-      SPUData *b = static_cast<SPUData *>(gtask->args->args[1]->get_guest());
-      spu_task->handles[0] = a->handle;
-      spu_task->handles[1] = b->handle;
+      spu_task->cl_arg_size = sizeof(gtask);
+
+      for(int i=0;i<clp->nbuffers;i++){
+	SPUData *a = static_cast<SPUData *>(gtask->args->args[i]->get_guest());
+	spu_task->handles[i] = a->handle;	
+      }
       return spu_task;
     }
   /*-----------------------------------------------------------------------------------------*/
@@ -92,7 +92,8 @@ namespace utp{
     SPU(){}
     /*-------------------------------------------------------------------------------*/
     static void Init(){
-      int ret=starpu_init(NULL);    
+      int ret=starpu_init(NULL);
+      cout << "SPU init\n";
       STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
     }
     /*-------------------------------------------------------------------------------*/
@@ -102,6 +103,8 @@ namespace utp{
     }
     /*-------------------------------------------------------------------------------*/
     static void data_created(GData *d){
+      if ( Dispatcher::is_distributed(d->get_level()) )
+	return;
       SPUData *x = new SPUData (d);
       d->set_guest ( static_cast<void *>(x) );
     }
