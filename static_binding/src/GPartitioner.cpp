@@ -95,6 +95,7 @@ void GPartitioner::set_for_allocation(bool f){alloc = f;}
 void GPartitioner::set_for_ownership(bool f){ownership = f;}
 /*-------------------------------------------------------------*/
   bool GPartitioner::is_owner(GData *d){
+    #ifdef DT_INCLUDED     
     int level = d->get_level();
     if ( level == 0 )
       return false;
@@ -105,6 +106,10 @@ void GPartitioner::set_for_ownership(bool f){ownership = f;}
     d->getCoordination(row,col,depth);
     int owner = (row % y) * cmdLine.q + col %x;
     return owner == me;
+    #else
+
+    return true;
+    #endif
     
     
   }

@@ -31,6 +31,10 @@ namespace utp {
 	   SPU::Init();
 	   #endif
          #endif
+      #else
+	   #ifdef SPU_INCLUDED
+	   SPU::Init();
+	   #endif
       #endif
 
       cmdLine.getCmdLine(argc,argv);

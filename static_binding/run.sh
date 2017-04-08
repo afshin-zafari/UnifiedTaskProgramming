@@ -8,7 +8,8 @@
 #SBATCH -n 16
 #SBATCH -J UI-DT-GEMM
 
-module load gcc/4.9 openmpi/1.8.1 cuda/7.5
+module load intel intelmpi
+LD_LIBRARY_PATH=/pica/h1/afshin/StarPU/STARPU_BIN/lib:${LD_LIBRARY_PATH}
 
 set -x
 B1=4
@@ -25,12 +26,19 @@ app_bo="./bin/utp_blas_only$1"
 app_db="./bin/utp_dt_blas$1"
 app_sb="./bin/utp_sg_blas$1"
 app_dsb="./bin/utp_dt_sg_blas_release"
+app_spub="./bin/utp_spu_blas"
 out="out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
 out2="dsb_out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
 app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout >$out"
 mpi_params1="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out"
 mpi_params2="-np $P --bind-to numa  --map-by numa --map-by ppr:$ipn:node --output-filename $out2"
 
+
+#-----BLAS ONLY
+echo "========================================================================="
+echo "========================================================================="
+$app_spub ${app_params} > spub_${out}
+exit 
 
 #-----BLAS ONLY
 echo "========================================================================="

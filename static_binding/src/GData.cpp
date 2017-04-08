@@ -172,7 +172,10 @@ void GData::set_memory(MemoryItem *m)
 void GData::set_memory(void *m,int ld)
 {
   content = (byte *)m;
-  leading_dim = ld;
+  if ( ld == -1 )
+    leading_dim = M;
+  else
+    leading_dim = ld;
   PRINTF("set_memory for %s, m:%p , ld:%d\n",get_name().c_str(),m,ld);
   if ( child_cnt ==0 )
     return ;

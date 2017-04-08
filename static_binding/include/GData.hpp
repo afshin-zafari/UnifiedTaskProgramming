@@ -32,12 +32,12 @@ class GData
         GHandle *get_handle();
         bool is_memory_allocated();
         void set_memory(MemoryItem*);
-        void set_memory(void *,int);
+        void set_memory(void *,int=-1);
         long get_element_count();
         int get_rows();
         int get_cols();
         byte *get_memory();
-        void fill_with(double,double);
+        void fill_with(double,double=1);
         void fill_rows_with ( double start , double scale);
         void print();
         void dump();
