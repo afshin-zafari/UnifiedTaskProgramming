@@ -24,6 +24,11 @@ namespace utp{
 	SPU::data_created(d);
 #endif
       }
+      static void data_set_memory(GData *d, double *mem, int ld){
+#ifdef SPU_INCLUDED
+	SPU::data_set_memory(d,mem,ld);
+#endif
+      }
       static void data_partitioned(GData *d){
 #ifdef SG_INCLUDED
 	SG::data_partitioned(d);

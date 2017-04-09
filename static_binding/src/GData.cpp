@@ -176,6 +176,7 @@ void GData::set_memory(void *m,int ld)
     leading_dim = M;
   else
     leading_dim = ld;
+  BroadCast::data_set_memory(this,(double*)m,leading_dim);
   PRINTF("set_memory for %s, m:%p , ld:%d\n",get_name().c_str(),m,ld);
   if ( child_cnt ==0 )
     return ;

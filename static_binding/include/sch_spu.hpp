@@ -24,8 +24,21 @@ namespace utp{
       int M = gdata->get_rows();
       int N = gdata->get_cols();
       ElementType *mem = (ElementType *)gdata->get_memory();
-      starpu_matrix_data_register(&handle, 0, (uintptr_t)mem, N, N, M, sizeof(ElementType));
-      cout << "Data " << x->get_name() << "registered at SPU with handle " << handle << endl;
+      if ( mem ){
+	cout << "Data " << x->get_name() << "registered at SPU with mem " << mem  << endl<< flush;
+	starpu_matrix_data_register(&handle, 0, (uintptr_t)mem, N, N, M, sizeof(ElementType));
+	cout << "Data " << x->get_name() << "registered at SPU with handle " << handle << endl<< flush;
+      }
+    }
+  /*-----------------------------------------------------------------------------------------*/
+    void register_mem(double *mem,int ld){
+      if ( mem ){
+	int M = gdata->get_rows();
+	int N = gdata->get_cols();
+	cout << "Data " << gdata->get_name() << "registered at SPU with mem " << mem  << endl<< flush;
+	starpu_matrix_data_register(&handle, 0, (uintptr_t)mem, N, N, M, sizeof(ElementType));
+	cout << "Data " << gdata->get_name() << "registered at SPU with handle " << handle << endl<< flush;
+      }
     }
   /*-----------------------------------------------------------------------------------------*/
     void destroy(){
@@ -50,18 +63,18 @@ namespace utp{
       starpu_codelet &cl = *clp;
       cl.cpu_funcs[0] =SPUTask::run;
       cl.nbuffers = gtask->args->args.size();
-      cout << "SPUTask created with arg count: " << cl.nbuffers << endl;
+      cout << "SPUTask created with arg count: " << cl.nbuffers << endl << flush;
       for(int i=0;i<cl.nbuffers;i++){
 	if      (gtask->axs->axs[i] == In    ) cl.modes[i] =STARPU_R;
 	else if (gtask->axs->axs[i] == Out   ) cl.modes[i] =STARPU_W;
 	else if (gtask->axs->axs[i] == InOut ) cl.modes[i] =STARPU_RW;
-	cout << "access of arg " << i << " = " << cl.modes[i] << endl;
+	cout << "access of arg " << i << " = " << cl.modes[i] << endl << flush;
       }
       cl.name = "general_spu_cl";
     }
   /*-----------------------------------------------------------------------------------------*/
     starpu_task *get_spu_task(){
-      cout << "get_spu_task called\n";
+      cout << "get_spu_task called\n" << flush;
       starpu_task *spu_task = starpu_task_create();
       spu_task->cl = clp;
       spu_task->cl_arg = (void  *) gtask;
@@ -70,14 +83,14 @@ namespace utp{
       for(int i=0;i<clp->nbuffers;i++){
 	SPUData *a = static_cast<SPUData *>(gtask->args->args[i]->get_guest());
 	spu_task->handles[i] = a->handle;
-	cout << "handle of spu data" << a->handle << endl;
+	cout << "handle of spu data" << a->handle << endl << flush;
       }
       return spu_task;
     }
   /*-----------------------------------------------------------------------------------------*/
     static void run(void *descr[], void *_args){
       GTask *t= (GTask *)_args;
-      cout << "SPUTask is ready to run for " << t->args->args[2]->get_name()<< endl;
+      cout << "SPUTask is ready to run for " << t->args->args[2]->get_name()<< endl << flush;
 #if SHORTCUT == 0
       Dispatcher::ready(_spu,t);
 #else
@@ -99,8 +112,9 @@ namespace utp{
     /*-------------------------------------------------------------------------------*/
     static void Init(){
       int ret=starpu_init(NULL);
-      cout << "SPU init\n";
+      cout << "SPU init\n" << flush;
       STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+      cout << "SPU init\n" << flush;
     }
     /*-------------------------------------------------------------------------------*/
     static void finalize(){
@@ -110,9 +124,14 @@ namespace utp{
     /*-------------------------------------------------------------------------------*/
     static void data_created(GData *d){
       //      if ( Dispatcher::is_distributed(d->get_level()) )	return;
+      cout << "data created at SPU " << d->get_name() << endl << flush;
       SPUData *x = new SPUData (d);
-      cout << "data created at SPU " << d->get_name() << endl;
       d->set_guest ( static_cast<void *>(x) );
+    }
+    /*-------------------------------------------------------------------------------*/
+    static void data_set_memory(GData *d,double *mem, int ld){
+      SPUData *x = static_cast<SPUData  *>(d->get_guest());
+      x->register_mem(mem,ld);
     }
     /*-------------------------------------------------------------------------------*/
     template <typename T,typename P>
@@ -125,7 +144,7 @@ namespace utp{
     /*-------------------------------------------------------------------------------*/
     template<typename T,typename P>
     static inline int submit(Task<T,P>*t){
-      cout << "----\t SPU.submit\t" << t->o->name << "_" << t->id << endl;
+      cout << "----\t SPU.submit\t" << t->o->name << "_" << t->id << endl << flush;
       SPUTask<T,P> *spu_task = new SPUTask<T,P>(t);
       int ret = starpu_task_submit(spu_task->get_spu_task() );
       if (STARPU_UNLIKELY(ret == -ENODEV))
