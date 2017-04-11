@@ -30,15 +30,15 @@ namespace utp{
 #endif
       }
       static void data_partitioned(GData *d){
+#ifdef SPU_INCLUDED
+	SPU::data_partitioned(d);
+#endif
 #ifdef SG_INCLUDED
 	SG::data_partitioned(d);
 #endif // SG_INCLUDED
 #ifdef DT_INCLUDED
 	DT::data_partitioned(d);
 #endif // DT_INCLUDED
-#ifdef SPU_INCLUDED
-	SPU::data_partitioned(d);
-#endif
       }
       static void partition_defined(GPartitioner *p){
 #ifdef SG_INCLUDED

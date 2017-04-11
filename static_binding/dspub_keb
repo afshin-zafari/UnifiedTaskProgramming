@@ -2,7 +2,7 @@ CPP = mpiicpc
 LD  = mpiicpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=1 -DUTP_DEBUG=0
+COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=0 -DUTP_DEBUG=1 
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 
@@ -23,7 +23,7 @@ SPU_INC = $(SPU_DIR)/include/starpu/1.2
 SPU_COMP_FLAGS = -I$(SPU_INC)
 
  DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip
-SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2
+SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2 -lcublas
 
 LINK_FLAGS += $(SPU_LIB_FLAGS) $(DT_LIB_FLAGS)
 COMP_FLAGS += $(SG_COMP_FLAGS) $(DT_COMP_FLAGS) $(SPU_COMP_FLAGS)
@@ -48,9 +48,9 @@ COMMON +=   GPartitioner.cpp
 
 #--------- DT SPU BLAS ---------
 SRC_LIB_DSB  = $(COMMON) 
+SRC_LIB_DSB +=   sch_ductteip.cpp
 SRC_LIB_DSB +=        sch_spu.cpp
 SRC_LIB_DSB +=       sch_blas.cpp
-SRC_LIB_DSB +=   sch_ductteip.cpp
 
 SRC_APP_DSB  =
 SRC_APP_DSB +=  cfg_dt_spu_blas.cpp

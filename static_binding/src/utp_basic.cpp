@@ -18,6 +18,8 @@ namespace utp {
     void packArgs(Args *){}
     void packAxs(Axs &){}
     void utp_initialize(int argc , char *argv[]){
+
+      cmdLine.getCmdLine(argc,argv);
       
       #ifdef DT_INCLUDED
       DT::init();
@@ -26,7 +28,7 @@ namespace utp {
 	   utp::SG_Engine = new SuperGlue<utp::SGWOptions>(cmdLine.nt);
 	   //	   dtEngine.set_superglue(utp::SG_Engine);
          #else      
-           dtEngine.start(argc,argv);
+           dtEngine.start(argc,argv,true);
 	   #ifdef SPU_INCLUDED
 	   SPU::Init();
 	   #endif
@@ -37,7 +39,6 @@ namespace utp {
 	   #endif
       #endif
 
-      cmdLine.getCmdLine(argc,argv);
       
       #ifdef SG_INCLUDED
         #ifndef DT_INCLUDED 

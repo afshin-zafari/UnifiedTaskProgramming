@@ -23,7 +23,7 @@ SPU_INC = $(SPU_DIR)/include/starpu/1.2
 SPU_COMP_FLAGS = -I$(SPU_INC)
 
  DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip
-SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2
+SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2 -lcublas
 
 LINK_FLAGS += $(SPU_LIB_FLAGS)
 COMP_FLAGS += $(SG_COMP_FLAGS) $(DT_COMP_FLAGS) $(SPU_COMP_FLAGS)

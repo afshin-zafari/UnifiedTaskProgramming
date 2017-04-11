@@ -19,6 +19,7 @@ namespace utp{
     typedef T First;
 
   };
+  /*-----------Node Dispatch ----------------------------------*/
   template < typename E >
   class NodeDispatch{
   public:
@@ -77,11 +78,13 @@ namespace utp{
   public:
     typedef typename Edge<typename E::First, typename E::Second>::First  first;
     typedef typename Edge<typename E::First, typename E::Second>::Second second;
+    /*-------------------------------------------------------*/
     static bool is_distributed(int level){
       if ( level ==1 && first::name == "DT" )
 	return true;
       return false;
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static void submit(UserProgram &, Task<T,P>*t){
 #     if DEBUG!=0
@@ -89,6 +92,7 @@ namespace utp{
 #     endif
       E::First::submit(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static void submit( Task<T,P>*t){
 #     if DEBUG!=0
@@ -96,6 +100,7 @@ namespace utp{
 #     endif
       E::First::submit(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void submit(first &f, Task<T,P>*t){
 #     if DEBUG!=0
@@ -103,6 +108,7 @@ namespace utp{
 #     endif
       E::Second::submit(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void ready(first &f,Task<T,P>*t){
 #     if DEBUG!=0
@@ -110,14 +116,21 @@ namespace utp{
 #     endif
       t->o->run(t);
     }
+    /*-------------------------------------------------------*/
+    template <typename T,typename P>
+    static void ready_for_gpu(first &f,Task<T,P>*t){
+      cout <<  f.name <<"\t Dis.ready_for_gpu\t" <<  t->o->name << "_" << t->id << endl;
+      t->o->run_on_gpu(t);
+    }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void finished(first &s,Task<T,P>*t){}
-  
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void finished(Task<T,P>*t){
       E::First::finished(t);
     }
-
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void finished(second &s,Task<T,P>*t){
 #     if DEBUG!=0
@@ -131,7 +144,9 @@ namespace utp{
       }
     }
   };
-  /*-------Path Dispatch -----------------------------*/
+
+
+  /*======== -------Path Dispatch -------================*/
 
   template <typename E1, typename E2>
   class PathDispatch{
@@ -140,14 +155,18 @@ namespace utp{
     typedef typename Edge<typename E1::First, typename E1::Second>::Second second;
     typedef typename Edge<typename E2::First, typename E2::Second>::Second third;
 
+    /*-------------------------------------------------------*/
     static void Init(){
       first::level = 0;
       second::level = 1;
       //third::level = 2;
     }
+    /*-------------------------------------------------------*/
     static bool is_distributed(int level){
       switch(level){
       case 0:
+	if ( first::name == "DT")
+	  return true;
 	return false;
       case 1:
 	if ( first::name == "DT")
@@ -162,6 +181,7 @@ namespace utp{
       }
       return false;
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline void submit(UserProgram &, Task<T,P>*t){
 #     if DEBUG!=0
@@ -169,34 +189,47 @@ namespace utp{
 #     endif
       E1::First::submit(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline void submit( Task<T,P>*t){
       E1::First::submit(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline void submit(first &, Task<T,P>*t){
       E1::Second::submit(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void submit(second&, Task<T,P>*t){
       E2::Second::submit(t);
     }
+    /*-------------------------------------------------------*/
+    template <typename T,typename P>
+    static void ready_for_gpu(second  &s,Task<T,P>*t){
+      cout <<  s.name <<"\t Dis.ready_for_gpu\t" <<  t->o->name << "_" << t->id << endl;
+      t->o->run_on_gpu(t);
+    }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline void ready(first &f,Task<T,P>*t){
-#     if DEBUG!=0
+#     if UTP_DEBUG != 0
       cout << f.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
 #     endif
       t->o->split(f,t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline void ready(second &s,Task<T,P>*t){
-#     if DEBUG!=0
+#     if UTP_DEBUG!=0
       cout << s.name <<"\t Dis.ready\t" <<  t->o->name << "_" << t->id <<endl;
 #     endif
       t->o->run(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void finished(first &s,Task<T,P>*t){}
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static  inline  void finished(Task<T,P>*t){
 #     if DEBUG!=0
@@ -204,6 +237,7 @@ namespace utp{
 #     endif
       E1::Second::finished(t);
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline void finished(second &s,Task<T,P>*t){
 #     if DEBUG!=0
@@ -215,13 +249,14 @@ namespace utp{
 	new_count = Atomic::decrease_nv(&p->child_count);
 	bool finished = new_count == 0;
 	if( finished){
-#     if DEBUG!=0
+#     if DEBUG==0
 	  cout << "ppppp Dis.finished\t" <<  p->o->name << "_" << p->id << endl;
 #     endif
 	  E1::First::finished(p);
 	}
       }
     }
+    /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline  void finished(third &s,Task<T,P>*t){
 #     if DEBUG!=0

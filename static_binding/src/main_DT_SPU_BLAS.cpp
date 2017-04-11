@@ -21,6 +21,11 @@ int main(int argc, char *argv[])
     A.set_partition(&P1);
     B.set_partition(&P1);
     C.set_partition(&P1);
+    /*
+    A.set_memory(new double [N*N],N);
+    B.set_memory(new double [N*N],N);
+    C.set_memory(new double [N*N],N);
+    */
 
     A.fill_with(1.0,0.0);
     B.fill_with(2.0,0.0);

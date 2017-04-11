@@ -1,14 +1,15 @@
-
-CC  = mpicc
-CXX = mpicxx
+CMP = mpiicpc
+CC  = $(CMP)
+CXX = $(CMP)
 AR  = ar
-LD  = mpicxx
+LD  = $(CMP)
 
-OBJ_OUT       = __/o
-DUCTTEIP_DIR  = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
-DUCTTEIP_SRC  = $(DUCTTEIP_DIR)/src
-SUPERGLUE_DIR = /pica/h1/afshin/sg/superglue
-
+OBJ_OUT        = __/o
+#DUCTTEIP_DIR  = /pica/h1/afshin/Damavand/D4/DuctTeip/ResStudio/Prototype
+DUCTTEIP_DIR   = /home/a/afshin/src/DuctTeip/ResStudio/Prototype
+DUCTTEIP_SRC   = $(DUCTTEIP_DIR)/src
+#SUPERGLUE_DIR = /pica/h1/afshin/sg/superglue
+SUPERGLUE_DIR  = /home/a/afshin/src/superglue
 
 INC     = -I$(DUCTTEIP_DIR)/include -I$(SUPERGLUE_DIR)/include
 CFLAGS  = -Wall -fexceptions
@@ -18,7 +19,7 @@ LIB     =
 LDFLAGS = -Wl,--allow-multiple-definition 
 
 INC_DEBUG     = $(INC) 
-CFLAGS_DEBUG  = $(CFLAGS) -g -std=c++11
+CFLAGS_DEBUG  = $(CFLAGS) -g -std=c++11 -DBUILD=DEBUG
 RESINC_DEBUG  = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG  = $(LIBDIR)

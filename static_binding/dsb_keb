@@ -2,7 +2,7 @@ CPP = mpiicpc
 LD  = mpiicpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=1 -DUTP_DEBUG=0
+COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=1 -DUTP_DEBUG=0 -DDEBUG=1
 COMP_FLAGS += -Iinclude
 LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
 

@@ -27,15 +27,17 @@ GData::GData(int i,int j,string n):M(i),N(j),name(n)
         all_data = new std::vector<GData *>;
     key = all_data->size();
     all_data->push_back(this);
-    memory = nullptr;
-    content = nullptr;
-    child_cnt = 0;
-    child_idx=0;
-    parent = nullptr;
-    children= nullptr;
-    partitioner=nullptr;
-    guest = nullptr;
-    level = 0;
+    
+    memory      = nullptr;
+    content     = nullptr;
+    child_cnt   = 0;
+    child_idx   = 0;
+    parent      = nullptr;
+    children    = nullptr;
+    partitioner = nullptr;
+    guest       = nullptr;
+    level       = 0;
+    
     BroadCast::data_created(this);
 }
 /*=====================================================================*/

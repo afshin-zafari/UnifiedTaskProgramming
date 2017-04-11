@@ -38,7 +38,9 @@ public :
     int i = 0 ;
     (void ) i;
   }
-  void runKernels(IDuctteipTask *task){}
+  void runKernels(IDuctteipTask *task){
+    cout << "runKernels in UTP" << task->getName()<< endl;
+  }
   string getTaskName(unsigned long) {return name;}
 
 };
@@ -133,14 +135,14 @@ public:
 
 	
     }
-    void run(){
-      if ( isFinished())
-	return;
-      if ( getState() == Running )
-	return;
+    void runKernel(){
+      cout << "DTTask::Run \n";
+      if ( isFinished())	return;
+      //if ( getState() == Running )	return;
       setState( Running);
       gtask->is_generating = true;
       #if SHORTCUT==0
+      cout << "DTTask  Dis.Ready \n";
       Dispatcher::ready(_dt,gtask);
       #else
       gtask->o->split(_dt,gtask);
@@ -153,7 +155,7 @@ class DT{
 public:
 
     pthread_mutex_t 	thread_lock_obsolete;
-    pthread_mutexattr_t 	mutex_attr_obsolete;
+    pthread_mutexattr_t	mutex_attr_obsolete;
     static int level;
     static string name ;
     DT()
@@ -172,10 +174,12 @@ public:
         pthread_mutexattr_destroy(&mutex_attr);
       */
     }
+    /*------------------------------------------------------------------------------*/
     static void finalize()
     {
         dtEngine.finalize();
     }
+    /*------------------------------------------------------------------------------*/
     static void init(){
         dt_ctx = new GenAlgorithm;
     }
@@ -186,6 +190,7 @@ public:
       assert(temp);
       return 1;
     }
+    /*------------------------------------------------------------------------------*/
     template <typename T,typename P>
     static inline void finishedTask(Task<T,P>  *t)
     {
@@ -232,22 +237,30 @@ public:
     {
       int by = d->get_part_countY();
       int bx = d->get_part_countX();
+      if ( d->get_level() ==1){
+	d->set_memory((void*)d->get_memory(), d->get_ld());
+	return;
+      }
       if  ( d->get_level() > 0 )
         return;
 
-      PRINTF("%s,%d, data:%s %dx%d, level:%d\n",__FUNCTION__,__LINE__,d->get_name().c_str(),by,bx,d->get_level());
+      printf("%s,%d, data:%s %dx%d, level:%d\n",__FUNCTION__,__LINE__,d->get_name().c_str(),by,bx,d->get_level());
       IData *dt;
       dt = (IData *)d->get_guest();
+      assert(dt);
+      printf("before ductteip->set_partition()\n");
       dt->setPartition(by,bx);
+
+      printf("after ductteip->set_partition()\n");
       for ( int i =0 ; i < by; i++){
         for ( int j =0 ; j < bx; j++){
           IData * dt_ch = (*dt)(i,j);
           GData &d_ch = (*d)(i,j);
           assert(dt_ch);
-          PRINTF("gd_ch:%s, dt_ch:%s\n",d_ch.get_name().c_str(),dt_ch->get_name().c_str());
-	  PRINTF("%s,%d: %s\n",__FILE__,__LINE__,__FUNCTION__);
+          printf("gd_ch:%s, dt_ch:%s\n",d_ch.get_name().c_str(),dt_ch->get_name().c_str());
+	  printf("%s,%d: %s\n",__FILE__,__LINE__,__FUNCTION__);
           d_ch.set_memory((void *)dt_ch->getContentAddress(),dt_ch->getYLocalDimension());
-          PRINTF("gdata memory:%p dt_ch memory:%p\n",d_ch.get_memory(),dt_ch->getContentAddress());
+          printf("gdata memory:%p dt_ch memory:%p\n",d_ch.get_memory(),dt_ch->getContentAddress());
           dt_ch->setParentData(dt);
             d_ch.set_guest((void*) dt_ch);
           dt_ch->set_guest((void*)& d_ch);
