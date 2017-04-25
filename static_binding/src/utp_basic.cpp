@@ -12,9 +12,11 @@
 #endif
 #ifdef SPU_INCLUDED
 #include "sch_spu.hpp"
+#include <cusolverDn.h>
 #endif
 
 namespace utp {
+    extern cusolverDnHandle_t *cusolver_handle;
     void packArgs(Args *){}
     void packAxs(Axs &){}
     void utp_initialize(int argc , char *argv[]){
@@ -31,6 +33,7 @@ namespace utp {
            dtEngine.start(argc,argv,true);
 	   #ifdef SPU_INCLUDED
 	   SPU::Init();
+	   cusolverDnCreate(cusolver_handle);
 	   #endif
          #endif
       #else
@@ -62,6 +65,10 @@ namespace utp {
       #endif
       #ifdef SPU_INCLUDED
       utp::SPU::finalize();
+      cout << "destroy cu solver." << cusolver_handle << endl << flush ;
+      if (cusolver_handle)
+	cusolverDnDestroy(*cusolver_handle);
+      cout << "after destroy cu solver.\n" ;
       #endif
     }
   

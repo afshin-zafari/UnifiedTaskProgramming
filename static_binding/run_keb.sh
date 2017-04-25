@@ -22,6 +22,8 @@
 
 ml add intelcuda
 LD_LIBRARY_PATH=/home/a/afshin/pfs/StarPU/starpu-1.2.0/BUILD/lib:${LD_LIBRARY_PATH}
+LD_LIBRARY_PATH=/hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/lib:${LD_LIBRARY_PATH}
+
 
 set -x
 
@@ -56,12 +58,12 @@ mpi_params3="-ordered-output -n $P -ppn $ipn -outfile-pattern  $out3 -errfile-pa
 #-----SPU BLAS 
 echo "========================================================================="
 echo "========================================================================="
-#$app_spub ${app_params} > spub_${out}
+$app_spub ${app_params} > spub_${out}
 
 #-----DT SPU BLAS 
 echo "========================================================================="
 echo "========================================================================="
-mpirun ${mpi_params3} ${app_dspub} ${app_params3}
+#mpirun ${mpi_params3} ${app_dspub} ${app_params3}
 grep -i "error" dspub*.txt*
 grep -i "\[0\]" ${out3} > p0_out.txt
 grep -i "\[1\]" ${out3} > p1_out.txt

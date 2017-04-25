@@ -37,6 +37,8 @@ cleandsb:
 COMMON  =          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
+COMMON +=          usyrk.cpp
+COMMON +=         upotrf.cpp
 COMMON +=          GData.cpp
 COMMON +=        cmdline.cpp
 COMMON +=        GHandle.cpp

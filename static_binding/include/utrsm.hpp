@@ -34,8 +34,31 @@ namespace ublas{
 
 	    // Signature: cblas_dtrsm (Order, Side, Uplo, TransA, Diag, M, N, alpha, A, lda, B, ldb)
 	    PRINTF("trsm------------, B(%d) \n",b->get_child_index());
-	    cblas_dtrsm(CblasColMajor,CblasRight,CblasLower,CblasTrans,CblasNonUnit,M,N,1.0,A,ldA,B,ldB);
+	    cblas_dtrsm(CblasColMajor,CblasRight,CblasLower,CblasTrans,CblasUnit,M,N,1.0,A,ldA,B,ldB);
         }
+    /*---------------------------------------------------------------*/
+      template <typename P>
+      static void run_on_gpu(Task<Trsm,P> *t){
+	GData *a = t->args->args[0];
+	GData *b = t->args->args[1];
+
+
+	//	double *A=(double *)a->get_memory();
+	double *A = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[0]);
+	
+	int ldA = a->get_rows();
+	int M = a->get_rows();
+
+	//	double *B=(double *)b->get_memory();
+	double *B = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[1]);
+	int ldB = b->get_rows();
+	int N = b->get_cols();
+	//cublasDtrsm ( side,  uplo,  transa, diag, m,  n,  alpha,A,  lda, B, ldb);
+	cublasDtrsm('L','L','N','U',M,N,1.0,A,ldA,B,ldB);
+	
+	Dispatcher::finished(t);
+      }
+      
     };
     /*===================================================================================*/
     extern Trsm trsm_instance;
@@ -46,18 +69,18 @@ namespace ublas{
         public:
             static const int trsm_type_id=1;
     TrsmTask(GData &A, GData &B, P* p):Task<Trsm,P>(&trsm_instance){
-                Task<Trsm,P>::args = new Args;
-                Task<Trsm,P>::axs  = new Axs;
-                packArgs (  Task<Trsm,P>::args, A , B    );
-                packAxs  ( *Task<Trsm,P>::axs , In, InOut);
+                this->args = new Args;
+                this->axs  = new Axs;
+                packArgs (  this->args, A , B    );
+                packAxs  ( *this->axs , In, InOut);
                 Task<Trsm,P>::id = trsm_task_count ++;
 		Task<Trsm,P>::type_id = trsm_type_id;
 		Task<Trsm,P>::child_count=0; 
 		Task<Trsm,P>::set_parent(p);
             }
             ~TrsmTask(){
-                delete Task<Trsm,P>::args;
-                delete Task<Trsm,P>::axs;
+                delete this->args;
+                delete this->axs;
             }
     };
     /*===================================================================================*/

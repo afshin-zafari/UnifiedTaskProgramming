@@ -77,23 +77,32 @@ namespace utp{
     starpu_task *get_spu_task(){
       if(debug)cout << "get_spu_task called\n" << flush;
       starpu_task *spu_task = starpu_task_create();
+      if(debug)cout << "after starpu_task_create\n" << flush;
+      assert(spu_task);
       spu_task->cl = clp;
       spu_task->cl_arg = (void  *) gtask;
       spu_task->cl_arg_size = sizeof(gtask);
-
+      cout << "No of args: " << gtask->args->args.size() << endl;
       for(int i=0;i<clp->nbuffers;i++){
+	if(debug)cout << "argument " << i << endl << flush;
+	assert(gtask);
+	assert(gtask->args);
+	assert(gtask->args->args[i]);	
 	SPUData *a = static_cast<SPUData *>(gtask->args->args[i]->get_guest());
+	assert(a);
 	spu_task->handles[i] = a->handle;
 	if(debug)
 	  cout << "Arg data " << gtask->args->args[i]->get_name() <<
-	    "handle of spu data " << a->handle << endl << flush;
+	    " handle of spu data " << a->handle << endl << flush;
       }
+      if(debug)cout << "get_spu_task returned\n" << flush;
       return spu_task;
     }
   /*-----------------------------------------------------------------------------------------*/
     static void run(void *descr[], void *_args){
       GTask *t= (GTask *)_args;
-      if(debug)cout << "SPUTask is ready to run for " << t->args->args[2]->get_name()<< endl << flush;
+      int n=t->args->args.size()-1;
+      if(debug)cout << "SPUTask is ready to run for " << t->args->args[n]->get_name()<< endl << flush;
 #if SHORTCUT == 0
       Dispatcher::ready(_spu,t);
 #else
@@ -107,7 +116,8 @@ namespace utp{
   /*-----------------------------------------------------------------------------------------*/
     static void run_cuda(void *descr[], void *_args){
       GTask *t= (GTask *)_args;
-      if(debug)cout << "SPUTask is ready to run on GPU  for " << t->args->args[2]->get_name()<< endl << flush;
+      int n=t->args->args.size()-1;      
+      if(debug)cout << "SPUTask is ready to run on GPU  for " << t->args->args[n]->get_name()<< endl << flush;
       double *pMem = (double *)STARPU_MATRIX_GET_PTR(descr[0]);
       double *xMem = (double *)t->args->args[0]->get_memory();
       t->gpuArgs.push_back(descr[0]);
@@ -143,15 +153,19 @@ namespace utp{
     }
     /*-------------------------------------------------------------------------------*/
     static void finalize(){
+      if(debug)cout << "SPU wait tasks\n" << flush;
       starpu_task_wait_for_all();
+      if(debug)cout << "SPU shut down\n" << flush;
       starpu_shutdown();
     }
     /*-------------------------------------------------------------------------------*/
     static void data_created(GData *d){
+      #ifdef DT_INCLUDED
       if ( Dispatcher::is_distributed(d->get_level()) )
 	return;
       if ( d->get_level() <2)
 	return;
+      #endif
       if(debug)cout << "data created at SPU " << d->get_name() << endl << flush;
       SPUData *x = new SPUData (d);
       d->set_guest ( static_cast<void *>(x) );
@@ -160,8 +174,10 @@ namespace utp{
     static void data_set_memory(GData *d,double *mem, int ld){
       if(!mem)
 	return;
+      #ifdef DT_INCLUDED
       if ( d->get_level() <2)
 	return;
+      #endif
       SPUData *x = static_cast<SPUData  *>(d->get_guest());
       x->register_mem(mem,ld);
     }

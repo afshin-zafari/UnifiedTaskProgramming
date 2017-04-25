@@ -58,9 +58,11 @@ namespace utp{
     OperationBase<T> *o;
     int id,child_count;
     bool is_generating;
+    double alpha,beta;
     Task ( OperationBase<T> *_o):o(_o){
       child_count =0;
       parent = nullptr;
+      alpha = beta = 1.0;
       Init();
     }
     void set_parent(Parent  *p){

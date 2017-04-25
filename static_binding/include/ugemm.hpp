@@ -37,8 +37,8 @@ namespace utp{
 	double *C=(double *)c->get_memory();
 	int ldC = c->get_rows();
 	int K = a->get_cols();
-	double beta= 1.0; 
-	double alpha= 1.0;
+	double beta= t->beta; 
+	double alpha= t->alpha;
 	auto TransA = CblasNoTrans;
 	//Order,TransA, TransB, M, N, K, alpha, A, lda, B, ldb, beta, C, ldc)
 
@@ -98,19 +98,19 @@ namespace utp{
     }
     /*------------------------------------------------------------*/
     GemmTask(GData &A,GData &B,GData &C,P *p=nullptr):Task<Gemm,P>(&gemm_instance){
-      Task<Gemm,P>::args = new Args;
-      Task<Gemm,P>::axs = new Axs;
-      packArgs( Task<Gemm,P>::args, A , B  , C    );
-      packAxs (*Task<Gemm,P>::axs , In, In , InOut);
-      Task<Gemm,P>::id = gemm_task_count ++;
-      Task<Gemm,P>::type_id = gemm_type_id;
-      Task<Gemm,P>::child_count=0;
-      Task<Gemm,P>::set_parent(p);
+      this->args = new Args;      
+      this->axs = new Axs;
+      packArgs( this->args, A , B  , C    );
+      packAxs (*this->axs , In, In , InOut);
+      this->id = gemm_task_count ++;
+      this->type_id = gemm_type_id;
+      this->child_count=0;
+      set_parent(p);
     }
     /*------------------------------------------------------------*/
     ~GemmTask(){
-      delete Task<Gemm,P>::args;
-      delete Task<Gemm,P>::axs;
+      delete this->args;
+      delete this->axs;
     }
   };
   /*===================================================================================*/

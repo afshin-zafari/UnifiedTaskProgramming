@@ -124,7 +124,12 @@ namespace utp{
     }
     /*-------------------------------------------------------*/
     template <typename T,typename P>
-    static   void finished(first &s,Task<T,P>*t){}
+    static   void finished(first &s,Task<T,P>*t){
+#     if UTP_DEBUG!=0
+      cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
+#     endif
+
+    }
     /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void finished(Task<T,P>*t){
@@ -133,7 +138,7 @@ namespace utp{
     /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   void finished(second &s,Task<T,P>*t){
-#     if DEBUG!=0
+#     if UTP_DEBUG!=0
       cout << "\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 #     endif
       if ( t->get_parent() != nullptr){
@@ -232,7 +237,7 @@ namespace utp{
     /*-------------------------------------------------------*/
     template <typename T,typename P>
     static  inline  void finished(Task<T,P>*t){
-#     if DEBUG!=0
+#     if UTP_DEBUG!=0
       cout << "+++++++\t Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 #     endif
       E1::Second::finished(t);
@@ -240,7 +245,7 @@ namespace utp{
     /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline void finished(second &s,Task<T,P>*t){
-#     if DEBUG!=0
+#     if UTP_DEBUG!=0
       cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 #     endif
       P *p = t->get_parent();
@@ -249,7 +254,7 @@ namespace utp{
 	new_count = Atomic::decrease_nv(&p->child_count);
 	bool finished = new_count == 0;
 	if( finished){
-#     if DEBUG==0
+#     if UTP_DEBUG==0
 	  cout << "ppppp Dis.finished\t" <<  p->o->name << "_" << p->id << endl;
 #     endif
 	  E1::First::finished(p);
@@ -259,7 +264,7 @@ namespace utp{
     /*-------------------------------------------------------*/
     template <typename T,typename P>
     static   inline  void finished(third &s,Task<T,P>*t){
-#     if DEBUG!=0
+#     if UTP_DEBUG!=0
       cout << s.name << " Dis.finished\t" <<  t->o->name << "_" << t->id << endl;
 #     endif
       P *p = t->get_parent();

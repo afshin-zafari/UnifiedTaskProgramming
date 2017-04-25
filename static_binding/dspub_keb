@@ -4,7 +4,12 @@ AR  = ar
 
 COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=0 -DUTP_DEBUG=1 
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
+COMP_FLAGS += -I/hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/include
+
+OPENBLAS_DIR = /hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/lib
+CUSOLVER_DIR = /hpc2n/eb/software/Compiler/intel/2017.1.132-GCC-5.4.0-2.26/CUDA/8.0.44/lib64/stubs
+
+LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -L$(OPENBLAS_DIR) -lopenblas -L$(CUSOLVER_DIR) -lcusolver #-lgsl -lgslcblas 
 
 SRC_DIR = /home/a/afshin/src
  SG_DIR = $(SRC_DIR)/superglue
@@ -37,6 +42,8 @@ cleandsb:
 COMMON  =          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
+COMMON +=          usyrk.cpp
+COMMON +=         upotrf.cpp
 COMMON +=          GData.cpp
 COMMON +=        cmdline.cpp
 COMMON +=        GHandle.cpp
