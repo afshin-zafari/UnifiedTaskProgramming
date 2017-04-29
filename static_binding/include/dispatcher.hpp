@@ -253,8 +253,11 @@ namespace utp{
 	unsigned int new_count=1;
 	new_count = Atomic::decrease_nv(&p->child_count);
 	bool finished = new_count == 0;
+#     if UTP_DEBUG!=0
+	cout << "ppppp Dis.finished\t" <<  p->o->name << "_" << p->id << "child Count" << new_count << endl;
+#     endif
 	if( finished){
-#     if UTP_DEBUG==0
+#     if UTP_DEBUG!=0
 	  cout << "ppppp Dis.finished\t" <<  p->o->name << "_" << p->id << endl;
 #     endif
 	  E1::First::finished(p);

@@ -2,9 +2,12 @@ CPP = mpiicpc
 LD  = mpiicpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -DSHORTCUT=1 -DUTP_DEBUG=0 -DDEBUG=0
+COMP_FLAGS  = -std=c++11  -DSHORTCUT=0 -DUTP_DEBUG=0 -DDEBUG=0 -DWITH_CUSOLVER=1 -DWITH_MKL=1
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--eh-frame-hdr -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
+
+CUSOLVER_DIR = /hpc2n/eb/software/Compiler/intel/2017.1.132-GCC-5.4.0-2.26/CUDA/8.0.44/lib64/stubs
+
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -L$(CUSOLVER_DIR) -lcublas -lcusolver -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
 
 SRC_DIR = /home/a/afshin/src
  SG_DIR = $(SRC_DIR)/superglue
@@ -22,7 +25,7 @@ SPU_INC = $(SPU_DIR)/include/starpu/1.2
  DT_COMP_FLAGS =  -I$(DT_INC) 
 SPU_COMP_FLAGS = -I$(SPU_INC)
 
- DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip
+ DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip_release
 SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2
 
 LINK_FLAGS += $(SPU_LIB_FLAGS) $(DT_LIB_FLAGS)
@@ -48,16 +51,15 @@ COMMON +=    mem_manager.cpp
 COMMON +=   GPartitioner.cpp
 
 
-#--------- DT SPU BLAS ---------
+#--------- DT SPU BLAS -------------
 SRC_LIB_DSB  = $(COMMON) 
-SRC_LIB_DSB +=        sch_spu.cpp
-SRC_LIB_DSB +=       sch_blas.cpp
-SRC_LIB_DSB +=   sch_ductteip.cpp
+SRC_LIB_DSB +=          sch_spu.cpp
+SRC_LIB_DSB +=         sch_blas.cpp
+SRC_LIB_DSB +=     sch_ductteip.cpp
 
 SRC_APP_DSB  =
+SRC_APP_DSB +=    main_cholesky.cpp
 SRC_APP_DSB +=  cfg_dt_spu_blas.cpp
-SRC_APP_DSB += main_DT_SPU_BLAS.cpp
-
 
 OBJ_LIB_DSB = $(subst .cpp,.o,$(SRC_LIB_DSB))
 OBJ_APP_DSB = $(subst .cpp,.o,$(SRC_APP_DSB))
@@ -69,7 +71,7 @@ OBJP_LIB_DSB = $(addprefix ./obj/,$(OBJ_LIB_DSB))
 SRCP_APP_DSB = $(addprefix ./src/,$(SRC_APP_DSB))
 OBJP_APP_DSB = $(addprefix ./obj/,$(OBJ_APP_DSB))
 
-      NAME_DSB = utp_dt_spu_blas
+      NAME_DSB = utp_dt_spu_blas_release
 LIB_TARGET_DSB =./lib/lib$(NAME_DSB).a
 APP_TARGET_DSB =./bin/$(NAME_DSB)
 

@@ -5,9 +5,13 @@
 #include "utrsm.hpp"
 #include "usyrk.hpp"
 
-
+#ifdef WITH_MKL
+#include "mkl.h"
+#else
 #include "gsl/gsl_cblas.h"
 #include "lapacke.h"
+#endif
+
 #include <cublas.h>
 #include <cusolverDn.h>
 
@@ -36,9 +40,9 @@ namespace utp{
 	int M = a->get_rows();
 
       
-      cout << "call blasDpotrf() for " << a->get_name() << endl << flush;
       LAPACKE_dpotrf(CblasColMajor,'L',M,A,M);
-#     if DEBUG != 0 
+#     if UTP_DEBUG != 0 
+      cout << "call blasDpotrf() for " << a->get_name() << endl << flush;
 #     endif
       Dispatcher::finished(t);
     }
@@ -107,7 +111,7 @@ namespace utp{
     template <typename Scheduler,typename P>
     void Potrf::split(Scheduler &s,Task<Potrf,P> *task){
 
-#if DEBUG !=0 
+#if UTP_DEBUG !=0 
       cout << s.name <<"\tPotrf.split\t" << task->o->name <<"_" << task->id << endl;
 #endif
       GData &A = *task->args->args[0];

@@ -1,6 +1,7 @@
+
 #!/bin/bash 
 
-for  prj in b sb db dsb spub dspub
+for  prj in sb dsb dspub spub #b sb db dsb spub dspub
 do
 	rm -f ./obj/*
 	make -f ${prj}_keb

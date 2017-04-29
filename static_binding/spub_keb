@@ -2,14 +2,15 @@ CPP = icpc
 LD  = icpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=0 -DUTP_DEBUG=1
+COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=0 -DUTP_DEBUG=1 -DWITH_MKL
 COMP_FLAGS += -Iinclude
 COMP_FLAGS += -I/hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/include
 
 OPENBLAS_DIR = /hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/lib
 CUSOLVER_DIR = /hpc2n/eb/software/Compiler/intel/2017.1.132-GCC-5.4.0-2.26/CUDA/8.0.44/lib64/stubs
 
-LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -L$(OPENBLAS_DIR) -lopenblas -L$(CUSOLVER_DIR) -lcusolver #-lgsl -lgslcblas 
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -L$(CUSOLVER_DIR) -lcublas -lcusolver -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+#-lgsl -lgslcblas -L$(OPENBLAS_DIR) -lopenblas
 
 SRC_DIR = /home/a/afshin/src
  SG_DIR = $(SRC_DIR)/superglue
@@ -27,7 +28,7 @@ SPU_INC = $(SPU_DIR)/include/starpu/1.2
  DT_COMP_FLAGS =  -I$(DT_INC) 
 SPU_COMP_FLAGS = -I$(SPU_INC)
 
- DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip
+ DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip_debug
 SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2 -lcublas
 
 LINK_FLAGS += $(SPU_LIB_FLAGS)
@@ -59,7 +60,7 @@ SRC_LIB_SB +=       sch_blas.cpp
 
 SRC_APP_SB  =
 SRC_APP_SB +=  cfg_spu_blas.cpp
-SRC_APP_SB += main_SPU_BLAS.cpp
+SRC_APP_SB += main_cholesky.cpp
 
 OBJ_LIB_SB = $(subst .cpp,.o,$(SRC_LIB_SB))
 OBJ_APP_SB = $(subst .cpp,.o,$(SRC_APP_SB))

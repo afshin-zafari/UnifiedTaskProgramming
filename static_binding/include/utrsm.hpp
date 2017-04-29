@@ -16,7 +16,7 @@ namespace ublas{
         static inline void split(Scheduler &s,Task<Trsm,P> *t);
       template <typename P>
       static inline void run(Task<Trsm,P> *t){
-#         if DEBUG != 0
+#         if UTP_DEBUG != 0
             cout << "----\tTrsm.run\ttrsm_"<< t->id << endl;
 #         endif
 	    GData *a = t->args->args[0];
@@ -35,6 +35,7 @@ namespace ublas{
 	    // Signature: cblas_dtrsm (Order, Side, Uplo, TransA, Diag, M, N, alpha, A, lda, B, ldb)
 	    PRINTF("trsm------------, B(%d) \n",b->get_child_index());
 	    cblas_dtrsm(CblasColMajor,CblasRight,CblasLower,CblasTrans,CblasUnit,M,N,1.0,A,ldA,B,ldB);
+	    Dispatcher::finished(t);
         }
     /*---------------------------------------------------------------*/
       template <typename P>
@@ -88,7 +89,7 @@ namespace ublas{
     /*===================================================================================*/
     template <typename Scheduler,typename P>
     void Trsm::split(Scheduler &s,Task<Trsm,P> *task){
-#     if DEBUG != 0
+#     if UTP_DEBUG != 0
         cout << s.name <<"\tTrsm.split\t" << task->o->name <<"_" << task->id << endl;
 #     endif
 	GData &A =  *task->args->args[0];
@@ -98,16 +99,14 @@ namespace ublas{
         int ya = A.get_part_countY();
         int yb = B.get_part_countY();
         for(int i=0;i<xa;i++){
-            for(int j=0;j<yb;j++){
-	      TrsmTask<Task<Trsm,P>> *t = new TrsmTask<Task<Trsm,P>>(A(i,i),B(j,i),task);
-                Dispatcher::submit(s,t);
-                for ( int k=i+1;k<ya;k++){
-                    for (int l=0;l<xa;l++){
-		      GemmTask<Task<Trsm,P>> *g = new GemmTask<Task<Trsm,P>>(A(k,i),B(j,i),B(j,l),task);
-                        Dispatcher::submit(s,g);
-                    }
-                }
-            }
+	  for(int j=0;j<yb;j++){
+	    TrsmTask<Task<Trsm,P>> *t = new TrsmTask<Task<Trsm,P>>(A(i,i),B(j,i),task);
+	    Dispatcher::submit(s,t);
+	    for ( int k=0;k<i;k++){
+	      GemmTask<Task<Trsm,P>> *g = new GemmTask<Task<Trsm,P>>(A(i,k),B(j,k),B(j,i),task);
+	      Dispatcher::submit(s,g);
+	    }
+	  }
         }
     }
     /*===================================================================================*/

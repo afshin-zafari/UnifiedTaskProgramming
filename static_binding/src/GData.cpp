@@ -218,6 +218,17 @@ byte *GData::get_memory()
     return content;
 }
 /*=====================================================================*/
+  void GData::fill_hilbert(){
+    double *d = (double*)content;
+    if ( d != nullptr){
+      for(int i=0;i<N;i++){
+	for(int j=0;j<N;j++){
+	  d[ j*N + i ]=1.0/(i+j+2-1);
+	}
+      }
+    }
+  }
+/*=====================================================================*/
 void GData::fill_with(double v,double inc)
 {
   GPartitioner *p = partitioner;
@@ -321,7 +332,7 @@ void GData::fill_rows_with ( double start , double scale)
 /*=====================================================================*/
 void GData ::dump()
 {
-  if ( M > 5 ) return;
+  if ( M > 12 ) return;
   double *d = (double*)content;
   if ( d != nullptr){
     for ( int i=0;i<M;i++){

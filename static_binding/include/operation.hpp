@@ -59,6 +59,7 @@ namespace utp{
     int id,child_count;
     bool is_generating;
     double alpha,beta;
+    bool trans_b;
     Task ( OperationBase<T> *_o):o(_o){
       child_count =0;
       parent = nullptr;

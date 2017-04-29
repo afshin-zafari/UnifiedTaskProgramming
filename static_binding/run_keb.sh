@@ -20,27 +20,27 @@
 #zSBATCH --error=UI-DT-GEMM-%j.err
 
 
-ml add intelcuda
+ml add intelcuda imkl
 LD_LIBRARY_PATH=/home/a/afshin/pfs/StarPU/starpu-1.2.0/BUILD/lib:${LD_LIBRARY_PATH}
-LD_LIBRARY_PATH=/hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/lib:${LD_LIBRARY_PATH}
+#LD_LIBRARY_PATH=/hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/lib:${LD_LIBRARY_PATH}
 
 
 set -x
 
-B1=4
-B2=3
-N=480
+B1=2
+B2=4
+N=120
 M=$N
 timeout=10
-P=2
-p=2
+P=1
+p=1
 q=1
-ipn=2
+ipn=$P
 nt=2
 app_bo="./bin/utp_blas_only$1"
 app_db="./bin/utp_dt_blas$1"
 app_sb="./bin/utp_sg_blas$1"
-app_dsb="./bin/utp_dt_sg_blas"
+app_dsb="./bin/utp_dt_sg_blas$1"
 app_spub="./bin/utp_spu_blas"
 app_dspub="./bin/utp_dt_spu_blas"
 out="out_${M}_${B1}_${B2}_${p}_${q}_${nt}.txt"
@@ -55,25 +55,31 @@ mpi_params2="-ordered-output -n $P -ppn $ipn -outfile-pattern  $out2 -errfile-pa
 mpi_params3="-ordered-output -n $P -ppn $ipn -outfile-pattern  $out3 -errfile-pattern $out3 -l"
 
 
-#-----SPU BLAS 
-echo "========================================================================="
-echo "========================================================================="
-$app_spub ${app_params} > spub_${out}
-
-#-----DT SPU BLAS 
-echo "========================================================================="
-echo "========================================================================="
-#mpirun ${mpi_params3} ${app_dspub} ${app_params3}
-grep -i "error" dspub*.txt*
-grep -i "\[0\]" ${out3} > p0_out.txt
-grep -i "\[1\]" ${out3} > p1_out.txt
 
 #-----DT SG BLAS 
 echo "========================================================================="
 echo "========================================================================="
-#mpirun ${mpi_params2} ${app_dsb} ${app_params}
+mpirun ${mpi_params2} ${app_dsb} ${app_params}
+grep -i "error" dsb*.txt*
+
 
 exit
+
+#-----SPU BLAS 
+echo "========================================================================="
+echo "========================================================================="
+$app_sb ${app_params} > spub_${out}
+
+
+
+#-----DT SPU BLAS 
+echo "========================================================================="
+echo "========================================================================="
+mpirun ${mpi_params3} ${app_dspub} ${app_params3}
+grep -i "error" dspub*.txt*
+grep -i "\[0\]" ${out3} > p0_out.txt
+grep -i "\[1\]" ${out3} > p1_out.txt
+
 
 
 #-----BLAS ONLY
@@ -90,12 +96,6 @@ $app_sb ${app_params} > sb_${out}
 echo "========================================================================="
 echo "========================================================================="
 mpirun ${mpi_params1} ${app_db} ${app_params}
-
-#-----DT SG BLAS 
-echo "========================================================================="
-echo "========================================================================="
-mpirun ${mpi_params2} ${app_dsb} ${app_params}
-grep -i "error" dsb*.txt*
 
 
 

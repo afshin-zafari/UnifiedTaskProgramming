@@ -39,6 +39,7 @@ class GData
         byte *get_memory();
         void fill_with(double,double=1);
         void fill_rows_with ( double start , double scale);
+        void fill_hilbert();
         void print();
         void dump();
         void fill_moler();

@@ -3,7 +3,11 @@
 #include "utp.hpp"
 #include "ugemm.hpp"
 
+#ifdef WITH_MKL
+#include "mkl.h"
+#else
 #include "gsl/gsl_cblas.h"
+#endif
 #include <cublas.h>
 
 namespace utp{
@@ -99,7 +103,7 @@ namespace utp{
     template <typename Scheduler,typename P>
     void Syrk::split(Scheduler &s,Task<Syrk,P> *task){
 
-#if DEBUG !=0 
+#if UTP_DEBUG !=0 
       cout << s.name <<"\tSyrk.split\t" << task->o->name <<"_" << task->id << endl;
 #endif
       GData &A = *task->args->args[0];
@@ -114,7 +118,7 @@ namespace utp{
 	    }
 	    else{
 	      GemmTask<Task<Syrk,P>> *gemm=new GemmTask<Task<Syrk,P>>(A(i,k),A(j,k),B(i,j),task);
-	      gemm->alpha = -1;
+	      gemm->trans_b = true;
 	      Dispatcher::submit(s,gemm);
 	    }
 	  }

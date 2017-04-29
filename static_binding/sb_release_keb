@@ -2,23 +2,29 @@ CPP = mpiicpc
 LD  = mpiicpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -DDEBUG=0 
+COMP_FLAGS  = -std=c++11  -DSHORTCUT=0 -DUTP_DEBUG=0 -DWITH_MKL=1 -DDEBUG=0
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas
+#COMP_FLAGS += -I/hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/include
 
-SRC_DIR=/home/a/afshin/src
-SG_DIR = $(SRC_DIR)/superglue
-DT_DIR = $(SRC_DIR)/DuctTeip/ResStudio/Prototype
-DT_LIB = $(DT_DIR)/lib
+OPENBLAS_DIR = /hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/lib
+CUSOLVER_DIR = /hpc2n/eb/software/Compiler/intel/2017.1.132-GCC-5.4.0-2.26/CUDA/8.0.44/lib64/stubs
+
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -L$(CUSOLVER_DIR) -lcusolver -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+#-lgsl -lgslcblas -L$(OPENBLAS_DIR) -lopenblas
+
+SRC_DIR = /home/a/afshin/src
+ SG_DIR = $(SRC_DIR)/superglue
+ DT_DIR = $(SRC_DIR)/DuctTeip/ResStudio/Prototype
+ DT_LIB = $(DT_DIR)/lib
 
 SG_INC = $(SG_DIR)/include
 DT_INC = $(DT_DIR)/include
 
 SG_COMP_FLAGS  = -I$(SG_INC)
 DT_COMP_FLAGS  = -I$(DT_INC) 
- DT_LIB_FLAGS  = -L$(DT_LIB) -lductteip
+ DT_LIB_FLAGS  = -L$(DT_LIB) -lductteip_release
    COMP_FLAGS += $(SG_COMP_FLAGS) $(DT_COMP_FLAGS)
-   LINK_FLAGS += -L$(DT_LIB) -lductteip
+   LINK_FLAGS += -L$(DT_LIB) -lductteip_release
 
 all: sb
 
@@ -30,6 +36,8 @@ COMMON  =          GData.cpp
 COMMON +=          ublas.cpp
 COMMON +=          ugemm.cpp
 COMMON +=          utrsm.cpp
+COMMON +=          usyrk.cpp
+COMMON +=         upotrf.cpp
 COMMON +=        cmdline.cpp
 COMMON +=        GHandle.cpp
 COMMON +=      utp_basic.cpp
@@ -43,8 +51,8 @@ SRC_LIB_SB +=       sch_blas.cpp
 SRC_LIB_SB +=  sch_superglue.cpp
 
 SRC_APP_SB  =
-SRC_APP_SB +=  cfg_sg_blas.cpp
-SRC_APP_SB += main_SG_BLAS.cpp
+SRC_APP_SB +=   cfg_sg_blas.cpp
+SRC_APP_SB += main_cholesky.cpp
 
 OBJ_LIB_SB = $(subst .cpp,.o,$(SRC_LIB_SB))
 OBJ_APP_SB = $(subst .cpp,.o,$(SRC_APP_SB))
@@ -62,7 +70,6 @@ APP_TARGET_SB =./bin/$(NAME_SB)
 
 $(OBJP_LIB_SB):./obj/%.o: ./src/%.cpp #$(SRCP_LIB_SB)
 #@$(info $(notdir $<) )
-	@echo $? $(words $?)
 	@echo -n "."
 	@$(CPP) -o $@ -c $< $(COMP_FLAGS) $(SG_COMP_FLAGS) -DSG_BLAS -DSG_INCLUDED
 
@@ -76,9 +83,8 @@ $(LIB_TARGET_SB):$(OBJP_LIB_SB)
 	@$(AR) rcsv  $@ $^ 
 
 $(APP_TARGET_SB):$(LIB_TARGET_SB) $(OBJP_APP_SB)
-	@echo
 	@echo "Linking ... to  $(APP_TARGET_SB)"
 	@$(LD) -o $@ $(OBJP_APP_SB) -L./lib -l$(NAME_SB)  $(LINK_FLAGS) -pthread
 
 sb:$(APP_TARGET_SB)
-
+	@echo "----------------"

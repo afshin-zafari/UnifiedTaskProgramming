@@ -6,8 +6,11 @@
 #include "starpu.h"
 
 #define FPRINTF(ofile, fmt, ...) do { if (!getenv("STARPU_SSILENT")) {fprintf(ofile, fmt, ## __VA_ARGS__); }} while(0)
-
-bool debug=!false;
+#if UTP_DEBUG==0
+bool debug=false;
+#else
+bool debug=true;
+#endif
 namespace utp{
   template <typename T> class OperationBase;
   template <typename T,typename P> class Task;
@@ -82,7 +85,7 @@ namespace utp{
       spu_task->cl = clp;
       spu_task->cl_arg = (void  *) gtask;
       spu_task->cl_arg_size = sizeof(gtask);
-      cout << "No of args: " << gtask->args->args.size() << endl;
+      if(debug)cout << "No of args: " << gtask->args->args.size() << endl;
       for(int i=0;i<clp->nbuffers;i++){
 	if(debug)cout << "argument " << i << endl << flush;
 	assert(gtask);
@@ -184,7 +187,7 @@ namespace utp{
     /*-------------------------------------------------------------------------------*/
     template <typename T,typename P>
     static inline void ready(Task<T,P> *t){
-#     if DEBUG != 0
+#     if UTP_DEBUG != 0
       cout << "----\t SPU.ready\t" << t->o->name << "_" << t->id << endl;
 #     endif
       utp::Dispatcher::ready(_spu,t);
@@ -205,7 +208,8 @@ namespace utp{
     /*-------------------------------------------------------------------------------*/
     template <typename T,typename P>
     static inline void finished(Task<T,P> *t){
-      std::cout << "----\t SPU.finished\t" << t->o->name << "_" << t->id << endl;
+      if(debug)
+	std::cout << "----\t SPU.finished\t" << t->o->name << "_" << t->id << endl;
       utp::Dispatcher::finished(_spu,t);
     }
     /*-------------------------------------------------------------------------------*/

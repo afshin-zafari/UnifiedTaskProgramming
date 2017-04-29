@@ -3,7 +3,7 @@
 #include "operation.hpp"
 #include "dispatcher.hpp"
 #include "sg/superglue.hpp"
-#include "sch_ductteip.hpp"
+//#include "sch_ductteip.hpp"
 
 namespace utp{
   template <typename T> class OperationBase;
@@ -62,6 +62,7 @@ namespace utp{
 #if UTP_DEBUG != 0
       cout << "---- \n" ;
 #endif
+      /*
       P *p = gtask->get_parent();
       if ( p != nullptr){
 	if ( p->child_count !=0){
@@ -77,6 +78,7 @@ namespace utp{
 	  }
 	}
       }
+      */
     }
     ~SGTask(){
       /*

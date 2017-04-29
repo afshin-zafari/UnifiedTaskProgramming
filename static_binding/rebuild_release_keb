@@ -1,7 +1,8 @@
 #!/bin/bash 
 
-for  prj in bo sb db dsb spub dspub
+for  prj in sb  dsb dspub spub #bo sb db dsb spub dspub
 do
 	rm -f ./obj/*
+	echo "===============${prj}_release_keb==================="
 	make -f ${prj}_release_keb
 done

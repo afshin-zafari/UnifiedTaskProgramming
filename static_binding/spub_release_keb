@@ -2,9 +2,13 @@ CPP = icpc
 LD  = icpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -DDEBUG=0 -DUTP_DEBUG=0
+COMP_FLAGS  = -std=c++11  -DDEBUG=0 -DUTP_DEBUG=0 -DWITH_CUSOLVER=1 -DWITH_MKL=1
 COMP_FLAGS += -Iinclude
-LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -lgsl -lgslcblas 
+
+CUSOLVER_DIR = /hpc2n/eb/software/Compiler/intel/2017.1.132-GCC-5.4.0-2.26/CUDA/8.0.44/lib64/stubs
+
+LINK_FLAGS  = -Wl,--allow-multiple-definition -pthread -L$(CUSOLVER_DIR) -lcublas -lcusolver -lmkl_core -lmkl_intel_lp64 -lmkl_sequential
+#-lgsl -lgslcblas -L$(OPENBLAS_DIR) -lopenblas
 
 SRC_DIR = /home/a/afshin/src
  SG_DIR = $(SRC_DIR)/superglue
@@ -22,7 +26,7 @@ SPU_INC = $(SPU_DIR)/include/starpu/1.2
  DT_COMP_FLAGS =  -I$(DT_INC) 
 SPU_COMP_FLAGS = -I$(SPU_INC)
 
- DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip
+ DT_LIB_FLAGS =  -L$(DT_LIB) -lductteip_release
 SPU_LIB_FLAGS = -L$(SPU_LIB) -lstarpu-1.2
 
 LINK_FLAGS += $(SPU_LIB_FLAGS)
@@ -66,7 +70,7 @@ OBJP_LIB_SB = $(addprefix ./obj/,$(OBJ_LIB_SB))
 SRCP_APP_SB = $(addprefix ./src/,$(SRC_APP_SB))
 OBJP_APP_SB = $(addprefix ./obj/,$(OBJ_APP_SB))
 
-      NAME_SB = utp_spu_blas
+      NAME_SB = utp_spu_blas_release
 LIB_TARGET_SB =./lib/lib$(NAME_SB).a
 APP_TARGET_SB =./bin/$(NAME_SB)
 

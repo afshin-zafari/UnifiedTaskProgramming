@@ -1,7 +1,12 @@
 #ifndef UGEMM_HPP
 #define UGEMM_HPP
 #include "utp.hpp"
+#ifdef WITH_MKL
+#include "mkl.h"
+#else
 #include "gsl/gsl_cblas.h"
+#endif
+
 #include <cublas.h>
 
 namespace utp{
@@ -40,12 +45,13 @@ namespace utp{
 	double beta= t->beta; 
 	double alpha= t->alpha;
 	auto TransA = CblasNoTrans;
+	auto TransB = t->trans_b?CblasTrans:CblasNoTrans;
 	//Order,TransA, TransB, M, N, K, alpha, A, lda, B, ldb, beta, C, ldc)
 
       
+      cblas_dgemm(CblasColMajor,TransA,TransB,M,N,K,alpha,A,ldA,B,ldB,beta,C,ldC);
+#     if UTP_DEBUG != 0 
       cout << "call blasDgemm() for " << c->get_name() << endl << flush;
-      cblas_dgemm(CblasColMajor,TransA,CblasNoTrans,M,N,K,alpha,A,ldA,B,ldB,beta,C,ldC);
-#     if DEBUG != 0 
       cout << M << "," << N << "," << K << "," << A << "," << ldA << "," << B << "," << ldB << "," << C << "," << ldC << endl;
       cout << "-----------\n" ;
 #     endif
@@ -79,7 +85,9 @@ namespace utp{
 	double beta= 1.0; 
 	double alpha= 1.0;
 	auto TransA = CblasNoTrans;
+	#if UTP_DEBUG!=0
 	cout << "call cublasDgemm() for " << c->get_name() << endl << flush;
+	#endif
 	cublasDgemm( 'n', 'n', K, M, M, alpha, A, ldA, B, ldB, beta, C, ldC);
 	Dispatcher::finished(t);
       }
@@ -122,7 +130,7 @@ namespace utp{
   template <typename Scheduler,typename P>
   void Gemm::split(Scheduler &s,Task<Gemm,P> *task){
 
-#if DEBUG !=0 
+#if UTP_DEBUG !=0 
     cout << s.name <<"\tGemm.split\t" << task->o->name <<"_" << task->id << endl;
 #endif
     GData &A = *task->args->args[0];
