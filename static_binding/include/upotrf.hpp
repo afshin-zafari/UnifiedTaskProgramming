@@ -52,17 +52,38 @@ namespace utp{
 	GData *a = t->args->args[0];
 
 
-	//	double *A=(double *)a->get_memory();
 	double *A = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[0]);
 	
 	int ldA = a->get_rows();
 	int M = a->get_rows();
 
-	cout << "call cublasDgemm() for " << a->get_name() << endl << flush;
+	unsigned ny = STARPU_MATRIX_GET_NY(t->gpuArgs[0]);
+	unsigned ld = STARPU_MATRIX_GET_LD(t->gpuArgs[0]);
+	if ( ny != M ){
+	  cout << " M != NY" << M << "?" << ny << endl;
+	  M=ny;
+	}
+	if ( ld != ldA ){
+	  cout << " ld != ldA" << ld << "?" << ldA << endl;
+	  ldA = ld;
+	}
+
 	int lwork,dev_info;
+	#if UTP_DEBUG !=0
+	cout << "call cusolverDnDpotrf() for " << a->get_name() << " with memory: " << A << endl << flush;
+	cout << "cusolver_handle = " << cusolver_handle << endl;
+	  #endif
+	cusolverDnSetStream(*cusolver_handle,starpu_cuda_get_local_stream());
 	cusolverDnDpotrf_bufferSize(*cusolver_handle, CUBLAS_FILL_MODE_LOWER,M, A, M ,&lwork);
+	  #if UTP_DEBUG != 0
+	  cout << "lwork = " << lwork <<  endl;
+	  #endif
+	
 	if ( lwork){
 	  double *work_space = new double[lwork];
+	  #if UTP_DEBUG != 0
+	  cout << "lwork = " << lwork << " wrkspc  = " << work_space << endl;
+	  #endif
 	  cusolverDnDpotrf(*cusolver_handle,CUBLAS_FILL_MODE_LOWER,M, A, M,work_space,lwork,&dev_info);
 
 	  if ( dev_info<0){

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -A SNIC2016-3-74
-#SBATCH -J job_SP_SP_SP_01
+#SBATCH -J job_SP_SP_SP_01_1K80
 #SBATCH -n 28
 #SBATCH --exclusive
 #SBATCH -N 1
@@ -26,7 +26,7 @@ app=${app_path}/mpi_cholesky_distributed
 JID=${SLURM_JOBID}
 
 export STARPU_SCHED=dmdar
-export STARPU_CALIBRATE=1
+export STARPU_CALIBRATE=0
 export STARPU_HOSTNAME=afshin_spu
 
 B1=60

@@ -46,6 +46,12 @@ namespace utp {
       #else
 	   #ifdef SPU_INCLUDED
 	   SPU::Init();
+	   #if WITH_CUSOLVER==1
+	   cout << "cu solver create\n";
+	   cusolver_handle = new cusolverDnHandle_t;
+	   cusolverDnCreate(cusolver_handle);
+	   cout << "cu solver create finished\n";
+	   #endif
 	   #endif
       #endif
 

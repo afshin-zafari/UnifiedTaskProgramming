@@ -5,7 +5,7 @@
 #SBATCH -n 448
 #SBATCH --exclusive
 #SBATCH -N 16
-#SBATCH --time=00:05:00
+#SBATCH --time=00:10:00
 #SBATCH --output=out_DT_SG_NO_16-%j.txt
 #SBATCH --error=err_DT_SG_NO_16-%j.txt
 
@@ -21,10 +21,10 @@ app_path=${run_base}/bin
 app=${app_path}/utp_dt_sg_blas_release
 JID=${SLURM_JOBID}
 
-B2=5
+B2=15
 for z in 200
 do
-	for B1 in 27
+	for B1 in 9
 	do		
 		N=$[$z * $B1 *$B2] 
 		out="P${P}_N${N}_B${B1}_$JID.txt"

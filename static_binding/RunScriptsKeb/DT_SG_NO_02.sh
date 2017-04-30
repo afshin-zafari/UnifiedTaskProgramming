@@ -13,7 +13,7 @@ run_base=/home/a/afshin/pfs/UTP_Cholesky_Runs
 source ${run_base}/main.sh
 
 set -x
-P=2;p=1;q=2;nt=28;ipn=1;
+P=2;p=2;q=1;nt=28;ipn=1;
 ex=${SBATCH_EXCLUSIVE}
 timeout=1000
 
@@ -21,10 +21,10 @@ app_path=${run_base}/bin
 app=${app_path}/utp_dt_sg_blas_release
 JID=${SLURM_JOBID}
 
-B2=31
+B2=10
 for z in 200
 do
-	for B1 in 5
+	for B1 in 7
 	do		
 		N=$[$z * $B1 *$B2] 
 		out="P${P}_N${N}_B${B1}-$JID.txt"

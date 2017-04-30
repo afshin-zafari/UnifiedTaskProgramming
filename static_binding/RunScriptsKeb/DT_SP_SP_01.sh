@@ -6,7 +6,7 @@
 #SBATCH --exclusive
 #SBATCH -N 1
 #SBATCH --gres=gpu:k80:1
-#SBATCH --time=00:15:00
+#SBATCH --time=00:05:00
 #SBATCH --output=out_DT_SP_SP_01-%j.txt
 #SBATCH --error=err_DT_SP_SP_01-%j.txt
 
@@ -27,10 +27,10 @@ export STARPU_SCHED=dmdar
 export STARPU_CALIBRATE=0
 export STARPU_HOSTNAME=afshin_spu
 
-B2=5
-for z in 400
+B2=10
+for z in 200
 do
-	for B1 in 12
+	for B1 in 6
 	do		
 		N=$[$z * $B1 *$B2] 
 		out="P${P}_N${N}_B${B1}_$JID.txt"

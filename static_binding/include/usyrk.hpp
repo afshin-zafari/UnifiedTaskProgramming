@@ -52,12 +52,12 @@ namespace utp{
 	//	double *A=(double *)a->get_memory();
 	double *A = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[0]);
 	
-	int ldA = a->get_rows();
+	int ldA = STARPU_MATRIX_GET_LD(t->gpuArgs[0]);//a->get_rows();
 	int N = a->get_rows();
 
 	//	double *B=(double *)b->get_memory();
 	double *B = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[1]);
-	int ldB = b->get_rows();
+	int ldB = STARPU_MATRIX_GET_LD(t->gpuArgs[1]);//b->get_rows();
 	int K = b->get_cols();
 	
 	//	cublasDsyrk ( uplo,  trans, n, k, alpha, *A, lda, beta, C,  ldc);

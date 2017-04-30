@@ -2,7 +2,7 @@ CPP = mpiicpc
 LD  = mpiicpc
 AR  = ar
 
-COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=0 -DUTP_DEBUG=1 -DWITH_MKL=1
+COMP_FLAGS  = -std=c++11  -g -DSHORTCUT=0 -DUTP_DEBUG=1 -DWITH_MKL=1 -DWITH_CUSOLVER=1
 COMP_FLAGS += -Iinclude
 #COMP_FLAGS += -I/hpc2n/eb/software/Compiler/GCC/5.4.0-2.26/OpenBLAS/0.2.18-LAPACK-3.6.1/include
 

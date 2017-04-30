@@ -58,7 +58,7 @@ SRC_LIB_SB +=       sch_blas.cpp
 
 SRC_APP_SB  =
 SRC_APP_SB +=  cfg_spu_blas.cpp
-SRC_APP_SB += main_SPU_BLAS.cpp
+SRC_APP_SB += main_cholesky.cpp
 
 OBJ_LIB_SB = $(subst .cpp,.o,$(SRC_LIB_SB))
 OBJ_APP_SB = $(subst .cpp,.o,$(SRC_APP_SB))

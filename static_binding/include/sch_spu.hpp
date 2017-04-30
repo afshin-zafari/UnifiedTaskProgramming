@@ -66,6 +66,9 @@ namespace utp{
       cl. cpu_funcs[0] = SPUTask::run;
       cl.cuda_funcs[0] = SPUTask::run_cuda;
       cl.cuda_flags[0] = STARPU_CUDA_ASYNC;
+      if (t->o->name == "potrf"){
+	cl.where = STARPU_CPU;
+      }
       cl.nbuffers = gtask->args->args.size();
       if(debug)cout << "SPUTask created with arg count: " << cl.nbuffers << endl << flush;
       for(int i=0;i<cl.nbuffers;i++){
@@ -119,15 +122,15 @@ namespace utp{
   /*-----------------------------------------------------------------------------------------*/
     static void run_cuda(void *descr[], void *_args){
       GTask *t= (GTask *)_args;
-      int n=t->args->args.size()-1;      
-      if(debug)cout << "SPUTask is ready to run on GPU  for " << t->args->args[n]->get_name()<< endl << flush;
+      int n=t->args->args.size();      
+      if(debug)cout << "SPUTask is ready to run on GPU  for " << t->args->args[n-1]->get_name()<< endl << flush;
       double *pMem = (double *)STARPU_MATRIX_GET_PTR(descr[0]);
       double *xMem = (double *)t->args->args[0]->get_memory();
-      t->gpuArgs.push_back(descr[0]);
-      t->gpuArgs.push_back(descr[1]);
-      t->gpuArgs.push_back(descr[2]);
+      for ( int i =0; i < n ; i ++)
+	t->gpuArgs.push_back((void *)(descr[i]));
+      //      t->gpuArgs.push_back(descr[1]);
+      //      t->gpuArgs.push_back(descr[2]);
       if(debug)cout << "SPU Mem = " << pMem << " GTask arg0 mem " << xMem << endl << flush;
-      if(debug)cout << "descriptor limimt? descr[3]= " << descr[3] << endl << flush;
 #if SHORTCUT == 0
       Dispatcher::ready_for_gpu(_spu,t);
 #else

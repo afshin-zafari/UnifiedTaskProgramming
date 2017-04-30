@@ -47,12 +47,12 @@ namespace ublas{
 	//	double *A=(double *)a->get_memory();
 	double *A = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[0]);
 	
-	int ldA = a->get_rows();
+	int ldA = STARPU_MATRIX_GET_LD(t->gpuArgs[0]);//a->get_rows();
 	int M = a->get_rows();
 
 	//	double *B=(double *)b->get_memory();
 	double *B = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[1]);
-	int ldB = b->get_rows();
+	int ldB = STARPU_MATRIX_GET_LD(t->gpuArgs[1]);//b->get_rows();
 	int N = b->get_cols();
 	//cublasDtrsm ( side,  uplo,  transa, diag, m,  n,  alpha,A,  lda, B, ldb);
 	cublasDtrsm('L','L','N','U',M,N,1.0,A,ldA,B,ldB);

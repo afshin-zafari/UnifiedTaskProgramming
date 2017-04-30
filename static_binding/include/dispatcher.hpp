@@ -119,7 +119,9 @@ namespace utp{
     /*-------------------------------------------------------*/
     template <typename T,typename P>
     static void ready_for_gpu(first &f,Task<T,P>*t){
+      #if UTP_DEBUG != 0
       cout <<  f.name <<"\t Dis.ready_for_gpu\t" <<  t->o->name << "_" << t->id << endl;
+      #endif
       t->o->run_on_gpu(t);
     }
     /*-------------------------------------------------------*/

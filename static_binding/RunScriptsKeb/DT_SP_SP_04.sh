@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -A SNIC2016-3-74
-#SBATCH -J job_DT_SP_SP_04
+#SBATCH -J job_DT_SP_SP_04_1K80
 #SBATCH -n 112
 #SBATCH --exclusive
 #SBATCH -N 4

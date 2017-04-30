@@ -19,8 +19,13 @@ P=9;p=3;q=3;nt=28;ipn=1;
 timeout=1000
 
 app_path=${run_base}/bin
-app=${app_path}/utp_dt_spu_blas_release_no_gpus
+app=${app_path}/utp_dt_spu_blas_release
 JID=${SLURM_JOBID}
+
+export STARPU_SCHED=dmdar
+export STARPU_CALIBRATE=0
+export STARPU_HOSTNAME=afshin_spu
+
 
 B2=5
 for z in 200

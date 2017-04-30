@@ -70,17 +70,22 @@ namespace utp{
 	//	double *A=(double *)a->get_memory();
 	double *A = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[0]);
 	
-	int ldA = a->get_rows();
+	int ldA = STARPU_MATRIX_GET_LD(t->gpuArgs[0]);//a->get_rows();
 	int M = a->get_rows();
 
 	//	double *B=(double *)b->get_memory();
 	double *B = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[1]);
-	int ldB = b->get_rows();
+	int ldB = STARPU_MATRIX_GET_LD(t->gpuArgs[1]);//b->get_rows();
 	int N = b->get_cols();
 	
 	//	double *C=(double *)c->get_memory();
 	double *C = (double *)STARPU_MATRIX_GET_PTR(t->gpuArgs[2]);
 	int ldC = c->get_rows();
+	int ldc = STARPU_MATRIX_GET_LD(t->gpuArgs[2]);
+	if ( ldc != ldC){
+	  cout << "ldc's differ." << endl;
+	}
+	  
 	int K = a->get_cols();
 	double beta= 1.0; 
 	double alpha= 1.0;

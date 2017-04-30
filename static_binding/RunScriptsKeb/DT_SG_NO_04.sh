@@ -21,13 +21,13 @@ app_path=${run_base}/bin
 app=${app_path}/utp_dt_sg_blas_release
 JID=${SLURM_JOBID}
 
-B2=5
+B2=10
 for z in 200
 do
-	for B1 in 18
+	for B1 in 9
 	do		
 		N=$[$z * $B1 *$B2] 
-		out="P${P}_N${N}_B${B1}.txt"
+		out="P${P}_N${N}_B${B1}_$JID.txt"
 		mpi_params="-ordered-output -n $P -ppn $ipn -outfile-pattern  $out -errfile-pattern $out -l"
 		app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout"
 		mpirun ${mpi_params} $app ${app_params}
