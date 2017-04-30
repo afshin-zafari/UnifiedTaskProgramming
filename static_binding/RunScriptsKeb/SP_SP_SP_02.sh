@@ -30,9 +30,9 @@ export STARPU_HOSTNAME=afshin_spu
 
 
 
-N=14000
-B1=$[$N / 200]
-app_params="-size $N -nblocks $B1 " #-dblockx $q -dblocky $p"
+N=72000
+B1=$[$N / 1000]
+app_params="-size $N -nblocks $B1" # -dblockx $q -dblocky $p"
 out="P${P}_N${N}_B${B1}_b${B2}_$JID.txt"
 mpi_params="-ordered-output -n $P -ppn $ipn -outfile-pattern  $out -errfile-pattern $out -l"
 mpirun ${mpi_params} $app ${app_params}

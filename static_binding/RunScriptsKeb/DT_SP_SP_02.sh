@@ -14,7 +14,7 @@ run_base=/home/a/afshin/pfs/UTP_Cholesky_Runs
 source ${run_base}/main.sh
 
 set -x
-P=2;p=1;q=2;nt=28;ipn=1;
+P=2;p=2;q=1;nt=28;ipn=1;
 
 timeout=1000
 
@@ -24,15 +24,16 @@ JID=${SLURM_JOBID}
 
 
 export STARPU_SCHED=dmdar
-export STARPU_CALIBRATE=1
+export STARPU_CALIBRATE=0
 export STARPU_HOSTNAME=afshin_spu
-B2=5
-for z in 200
+
+B2=10
+for z in 400
 do
-	for B1 in 14
+	for B1 in 9
 	do		
 		N=$[$z * $B1 *$B2] 
-		out="P${P}_N${N}_B${B1}.txt"
+		out="P${P}_N${N}_B${B1}_$JID.txt"
 		mpi_params="-ordered-output -n $P -ppn $ipn -outfile-pattern  $out -errfile-pattern $out -l"
 		app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout"
 		mpirun ${mpi_params} $app ${app_params}

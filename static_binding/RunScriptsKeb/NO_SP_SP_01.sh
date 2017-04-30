@@ -26,17 +26,14 @@ app=${app_path}/cholesky_grain_tag
 
 JID=${SLURM_JOBID}
 
-for NN in 60
+for NN in 40 50
 do
-	for x  in  4
-	do
-		N=$[$NN * 400] 		
-		B1=$NN
-		out="P${P}_N${N}_B${B1}_$JID.txt"
-		app_params="-size $N -nblocks $B1"
-		$app ${app_params}
-		echo "B= $B1" >> out_NO_SP_NO_01-${JID}.txt
-	done
+	N=$[$NN * 1000] 		
+	B1=$NN
+	out="P${P}_N${N}_B${B1}_$JID.txt"
+	app_params="-size $N -nblocks $B1"
+	$app ${app_params}
+	echo "B= $B1" >> out_NO_SP_NO_01-${JID}.txt
 done
 grep -i -A 2 "size" out_NO_SP_NO_01-${JID}.txt >> no_sp_no_timings.txt
 

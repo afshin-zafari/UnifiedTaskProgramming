@@ -21,10 +21,10 @@ app_path=${run_base}/bin
 app=${app_path}/utp_dt_sg_blas_release
 JID=${SLURM_JOBID}
 
-B2=10
+B2=15
 for z in 200
 do
-	for B1 in 9
+	for B1 in 6
 	do		
 		N=$[$z * $B1 *$B2] 
 		out="P${P}_N${N}_B${B1}_$JID.txt"

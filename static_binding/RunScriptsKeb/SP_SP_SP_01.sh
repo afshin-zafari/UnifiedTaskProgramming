@@ -29,9 +29,9 @@ export STARPU_SCHED=dmdar
 export STARPU_CALIBRATE=0
 export STARPU_HOSTNAME=afshin_spu
 
-B1=60
+B1=50
 
-N=12000
+N=30000
 
 app_params="-size $N -nblocks $B1 -dblockx $q -dblocky $p"
 out="P${P}_N${N}_B${B1}_b${B2}_$JID.txt"

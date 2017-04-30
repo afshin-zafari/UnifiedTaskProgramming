@@ -27,10 +27,10 @@ export STARPU_SCHED=dmdar
 export STARPU_CALIBRATE=0
 export STARPU_HOSTNAME=afshin_spu
 
-B2=10
+B2=20
 for z in 200
 do
-	for B1 in 6
+	for B1 in 9
 	do		
 		N=$[$z * $B1 *$B2] 
 		out="P${P}_N${N}_B${B1}_$JID.txt"
