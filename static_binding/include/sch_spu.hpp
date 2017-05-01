@@ -29,7 +29,8 @@ namespace utp{
       int N = gdata->get_cols();
       ElementType *mem = (ElementType *)gdata->get_memory();
       if ( mem ){
-	starpu_matrix_data_register(&handle, 0, (uintptr_t)mem, N, N, M, sizeof(ElementType));
+	if ( N * M   <= 2000*2000L)
+	  starpu_matrix_data_register(&handle, STARPU_MAIN_RAM, (uintptr_t)mem, N, N, M, sizeof(ElementType));
 	if(debug)cout << "Data " << x->get_name() << " registered at SPU with mem  " << mem <<" and handle " << handle << endl<< flush;
       }
     }
@@ -38,7 +39,9 @@ namespace utp{
       if ( mem ){
 	int M = gdata->get_rows();
 	int N = gdata->get_cols();;
-	starpu_matrix_data_register(&handle, 0, (uintptr_t)mem, N, N, M, sizeof(ElementType));
+	if(debug)cout << "Data " << gdata->get_name() << " going to be registered at SPU with mem: " << mem << endl<< flush;
+	if ( N * M   <= 2000L*2000L)
+	  starpu_matrix_data_register(&handle, STARPU_MAIN_RAM, (uintptr_t)mem, N, N, M, sizeof(ElementType));
 	if(debug)cout << "Data " << gdata->get_name() << " registered at SPU with mem: " << mem << " and handle: " << handle << endl<< flush;
       }
     }
@@ -183,8 +186,13 @@ namespace utp{
       #ifdef DT_INCLUDED
       if ( d->get_level() <2)
 	return;
+      #else
+      if ( d->get_level() <1)
+	return;
       #endif
+      assert(d->get_guest());
       SPUData *x = static_cast<SPUData  *>(d->get_guest());
+      assert(x);
       x->register_mem(mem,ld);
     }
     /*-------------------------------------------------------------------------------*/

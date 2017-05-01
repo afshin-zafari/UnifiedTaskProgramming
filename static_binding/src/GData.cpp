@@ -220,6 +220,8 @@ byte *GData::get_memory()
 /*=====================================================================*/
   void GData::fill_hilbert(){
     double *d = (double*)content;
+    if(N>1000)
+      return;
     if ( d != nullptr){
       for(int i=0;i<N;i++){
 	for(int j=0;j<N;j++){

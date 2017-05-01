@@ -22,13 +22,13 @@ P=1;B2=1;p=1;q=1;nt=28
 timemout=60
 
 app_path=${run_base}/bin
-app=${app_path}/utp_spu_blas_release
+app=${app_path}/utp_spu_blas #_release
 
 JID=${SLURM_JOBID}
 
-for NN in 80
+for NN in 45
 do
-	N=$[$NN * 500] 
+	N=$[$NN * 800] 
 	B1=$NN
 	out="UTP_P${P}_N${N}_B${B1}_$JID.txt"
 	app_params="-M $N $B1 $B2 -N $N $B1 $B2 -P $P -p $p -q $q -t $nt -T $timeout >$out"

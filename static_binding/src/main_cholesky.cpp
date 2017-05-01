@@ -2,9 +2,10 @@
 #include "utp.hpp"
 #include "cmdline.hpp"
 #include "upotrf.hpp"
+//#include "starpu.h"
 
 using namespace std;
-int N,B1,B2;
+size_t  N,B1,B2;
 utp::GData *A,*B,*C;
 utp::TimeUnit start;
 utp::GPartitioner *P1,*P2;
@@ -72,7 +73,12 @@ void cholesky()
   A->set_partition(P1);
   cout << "After  partitioing A\n" << flush;
   #ifndef DT_INCLUDED
-  A->set_memory(new double [N*N],N);
+  //double *d = (double *)malloc(sizeof(double) * N*N);
+  //  double *d = new double [(size_t)(N*N)];
+  double *d=new double[N*N];
+  //  starpu_malloc_flags((void **)&d,N*N,STARPU_MALLOC_PINNED);
+  cout << "After mem allocation  A: " << d << "size: " << N*N << flush;
+  A->set_memory(d,N);
   cout << "After mem allocation  A\n" << flush;
   A->fill_hilbert();
   #endif

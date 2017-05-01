@@ -15,14 +15,14 @@ source ${run_base}/main.sh
 set -x
 P=16;p=4;q=4;nt=28;ipn=1;
 
-timeout=1000
+timeout=2000
 
 app_path=${run_base}/bin
 app=${app_path}/utp_dt_sg_blas_release
 JID=${SLURM_JOBID}
 
 B2=15
-for z in 200
+for z in 400
 do
 	for B1 in 9
 	do		

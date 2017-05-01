@@ -26,7 +26,7 @@ app=${app_path}/cholesky_grain_tag
 
 JID=${SLURM_JOBID}
 
-for NN in 40 50
+for NN in 48
 do
 	N=$[$NN * 1000] 		
 	B1=$NN

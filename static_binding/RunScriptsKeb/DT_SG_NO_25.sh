@@ -1,30 +1,30 @@
 #!/bin/bash
 
 #SBATCH -A SNIC2016-3-74
-#SBATCH -J job_DT_SG_NO_04
-#SBATCH -n 112
+#SBATCH -J job_DT_SG_NO_25
+#SBATCH -n 700
 #SBATCH --exclusive
-#SBATCH -N 4
-#SBATCH --time=00:05:00
-#SBATCH --output=out_DT_SG_NO_04-%j.txt
-#SBATCH --error=err_DT_SG_NO_04-%j.txt
+#SBATCH -N 25
+#SBATCH --time=00:10:00
+#SBATCH --output=out_DT_SG_NO_25-%j.txt
+#SBATCH --error=err_DT_SG_NO_25-%j.txt
 
 run_base=/home/a/afshin/pfs/UTP_Cholesky_Runs
 source ${run_base}/main.sh
 
 set -x
-P=4;p=2;q=2;nt=28;ipn=1;
+P=25;p=5;q=5;nt=28;ipn=1;
 
-timeout=1000
+timeout=2000
 
 app_path=${run_base}/bin
 app=${app_path}/utp_dt_sg_blas_release
 JID=${SLURM_JOBID}
 
-B2=6
-for z in 500
+B2=10
+for z in 400
 do
-	for B1 in 6
+	for B1 in 9
 	do		
 		N=$[$z * $B1 *$B2] 
 		out="P${P}_N${N}_B${B1}_$JID.txt"
@@ -35,3 +35,4 @@ do
 done
 grep -i "\[UTP\]" P*.txt > dt_sg_timings.txt
 rm *file*.txt
+

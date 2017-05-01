@@ -5,7 +5,7 @@
 #SBATCH -n 448
 #SBATCH --exclusive
 #SBATCH -N 16
-#SBATCH --time=00:05:00
+#SBATCH --time=00:10:00
 #SBATCH --output=out_DT_SP_NO_16-%j.txt
 #SBATCH --error=err_DT_SP_NO_16-%j.txt
 
@@ -29,7 +29,7 @@ export STARPU_HOSTNAME=afshin_spu
 
 
 B2=15
-for z in 200
+for z in 400
 do
 	for B1 in 9
 	do		
